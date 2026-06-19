@@ -169,7 +169,7 @@ select option{background:#040e19}
   <!-- SIDEBAR -->
   <nav class="sidebar">
     <div class="nav-label">Treść strony</div>
-    <div class="nav-item active" onclick="showSection('hero')">Hero</div>
+    <div class="nav-item active" onclick="showSection('hero')">Strona główna</div>
     <div class="nav-item" onclick="showSection('realizacje')">Realizacje</div>
     <div class="nav-item" onclick="showSection('uslugi')">Usługi</div>
     <div class="nav-label">Firma</div>
@@ -345,62 +345,121 @@ function collectFormData() {
 
 // ─── HERO ────────────────────────────────────────────────────────────────────
 function renderHero() {
-  const h = DATA.hero || {};
+  const hh = DATA.hero_home   || {};
+  const hu = DATA.hero_uslugi || {};
   return `
     <div class="section-header">
-      <span class="section-title">Sekcja Hero</span>
-      <span class="section-badge">Strona główna</span>
+      <span class="section-title">Strona główna</span>
+      <span class="section-badge">Hero</span>
     </div>
+
     <div class="card">
-      <div class="card-body open">
+      <div class="card-head" onclick="toggleCard('hero-home-body')">
+        <span class="card-code">HOME</span>
+        <span class="card-title">Ekran startowy z animacją</span>
+      </div>
+      <div class="card-body open" id="hero-home-body">
         <div class="form-group">
-          <label class="fl">Napis nad nagłówkiem (mały, niebieski)</label>
-          <input type="text" id="hero-tag" value="${esc(h.tag || 'OFERTA')}" placeholder="np. OFERTA">
+          <label class="fl">Napis z migającą kropką</label>
+          <input type="text" id="hh-tagline" value="${esc(hh.tagline || '')}" placeholder="np. Inżynieria orurowania · Energetyka i przemysł">
         </div>
         <div class="form-group">
           <label class="fl">Nagłówek główny</label>
-          <textarea id="hero-heading" rows="3" placeholder="Tytuł strony głównej...">${esc(h.heading || '')}</textarea>
-          <div style="font-size:11px;color:#4f6e85;font-family:'IBM Plex Mono',monospace;margin-top:5px;">Nowa linia w tekście = &lt;br&gt; na stronie</div>
+          <input type="text" id="hh-heading" value="${esc(hh.heading || '')}" placeholder="np. Rurociągi projektowane z inżynierską precyzją.">
         </div>
         <div class="form-group">
-          <label class="fl">Podtytuł / opis</label>
-          <textarea id="hero-subheading" rows="4" placeholder="Krótki opis firmy...">${esc(h.subheading || '')}</textarea>
+          <label class="fl">Opis pod nagłówkiem</label>
+          <textarea id="hh-description" rows="4">${esc(hh.description || '')}</textarea>
         </div>
         <div class="form-actions">
-          <button class="btn-sm" onclick="saveHero()">Zapisz hero</button>
-          <span class="mono" id="hero-msg"></span>
+          <button class="btn-sm" onclick="saveHeroHome()">Zapisz</button>
+          <span class="mono" id="hh-msg"></span>
         </div>
+        <hr class="form-divider">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;margin-bottom:12px;">Podgląd</div>
+        <div style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#5fd0ec;margin-bottom:10px;">
+          <span style="width:6px;height:6px;background:#2fb6d6;border-radius:50%;flex:none;"></span>
+          <span id="hh-prev-tagline">${esc(hh.tagline || '')}</span>
+        </div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(18px,2.5vw,28px);line-height:1.1;color:#f3f8fc;margin-bottom:10px;" id="hh-prev-heading">${esc(hh.heading || '')}</div>
+        <div style="font-size:13px;line-height:1.6;color:#a9c2d4;max-width:500px;" id="hh-prev-desc">${esc(hh.description || '')}</div>
       </div>
     </div>
-    <div style="margin-top:20px;padding:20px;background:#06121f;border:1px solid rgba(160,200,225,0.08);border-radius:3px;">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;margin-bottom:14px;">Podgląd</div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#2fb6d6;margin-bottom:10px;" id="hero-prev-tag">${esc(h.tag || 'OFERTA')}</div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(20px,3vw,32px);line-height:1.15;color:#f3f8fc;margin-bottom:12px;" id="hero-prev-heading">${(h.heading||'').replace(/\n/g,'<br>')}</div>
-      <div style="font-size:14px;line-height:1.65;color:#8fa9bd;max-width:560px;" id="hero-prev-sub">${esc(h.subheading || '')}</div>
+
+    <div class="card" style="margin-top:8px">
+      <div class="card-head" onclick="toggleCard('hero-uslugi-body')">
+        <span class="card-code">USŁUGI</span>
+        <span class="card-title">Intro podstrony Usługi</span>
+      </div>
+      <div class="card-body" id="hero-uslugi-body">
+        <div class="form-group">
+          <label class="fl">Mały napis nad tytułem</label>
+          <input type="text" id="hu-tag" value="${esc(hu.tag || '')}" placeholder="np. OFERTA">
+        </div>
+        <div class="form-group">
+          <label class="fl">Nagłówek</label>
+          <textarea id="hu-heading" rows="2">${esc(hu.heading || '')}</textarea>
+          <div style="font-size:11px;color:#4f6e85;font-family:'IBM Plex Mono',monospace;margin-top:4px;">Nowa linia = łamanie na stronie</div>
+        </div>
+        <div class="form-group">
+          <label class="fl">Opis</label>
+          <textarea id="hu-subheading" rows="4">${esc(hu.subheading || '')}</textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn-sm" onclick="saveHeroUslugi()">Zapisz</button>
+          <span class="mono" id="hu-msg"></span>
+        </div>
+      </div>
     </div>
   `;
 }
 
 function collectHero() {
-  DATA.hero = DATA.hero || {};
-  const tag = document.getElementById('hero-tag');
-  const hd  = document.getElementById('hero-heading');
-  const sub = document.getElementById('hero-subheading');
-  if (tag) DATA.hero.tag        = tag.value.trim();
-  if (hd)  DATA.hero.heading    = hd.value.trim();
-  if (sub) DATA.hero.subheading = sub.value.trim();
+  const hhTagline = document.getElementById('hh-tagline');
+  const hhHeading = document.getElementById('hh-heading');
+  const hhDesc    = document.getElementById('hh-description');
+  if (hhTagline || hhHeading || hhDesc) {
+    DATA.hero_home = DATA.hero_home || {};
+    if (hhTagline) DATA.hero_home.tagline     = hhTagline.value.trim();
+    if (hhHeading) DATA.hero_home.heading     = hhHeading.value.trim();
+    if (hhDesc)    DATA.hero_home.description = hhDesc.value.trim();
+  }
+  const huTag = document.getElementById('hu-tag');
+  const huHd  = document.getElementById('hu-heading');
+  const huSub = document.getElementById('hu-subheading');
+  if (huTag || huHd || huSub) {
+    DATA.hero_uslugi = DATA.hero_uslugi || {};
+    if (huTag) DATA.hero_uslugi.tag        = huTag.value.trim();
+    if (huHd)  DATA.hero_uslugi.heading    = huHd.value.trim();
+    if (huSub) DATA.hero_uslugi.subheading = huSub.value.trim();
+  }
 }
 
-function saveHero() {
-  collectHero();
-  // Live preview update
-  const pt = document.getElementById('hero-prev-tag');
-  const ph = document.getElementById('hero-prev-heading');
-  const ps = document.getElementById('hero-prev-sub');
-  if (pt) pt.textContent = DATA.hero.tag;
-  if (ph) ph.innerHTML   = DATA.hero.heading.replace(/\n/g, '<br>');
-  if (ps) ps.textContent = DATA.hero.subheading;
-  const msg = document.getElementById('hero-msg');
+function saveHeroHome() {
+  const hhTagline = document.getElementById('hh-tagline');
+  const hhHeading = document.getElementById('hh-heading');
+  const hhDesc    = document.getElementById('hh-description');
+  DATA.hero_home = DATA.hero_home || {};
+  if (hhTagline) DATA.hero_home.tagline     = hhTagline.value.trim();
+  if (hhHeading) DATA.hero_home.heading     = hhHeading.value.trim();
+  if (hhDesc)    DATA.hero_home.description = hhDesc.value.trim();
+  document.getElementById('hh-prev-tagline').textContent = DATA.hero_home.tagline;
+  document.getElementById('hh-prev-heading').textContent = DATA.hero_home.heading;
+  document.getElementById('hh-prev-desc').textContent    = DATA.hero_home.description;
+  const msg = document.getElementById('hh-msg');
+  msg.textContent = '✓ Gotowe — kliknij Zapisz zmiany aby opublikować';
+  setTimeout(() => msg.textContent = '', 3000);
+}
+
+function saveHeroUslugi() {
+  DATA.hero_uslugi = DATA.hero_uslugi || {};
+  const huTag = document.getElementById('hu-tag');
+  const huHd  = document.getElementById('hu-heading');
+  const huSub = document.getElementById('hu-subheading');
+  if (huTag) DATA.hero_uslugi.tag        = huTag.value.trim();
+  if (huHd)  DATA.hero_uslugi.heading    = huHd.value.trim();
+  if (huSub) DATA.hero_uslugi.subheading = huSub.value.trim();
+  const msg = document.getElementById('hu-msg');
   msg.textContent = '✓ Gotowe — kliknij Zapisz zmiany aby opublikować';
   setTimeout(() => msg.textContent = '', 3000);
 }

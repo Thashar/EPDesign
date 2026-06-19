@@ -2,7 +2,12 @@
   "meta": {
     "lastUpdated": "2026-06-19"
   },
-  "hero": {
+  "hero_home": {
+    "tagline": "Inżynieria orurowania · Energetyka i przemysł",
+    "heading": "Rurociągi projektowane z inżynierską precyzją.",
+    "description": "Od analiz przedprojektowych i podatności rurociągów, przez projekty wykonawcze i powykonawcze, po skanowanie oraz modelowanie 3D — z eksperckim wsparciem automatyki na każdym etapie prac."
+  },
+  "hero_uslugi": {
     "tag": "OFERTA",
     "heading": "Kompleksowe usługi inżynierskie\ndla sektora energetycznego",
     "subheading": "Specjalistyczne usługi inżynierskie w zakresie orurowania — od analiz i projektów, przez skanowanie i modelowanie 3D, po eksperckie wsparcie w automatyzacji i weryfikację zgodności z IRiESP i NC-RfG."

@@ -55,12 +55,12 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
     <div style="max-width:660px;">
       <div style="display:inline-flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,1.1vw,13px);letter-spacing:.18em;text-transform:uppercase;color:#5fd0ec;margin-bottom:26px;">
         <span style="width:7px;height:7px;background:#2fb6d6;border-radius:50%;animation:epdBlink 2.2s ease-in-out infinite;flex:none;"></span>
-        Inżynieria orurowania · Energetyka i przemysł
+        <span id="home-tagline">Inżynieria orurowania · Energetyka i przemysł</span>
       </div>
-      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(38px,6vw,76px);line-height:1.02;letter-spacing:-0.02em;color:#f3f8fc;text-wrap:balance;margin-bottom:26px;">
+      <h1 id="home-heading" style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(38px,6vw,76px);line-height:1.02;letter-spacing:-0.02em;color:#f3f8fc;text-wrap:balance;margin-bottom:26px;">
         Rurociągi projektowane z&nbsp;inżynierską precyzją.
       </h1>
-      <p style="font-size:clamp(16px,1.5vw,20px);line-height:1.6;color:#a9c2d4;max-width:560px;text-wrap:pretty;margin-bottom:38px;">
+      <p id="home-description" style="font-size:clamp(16px,1.5vw,20px);line-height:1.6;color:#a9c2d4;max-width:560px;text-wrap:pretty;margin-bottom:38px;">
         Od analiz przedprojektowych i&nbsp;podatności rurociągów, przez projekty wykonawcze i&nbsp;powykonawcze, po skanowanie oraz modelowanie 3D — z&nbsp;eksperckim wsparciem automatyki na każdym etapie prac.
       </p>
       <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:46px;">
@@ -470,13 +470,21 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
   }
 
   function applyContent(d) {
-    if (d.hero) {
+    if (d.hero_home) {
+      var ht = document.getElementById('home-tagline');
+      var hh = document.getElementById('home-heading');
+      var hd = document.getElementById('home-description');
+      if (ht && d.hero_home.tagline)     ht.textContent = d.hero_home.tagline;
+      if (hh && d.hero_home.heading)     hh.textContent = d.hero_home.heading;
+      if (hd && d.hero_home.description) hd.textContent = d.hero_home.description;
+    }
+    if (d.hero_uslugi) {
       var tag = document.getElementById('hero-tag');
-      var hd  = document.getElementById('hero-heading');
+      var hd2 = document.getElementById('hero-heading');
       var sub = document.getElementById('hero-subheading');
-      if (tag && d.hero.tag) tag.textContent = d.hero.tag;
-      if (hd  && d.hero.heading) hd.innerHTML = d.hero.heading.replace(/\n/g, '<br>');
-      if (sub && d.hero.subheading) sub.textContent = d.hero.subheading;
+      if (tag && d.hero_uslugi.tag)        tag.textContent = d.hero_uslugi.tag;
+      if (hd2 && d.hero_uslugi.heading)    hd2.innerHTML   = d.hero_uslugi.heading.replace(/\n/g, '<br>');
+      if (sub && d.hero_uslugi.subheading) sub.textContent = d.hero_uslugi.subheading;
     }
 
     var rg = document.getElementById('realizacje-grid');
