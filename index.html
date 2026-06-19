@@ -80,6 +80,25 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
 #root .bs{color:#eaf2f8;border-color:rgba(160,200,225,0.28)}
 #root .bs:hover{border-color:rgba(160,200,225,0.6);background:rgba(255,255,255,0.04)}
 @media (max-width: 900px){
+  #root > nav,
+  #pg-uslugi > nav,
+  #pg-realizacje > nav,
+  #pg-ofirmie > nav,
+  #pg-certyfikaty > nav{
+    padding-left:18px !important;
+    padding-right:18px !important;
+  }
+  #root > nav + div,
+  #pg-uslugi > nav + div,
+  #pg-realizacje > nav + div,
+  #pg-ofirmie > nav + div,
+  #pg-certyfikaty > nav + div{
+    padding-top:42px !important;
+  }
+  footer{
+    padding-top:28px !important;
+    padding-bottom:28px !important;
+  }
   #ofirmie-paragraphs{min-width:0;width:100%;}
   #ofirmie-timeline{flex:1 1 100%;width:100%;min-width:0;}
   #ofirmie-timeline > div{align-items:flex-start;gap:12px 18px;flex-wrap:wrap;}
