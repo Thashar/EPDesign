@@ -929,7 +929,10 @@ function renderKontakt() {
           <div><label class="fl">Ulica</label><input type="text" id="k-ulica" value="${esc(k.ulica||'')}"></div>
           <div><label class="fl">Miasto</label><input type="text" id="k-miasto" value="${esc(k.miasto||'')}"></div>
         </div>
-        <div class="form-group"><label class="fl">E-mail</label><input type="email" id="k-email" value="${esc(k.email||'')}"></div>
+        <div class="form-row">
+          <div><label class="fl">E-mail</label><input type="email" id="k-email" value="${esc(k.email||'')}"></div>
+          <div><label class="fl">Telefon</label><input type="tel" id="k-telefon" value="${esc(k.telefon||'')}"></div>
+        </div>
         <hr class="form-divider">
         <div class="kontakt-grid">
           <div class="form-group"><label class="fl">NIP</label><input type="text" id="k-nip" value="${esc(k.nip||'')}"></div>
@@ -943,7 +946,7 @@ function renderKontakt() {
 }
 
 function collectKontakt() {
-  const fields = ['firma','ulica','miasto','email','nip','krs','regon','linkedin'];
+  const fields = ['firma','ulica','miasto','email','telefon','nip','krs','regon','linkedin'];
   DATA.kontakt = DATA.kontakt || {};
   fields.forEach(f => {
     const el = document.getElementById(`k-${f}`);

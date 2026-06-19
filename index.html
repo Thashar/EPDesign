@@ -369,7 +369,7 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
         </div>
         <div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4f6e85;margin-bottom:10px;">Kontakt</div>
-          <div style="font-size:14px;line-height:1.9;color:#8fa9bd;"><a href="mailto:kontakt@epdesign.pl" style="color:#bcd2e2;text-decoration:none;">kontakt@epdesign.pl</a></div>
+          <div style="font-size:14px;line-height:1.9;color:#8fa9bd;" id="wycena-kontakt"><a href="mailto:kontakt@epdesign.pl" style="color:#bcd2e2;text-decoration:none;">kontakt@epdesign.pl</a></div>
         </div>
         <div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4f6e85;margin-bottom:10px;">Dane rejestrowe</div>
@@ -516,6 +516,16 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
 
     var cg = document.getElementById('certyfikaty-grid');
     if (cg && d.certyfikaty) cg.innerHTML = renderCertGrid(d.certyfikaty);
+
+    if (d.kontakt) {
+      var k = d.kontakt;
+      var wk = document.getElementById('wycena-kontakt');
+      if (wk) {
+        var emailLine = k.email ? '<a href="mailto:' + h(k.email) + '" style="color:#bcd2e2;text-decoration:none;">' + h(k.email) + '</a>' : '';
+        var telLine   = k.telefon ? '<a href="tel:' + h(k.telefon) + '" style="color:#bcd2e2;text-decoration:none;">' + h(k.telefon) + '</a>' : '';
+        wk.innerHTML = [emailLine, telLine].filter(Boolean).join('<br>');
+      }
+    }
   }
 
   fetch('/api/content')
