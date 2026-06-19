@@ -123,10 +123,22 @@
       "W 2021 roku nawiązaliśmy strategiczną współpracę z partnerami z Europy Zachodniej, co umożliwiło realizację projektów transgranicznych i wdrożenie metodologii zgodnych z NC-RfG na rynkach europejskich. Dziś EPDesign to ponad 20 wyspecjalizowanych inżynierów realizujących rocznie kilkanaście projektów dla sektora energetycznego, petrochemicznego i przemysłowego."
     ],
     "timeline": [
-      { "year": "2017", "text": "Założenie spółki Energy Piping Design w Warszawie" },
-      { "year": "2019", "text": "Wdrożenie usług skanowania laserowego 3D i modelowania" },
-      { "year": "2021", "text": "Pierwsza weryfikacja logik IRiESP i certyfikacja NC-RfG" },
-      { "year": "2024", "text": "Przekroczenie 60 zrealizowanych projektów w Polsce i za granicą" }
+      {
+        "year": "2017",
+        "text": "Założenie spółki Energy Piping Design w Warszawie"
+      },
+      {
+        "year": "2019",
+        "text": "Wdrożenie usług skanowania laserowego 3D i modelowania"
+      },
+      {
+        "year": "2021",
+        "text": "Pierwsza weryfikacja logik IRiESP i certyfikacja NC-RfG"
+      },
+      {
+        "year": "2024",
+        "text": "Przekroczenie 60 zrealizowanych projektów w Polsce i za granicą"
+      }
     ]
   },
   "certyfikaty": [
