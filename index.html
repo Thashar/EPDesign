@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Energy Piping Design — Inżynieria Rurociągów</title>
+<meta name="description" content="Kompleksowe usługi inżynierskie w zakresie orurowania dla sektora energetycznego i przemysłowego. Analizy, projekty wykonawcze, skanowanie laserowe 3D, modelowanie, automatyka IRiESP i NC-RfG.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#06101c}
+@keyframes epdBlink{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes epdScanSweep{0%{background-position:-200% 0;opacity:1}100%{background-position:200% 0;opacity:0}}
+.nl{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#bcd2e2;text-decoration:none;transition:color .2s}
+.nl:hover,.nl.a{color:#2fb6d6}
+.nc{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#eaf2f8;text-decoration:none;padding:10px 18px;border:1px solid rgba(120,200,235,0.45);border-radius:3px;transition:border-color .2s,background .2s}
+.nc:hover{border-color:#2fb6d6;background:rgba(47,182,214,0.1)}
+.bp{display:inline-flex;align-items:center;gap:10px;font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:16px;color:#04121d;background:#2fb6d6;text-decoration:none;padding:16px 30px;border-radius:3px;transition:background .2s}
+.bp:hover{background:#56cce6}
+.bs{display:inline-flex;align-items:center;gap:10px;font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:16px;color:#eaf2f8;text-decoration:none;padding:16px 26px;border:1px solid rgba(160,200,225,0.28);border-radius:3px;transition:border-color .2s,background .2s}
+.bs:hover{border-color:rgba(160,200,225,0.6);background:rgba(255,255,255,0.04)}
+input,textarea{color-scheme:dark;font-family:'IBM Plex Sans',sans-serif}
+input::placeholder,textarea::placeholder{color:#4f6e85}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#05101c}
+::-webkit-scrollbar-thumb{background:rgba(47,182,214,0.3);border-radius:3px}
+.form-input{background:rgba(255,255,255,0.04);border:1px solid rgba(160,200,225,0.18);border-radius:2px;padding:12px 14px;font-size:15px;color:#eaf2f8;outline:none;transition:border-color .2s;width:100%}
+.form-input:focus{border-color:rgba(47,182,214,0.5)}
+</style>
+</head>
+<body>
+
+<!-- ═══════ HERO ═══════════════════════════════════════════════════════════ -->
+<section id="root" style="position:relative;width:100%;min-height:100vh;overflow:hidden;background:radial-gradient(125% 95% at 70% 38%,#133451 0%,#0a1c30 46%,#05101c 100%);font-family:'IBM Plex Sans',-apple-system,sans-serif;color:#eaf2f8;">
+
+  <canvas id="canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
+
+  <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(102deg,#05101c 0%,rgba(5,16,28,0.92) 28%,rgba(6,18,32,0.55) 48%,rgba(6,18,32,0.12) 64%,transparent 78%);"></div>
+  <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(5,16,28,0.55) 0%,transparent 22%,transparent 80%,rgba(4,12,22,0.7) 100%);"></div>
+
+  <nav style="position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(20px,3vw,34px) clamp(22px,5vw,72px);">
+    <img src="uploads/epd-logo-white.png" alt="Energy Piping Design" style="height:clamp(60px,6.8vw,84px);width:auto;display:block;">
+    <div style="display:flex;align-items:center;gap:clamp(18px,2.6vw,40px);flex-wrap:wrap;">
+      <a href="#" onclick="navigate('uslugi');return false;" class="nl">Usługi</a>
+      <a href="#" onclick="navigate('realizacje');return false;" class="nl">Realizacje</a>
+      <a href="#" onclick="navigate('ofirmie');return false;" class="nl">O firmie</a>
+      <a href="#" onclick="navigate('certyfikaty');return false;" class="nl">Certyfikaty</a>
+      <a href="#" onclick="openWycena();return false;" class="nc">Kontakt</a>
+    </div>
+  </nav>
+
+  <div style="position:relative;z-index:2;display:flex;align-items:center;min-height:calc(100vh - 110px);padding:0 clamp(22px,5vw,72px) clamp(40px,6vh,80px);">
+    <div style="max-width:660px;">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,1.1vw,13px);letter-spacing:.18em;text-transform:uppercase;color:#5fd0ec;margin-bottom:26px;">
+        <span style="width:7px;height:7px;background:#2fb6d6;border-radius:50%;animation:epdBlink 2.2s ease-in-out infinite;flex:none;"></span>
+        Inżynieria orurowania · Energetyka i przemysł
+      </div>
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(38px,6vw,76px);line-height:1.02;letter-spacing:-0.02em;color:#f3f8fc;text-wrap:balance;margin-bottom:26px;">
+        Rurociągi projektowane z&nbsp;inżynierską precyzją.
+      </h1>
+      <p style="font-size:clamp(16px,1.5vw,20px);line-height:1.6;color:#a9c2d4;max-width:560px;text-wrap:pretty;margin-bottom:38px;">
+        Od analiz przedprojektowych i&nbsp;podatności rurociągów, przez projekty wykonawcze i&nbsp;powykonawcze, po skanowanie oraz modelowanie 3D — z&nbsp;eksperckim wsparciem automatyki na każdym etapie prac.
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:46px;">
+        <a href="#" onclick="navigate('realizacje');return false;" class="bp">Nasze realizacje <span style="font-size:18px;line-height:0;">→</span></a>
+        <a href="#" onclick="navigate('uslugi');return false;" class="bs">Poznaj usługi</a>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px 26px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.02em;color:#7f9bb0;">
+        <span style="display:inline-flex;align-items:center;gap:9px;"><span style="width:6px;height:6px;background:#2fb6d6;display:inline-block;flex:none;"></span>Analizy podatności</span>
+        <span style="display:inline-flex;align-items:center;gap:9px;"><span style="width:6px;height:6px;background:#2fb6d6;display:inline-block;flex:none;"></span>Projekty &amp; modelowanie 3D</span>
+        <span style="display:inline-flex;align-items:center;gap:9px;"><span style="width:6px;height:6px;background:#2fb6d6;display:inline-block;flex:none;"></span>Skanowanie laserowe</span>
+        <span style="display:inline-flex;align-items:center;gap:9px;"><span style="width:6px;height:6px;background:#2fb6d6;display:inline-block;flex:none;"></span>Automatyka — IRiESP &amp; NC-RfG</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:absolute;left:clamp(22px,5vw,72px);bottom:22px;z-index:2;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;">Energy Piping Design Sp. z o.o.</div>
+  <div style="position:absolute;right:clamp(22px,5vw,72px);bottom:22px;z-index:2;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;display:flex;align-items:center;gap:9px;"><span style="width:6px;height:6px;background:#2fb6d6;display:inline-block;"></span>Scan → Model → Flow</div>
+</section>
+
+<!-- ═══════ TRANSITION OVERLAY ════════════════════════════════════════════ -->
+<div id="scan" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:150;background:linear-gradient(90deg,transparent 0%,rgba(47,182,214,0.35) 49%,rgba(47,182,214,0.55) 50%,rgba(47,182,214,0.35) 51%,transparent 100%);background-size:200% 100%;background-position:-200% 0;opacity:0;"></div>
+
+<!-- ═══════ USŁUGI ════════════════════════════════════════════════════════ -->
+<div id="pg-uslugi" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:49;overflow-y:auto;background:#05101c;transform:translateX(100%);transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);pointer-events:none;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:#eaf2f8;">
+  <nav style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(16px,2.4vw,26px) clamp(22px,5vw,72px);background:rgba(4,14,26,0.97);border-bottom:1px solid rgba(160,200,225,0.07);">
+    <a href="#" onclick="navigate('home');return false;"><img src="uploads/epd-logo-white.png" alt="EPDesign" style="height:clamp(60px,6.8vw,84px);width:auto;display:block;opacity:0.9;"></a>
+    <div style="display:flex;align-items:center;gap:clamp(14px,2.2vw,34px);flex-wrap:wrap;">
+      <a href="#" onclick="navigate('uslugi');return false;" class="nl a">Usługi</a>
+      <a href="#" onclick="navigate('realizacje');return false;" class="nl">Realizacje</a>
+      <a href="#" onclick="navigate('ofirmie');return false;" class="nl">O firmie</a>
+      <a href="#" onclick="navigate('certyfikaty');return false;" class="nl">Certyfikaty</a>
+      <a href="#" onclick="openWycena();return false;" class="nc">Kontakt</a>
+    </div>
+  </nav>
+  <div style="padding:clamp(48px,6vh,72px) clamp(22px,5vw,72px) 40px;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#2fb6d6;margin-bottom:14px;">OFERTA</div>
+    <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.5vw,60px);line-height:1.04;letter-spacing:-0.02em;color:#f3f8fc;margin-bottom:18px;text-wrap:balance;">Kompleksowe usługi inżynierskie<br>dla sektora energetycznego</h1>
+    <p style="font-size:clamp(15px,1.4vw,18px);line-height:1.65;color:#8fa9bd;max-width:620px;text-wrap:pretty;">Specjalistyczne usługi inżynierskie w zakresie orurowania — od analiz i projektów, przez skanowanie i modelowanie 3D, po eksperckie wsparcie w automatyzacji i weryfikację zgodności z IRiESP i NC-RfG.</p>
+  </div>
+  <div style="padding:0 clamp(22px,5vw,72px) 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:rgba(160,200,225,0.07);">
+    <div style="background:#05101c;padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;padding-bottom:12px;border-bottom:1px solid rgba(47,182,214,0.18);">EPD-SRV-01</div>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:#eaf2f8;line-height:1.25;">Analizy przedprojektowe</h3>
+      <p style="font-size:14px;line-height:1.68;color:#7f9bb0;flex:1;">Kompleksowe badania wstępne i ocena wykonalności przed realizacją projektu rurociągowego. Optymalizacja tras, układów i doboru materiałów w środowisku energetycznym i przemysłowym.</p>
+    </div>
+    <div style="background:#05101c;padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;padding-bottom:12px;border-bottom:1px solid rgba(47,182,214,0.18);">EPD-SRV-02</div>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:#eaf2f8;line-height:1.25;">Podatność rurociągów</h3>
+      <p style="font-size:14px;line-height:1.68;color:#7f9bb0;flex:1;">Analizy wytrzymałościowe i podatnościowe metodą MES. Ocena naprężeń termicznych, mechanicznych i dynamicznych zgodnie z normami EN, ASME i branżowymi standardami energetycznymi.</p>
+    </div>
+    <div style="background:#05101c;padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;padding-bottom:12px;border-bottom:1px solid rgba(47,182,214,0.18);">EPD-SRV-03</div>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:#eaf2f8;line-height:1.25;">Projekty wykonawcze i powykonawcze</h3>
+      <p style="font-size:14px;line-height:1.68;color:#7f9bb0;flex:1;">Pełna dokumentacja techniczna wykonawcza i powykonawcza zgodna z normami branżowymi. Izometrie, schematy P&amp;ID, wykazy materiałów — dla sektora energetycznego i przemysłowego.</p>
+    </div>
+    <div style="background:#05101c;padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;padding-bottom:12px;border-bottom:1px solid rgba(47,182,214,0.18);">EPD-SRV-04</div>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:#eaf2f8;line-height:1.25;">Skanowanie laserowe 3D</h3>
+      <p style="font-size:14px;line-height:1.68;color:#7f9bb0;flex:1;">Precyzyjne skanowanie laserowe istniejących instalacji przemysłowych i energetycznych. Generowanie chmur punktów wysokiej rozdzielczości jako podstawa do dalszych prac projektowych.</p>
+    </div>
+    <div style="background:#05101c;padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;padding-bottom:12px;border-bottom:1px solid rgba(47,182,214,0.18);">EPD-SRV-05</div>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:#eaf2f8;line-height:1.25;">Modelowanie 3D instalacji</h3>
+      <p style="font-size:14px;line-height:1.68;color:#7f9bb0;flex:1;">Tworzenie wiernych modeli cyfrowych instalacji rurociągowych na podstawie skanów i dokumentacji. Formaty PDMS, SP3D, E3D. Kompletna dokumentacja as-built dla zarządzania majątkiem.</p>
+    </div>
+    <div style="background:#05101c;padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;padding-bottom:12px;border-bottom:1px solid rgba(47,182,214,0.18);">EPD-SRV-06</div>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:#eaf2f8;line-height:1.25;">Automatyzacja — IRiESP &amp; NC-RfG</h3>
+      <p style="font-size:14px;line-height:1.68;color:#7f9bb0;flex:1;">Eksperckie wsparcie w obszarze automatyzacji na wszystkich etapach prac. Analiza i weryfikacja logik sterowania zgodnie z wymaganiami IRiESP oraz europejską normą NC-RfG.</p>
+    </div>
+  </div>
+  <footer style="border-top:1px solid rgba(255,255,255,0.05);padding:26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:#040e19;">
+    <div style="display:flex;align-items:center;gap:18px;"><img src="uploads/epd-logo-white.png" alt="" style="height:24px;opacity:0.6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#2f4558;">© 2025 Energy Piping Design Sp. z o.o.</span></div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2f4558;">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2f4558;">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2fb6d6;text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
+  </footer>
+</div>
+
+<!-- ═══════ REALIZACJE ════════════════════════════════════════════════════ -->
+<div id="pg-realizacje" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:49;overflow-y:auto;background:#05101c;transform:translateX(100%);transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);pointer-events:none;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:#eaf2f8;">
+  <nav style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(16px,2.4vw,26px) clamp(22px,5vw,72px);background:rgba(4,14,26,0.97);border-bottom:1px solid rgba(160,200,225,0.07);">
+    <a href="#" onclick="navigate('home');return false;"><img src="uploads/epd-logo-white.png" alt="EPDesign" style="height:clamp(60px,6.8vw,84px);width:auto;display:block;opacity:0.9;"></a>
+    <div style="display:flex;align-items:center;gap:clamp(14px,2.2vw,34px);flex-wrap:wrap;">
+      <a href="#" onclick="navigate('uslugi');return false;" class="nl">Usługi</a>
+      <a href="#" onclick="navigate('realizacje');return false;" class="nl a">Realizacje</a>
+      <a href="#" onclick="navigate('ofirmie');return false;" class="nl">O firmie</a>
+      <a href="#" onclick="navigate('certyfikaty');return false;" class="nl">Certyfikaty</a>
+      <a href="#" onclick="openWycena();return false;" class="nc">Kontakt</a>
+    </div>
+  </nav>
+  <div style="padding:clamp(48px,6vh,72px) clamp(22px,5vw,72px) 40px;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#2fb6d6;margin-bottom:14px;">PORTFOLIO</div>
+    <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.5vw,60px);line-height:1.04;letter-spacing:-0.02em;color:#f3f8fc;margin-bottom:18px;">Wybrane realizacje</h1>
+    <p style="font-size:clamp(15px,1.4vw,18px);line-height:1.65;color:#8fa9bd;max-width:560px;">Projekty zrealizowane dla czołowych podmiotów sektora energetycznego, petrochemicznego i przemysłowego w Polsce i za granicą.</p>
+  </div>
+  <div style="padding:0 clamp(22px,5vw,72px) 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:rgba(160,200,225,0.07);">
+    <div style="background:#05101c;padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;">EPD-2023-004 · Energetyka</div>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:#eaf2f8;line-height:1.3;">EC Katowice — Modernizacja rurociągów pary technologicznej</h3>
+      <p style="font-size:13.5px;line-height:1.6;color:#7f9bb0;flex:1;">Projekt wykonawczy modernizacji sieci rurociągów pary i kondensatu w elektrociepłowni. Analiza podatności, izometrie i dobór kompensatorów.</p>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2fb6d6;margin-top:6px;">2023</div>
+    </div>
+    <div style="background:#05101c;padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;">EPD-2023-003 · Górnictwo</div>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:#eaf2f8;line-height:1.3;">KGHM Polska Miedź — Instalacje technologiczne kopalni</h3>
+      <p style="font-size:13.5px;line-height:1.6;color:#7f9bb0;flex:1;">Dokumentacja wykonawcza instalacji rurociągów chłodzenia i sprężonego powietrza. Skanowanie laserowe i model 3D istniejącej infrastruktury.</p>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2fb6d6;margin-top:6px;">2023</div>
+    </div>
+    <div style="background:#05101c;padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;">EPD-2022-006 · Petrochemia</div>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:#eaf2f8;line-height:1.3;">PKN Orlen — Model as-built terminalu paliw</h3>
+      <p style="font-size:13.5px;line-height:1.6;color:#7f9bb0;flex:1;">Skanowanie laserowe 3D i opracowanie modelu cyfrowego terminalu paliw. Weryfikacja kolizji z nową infrastrukturą i aktualizacja dokumentacji powykonawczej.</p>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2fb6d6;margin-top:6px;">2022</div>
+    </div>
+    <div style="background:#05101c;padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;">EPD-2022-002 · Energetyka</div>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:#eaf2f8;line-height:1.3;">Enea Wytwarzanie — Analiza rurociągów parowych bloku energetycznego</h3>
+      <p style="font-size:13.5px;line-height:1.6;color:#7f9bb0;flex:1;">Kompleksowa analiza podatności rurociągów parowych i zasilających bloku 200 MW. Optymalizacja układu podpór i kompensatorów termicznych.</p>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2fb6d6;margin-top:6px;">2022</div>
+    </div>
+    <div style="background:#05101c;padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;">EPD-2021-005 · Energetyka</div>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:#eaf2f8;line-height:1.3;">Tauron Polska Energia — Weryfikacja logik sterowania IRiESP</h3>
+      <p style="font-size:13.5px;line-height:1.6;color:#7f9bb0;flex:1;">Analiza i weryfikacja logik sterowania jednostki wytwórczej pod kątem zgodności z Instrukcją Ruchu i Eksploatacji Sieci Przesyłowej oraz wymaganiami NC-RfG.</p>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2fb6d6;margin-top:6px;">2021</div>
+    </div>
+    <div style="background:#05101c;padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;">EPD-2021-001 · Oil &amp; Gas</div>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:#eaf2f8;line-height:1.3;">Lotos Petrobaltic — Instalacja procesowa platformy wydobywczej</h3>
+      <p style="font-size:13.5px;line-height:1.6;color:#7f9bb0;flex:1;">Projekt wykonawczy instalacji procesowej i użytkowej platformy wydobywczej na Bałtyku. Dobór materiałów odpornych na korozję morską i weryfikacja normowa.</p>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2fb6d6;margin-top:6px;">2021</div>
+    </div>
+  </div>
+  <footer style="border-top:1px solid rgba(255,255,255,0.05);padding:26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:#040e19;">
+    <div style="display:flex;align-items:center;gap:18px;"><img src="uploads/epd-logo-white.png" alt="" style="height:24px;opacity:0.6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#2f4558;">© 2025 Energy Piping Design Sp. z o.o.</span></div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2f4558;">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2f4558;">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2fb6d6;text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
+  </footer>
+</div>
+
+<!-- ═══════ O FIRMIE ══════════════════════════════════════════════════════ -->
+<div id="pg-ofirmie" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:49;overflow-y:auto;background:#05101c;transform:translateX(100%);transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);pointer-events:none;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:#eaf2f8;">
+  <nav style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(16px,2.4vw,26px) clamp(22px,5vw,72px);background:rgba(4,14,26,0.97);border-bottom:1px solid rgba(160,200,225,0.07);">
+    <a href="#" onclick="navigate('home');return false;"><img src="uploads/epd-logo-white.png" alt="EPDesign" style="height:clamp(60px,6.8vw,84px);width:auto;display:block;opacity:0.9;"></a>
+    <div style="display:flex;align-items:center;gap:clamp(14px,2.2vw,34px);flex-wrap:wrap;">
+      <a href="#" onclick="navigate('uslugi');return false;" class="nl">Usługi</a>
+      <a href="#" onclick="navigate('realizacje');return false;" class="nl">Realizacje</a>
+      <a href="#" onclick="navigate('ofirmie');return false;" class="nl a">O firmie</a>
+      <a href="#" onclick="navigate('certyfikaty');return false;" class="nl">Certyfikaty</a>
+      <a href="#" onclick="openWycena();return false;" class="nc">Kontakt</a>
+    </div>
+  </nav>
+
+  <div style="padding:clamp(48px,6vh,72px) clamp(22px,5vw,72px) 60px;border-bottom:1px solid rgba(255,255,255,0.05);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#2fb6d6;margin-bottom:14px;">HISTORIA</div>
+    <div style="display:flex;gap:clamp(40px,6vw,100px);flex-wrap:wrap;align-items:flex-start;">
+      <div style="flex:1;min-width:300px;">
+        <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(30px,4vw,54px);line-height:1.05;letter-spacing:-0.02em;color:#f3f8fc;margin-bottom:28px;text-wrap:balance;">Inżynieria rurociągów<br>z pasji do precyzji</h1>
+        <p style="font-size:clamp(15px,1.4vw,17px);line-height:1.78;color:#8fa9bd;text-wrap:pretty;margin-bottom:20px;">Energy Piping Design Sp. z o.o. powstała w 2017 roku jako odpowiedź na rosnące zapotrzebowanie rynku energetycznego na wyspecjalizowane usługi inżynieryjne w zakresie projektowania orurowania. Firmę założyli doświadczeni inżynierowie z wieloletnią praktyką w największych polskich i europejskich projektach energetycznych.</p>
+        <p style="font-size:clamp(15px,1.4vw,17px);line-height:1.78;color:#8fa9bd;text-wrap:pretty;margin-bottom:20px;">W 2019 roku rozszerzyliśmy ofertę o zaawansowane usługi skanowania laserowego 3D, stając się jednym z nielicznych podmiotów w Polsce łączących kompetencje projektowe z możliwościami cyfrowego odwzorowania istniejących instalacji.</p>
+        <p style="font-size:clamp(15px,1.4vw,17px);line-height:1.78;color:#8fa9bd;text-wrap:pretty;">W 2021 roku nawiązaliśmy strategiczną współpracę z partnerami z Europy Zachodniej, co umożliwiło realizację projektów transgranicznych i wdrożenie metodologii zgodnych z NC-RfG na rynkach europejskich. Dziś EPDesign to ponad 20 wyspecjalizowanych inżynierów realizujących rocznie kilkanaście projektów dla sektora energetycznego, petrochemicznego i przemysłowego.</p>
+      </div>
+      <div style="flex:none;display:flex;flex-direction:column;gap:0;">
+        <div style="display:flex;gap:20px;align-items:baseline;padding:20px 0;border-top:1px solid rgba(255,255,255,0.07);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2fb6d6;width:48px;flex:none;">2017</span><span style="font-size:14px;line-height:1.55;color:#7f9bb0;">Założenie spółki Energy Piping Design w Warszawie</span></div>
+        <div style="display:flex;gap:20px;align-items:baseline;padding:20px 0;border-top:1px solid rgba(255,255,255,0.07);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2fb6d6;width:48px;flex:none;">2019</span><span style="font-size:14px;line-height:1.55;color:#7f9bb0;">Wdrożenie usług skanowania laserowego 3D i modelowania</span></div>
+        <div style="display:flex;gap:20px;align-items:baseline;padding:20px 0;border-top:1px solid rgba(255,255,255,0.07);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2fb6d6;width:48px;flex:none;">2021</span><span style="font-size:14px;line-height:1.55;color:#7f9bb0;">Pierwsza weryfikacja logik IRiESP i certyfikacja NC-RfG</span></div>
+        <div style="display:flex;gap:20px;align-items:baseline;padding:20px 0;border-top:1px solid rgba(255,255,255,0.07);border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2fb6d6;width:48px;flex:none;">2024</span><span style="font-size:14px;line-height:1.55;color:#7f9bb0;">Przekroczenie 60 zrealizowanych projektów w Polsce i za granicą</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:clamp(48px,5vh,64px) clamp(22px,5vw,72px) 48px;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#2fb6d6;margin-bottom:14px;">KADRA</div>
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(24px,3vw,40px);color:#f3f8fc;margin-bottom:40px;">Zarząd</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,260px));gap:48px 56px;">
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <div style="width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid rgba(160,200,225,0.12);"><img src="uploads/ulbrich.jpg" alt="Paweł Ulbrich" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"></div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:#eaf2f8;margin-bottom:6px;">Paweł Ulbrich</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;color:#2fb6d6;margin-bottom:3px;">Prezes Zarządu</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;color:#7f9bb0;">Dyrektor Generalny</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <div style="width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid rgba(160,200,225,0.12);"><img src="uploads/borowka.jpg" alt="Rafał Borówka" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"></div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:#eaf2f8;margin-bottom:6px;">Rafał Borówka</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;color:#2fb6d6;margin-bottom:3px;">Wiceprezes Zarządu</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;color:#7f9bb0;">Dyrektor Techniczny</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 clamp(22px,5vw,72px) 80px;border-top:1px solid rgba(255,255,255,0.05);">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(24px,3vw,40px);color:#f3f8fc;margin-bottom:40px;margin-top:48px;">Kadra menedżerska</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,260px));gap:48px 56px;">
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <div style="width:100%;aspect-ratio:1;border-radius:2px;border:1px solid rgba(160,200,225,0.1);background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#3a5568;">zdjęcie</span></div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:#eaf2f8;margin-bottom:6px;">Michał Wilk</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;color:#2fb6d6;margin-bottom:3px;">Prokurent</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <div style="width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid rgba(160,200,225,0.12);"><img src="uploads/celmer.jpg" alt="Michał Celmer" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"></div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:#eaf2f8;margin-bottom:6px;">Michał Celmer</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;color:#2fb6d6;">Kierownik Zespołu Projektowego</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="border-top:1px solid rgba(255,255,255,0.05);padding:26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:#040e19;">
+    <div style="display:flex;align-items:center;gap:18px;"><img src="uploads/epd-logo-white.png" alt="" style="height:24px;opacity:0.6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#2f4558;">© 2025 Energy Piping Design Sp. z o.o.</span></div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2f4558;">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2f4558;">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2fb6d6;text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
+  </footer>
+</div>
+
+<!-- ═══════ CERTYFIKATY ══════════════════════════════════════════════════ -->
+<div id="pg-certyfikaty" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:49;overflow-y:auto;background:#05101c;transform:translateX(100%);transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);pointer-events:none;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:#eaf2f8;">
+  <nav style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(16px,2.4vw,26px) clamp(22px,5vw,72px);background:rgba(4,14,26,0.97);border-bottom:1px solid rgba(160,200,225,0.07);">
+    <a href="#" onclick="navigate('home');return false;"><img src="uploads/epd-logo-white.png" alt="EPDesign" style="height:clamp(60px,6.8vw,84px);width:auto;display:block;opacity:0.9;"></a>
+    <div style="display:flex;align-items:center;gap:clamp(14px,2.2vw,34px);flex-wrap:wrap;">
+      <a href="#" onclick="navigate('uslugi');return false;" class="nl">Usługi</a>
+      <a href="#" onclick="navigate('realizacje');return false;" class="nl">Realizacje</a>
+      <a href="#" onclick="navigate('ofirmie');return false;" class="nl">O firmie</a>
+      <a href="#" onclick="navigate('certyfikaty');return false;" class="nl a">Certyfikaty</a>
+      <a href="#" onclick="openWycena();return false;" class="nc">Kontakt</a>
+    </div>
+  </nav>
+  <div style="padding:clamp(48px,6vh,72px) clamp(22px,5vw,72px) 40px;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#2fb6d6;margin-bottom:14px;">JAKOŚĆ I BEZPIECZEŃSTWO</div>
+    <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.5vw,60px);line-height:1.04;letter-spacing:-0.02em;color:#f3f8fc;margin-bottom:18px;">Certyfikaty</h1>
+    <p style="font-size:clamp(15px,1.4vw,18px);line-height:1.65;color:#8fa9bd;max-width:560px;">Energy Piping Design Sp. z o.o. posiada wdrożone i certyfikowane systemy zarządzania jakością oraz bezpieczeństwem i higieną pracy.</p>
+  </div>
+  <div style="padding:0 clamp(22px,5vw,72px) 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:32px;max-width:900px;">
+    <div style="border:1px solid rgba(160,200,225,0.12);border-radius:2px;overflow:hidden;display:flex;flex-direction:column;">
+      <div style="background:rgba(47,182,214,0.06);border-bottom:1px solid rgba(160,200,225,0.1);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;">ISO 9001</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4f6e85;">ZSZ</div>
+      </div>
+      <div style="flex:1;aspect-ratio:1.414;background:repeating-linear-gradient(-45deg,rgba(255,255,255,0.02) 0px,rgba(255,255,255,0.02) 1px,transparent 1px,transparent 8px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:32px;">
+        <div style="width:44px;height:44px;border:1.5px solid rgba(160,200,225,0.25);border-radius:2px;display:flex;align-items:center;justify-content:center;"><span style="color:#4f6e85;font-size:22px;line-height:1;">+</span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#3a5568;text-align:center;">Zdjęcie certyfikatu<br>ZSZ ISO 9001</div>
+      </div>
+      <div style="padding:16px 22px;border-top:1px solid rgba(160,200,225,0.08);">
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:#eaf2f8;margin-bottom:4px;">System Zarządzania Jakością</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7f9bb0;">PN-EN ISO 9001:2015</div>
+      </div>
+    </div>
+    <div style="border:1px solid rgba(160,200,225,0.12);border-radius:2px;overflow:hidden;display:flex;flex-direction:column;">
+      <div style="background:rgba(47,182,214,0.06);border-bottom:1px solid rgba(160,200,225,0.1);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;">ISO 45001</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4f6e85;">BHP</div>
+      </div>
+      <div style="flex:1;aspect-ratio:1.414;background:repeating-linear-gradient(-45deg,rgba(255,255,255,0.02) 0px,rgba(255,255,255,0.02) 1px,transparent 1px,transparent 8px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:32px;">
+        <div style="width:44px;height:44px;border:1.5px solid rgba(160,200,225,0.25);border-radius:2px;display:flex;align-items:center;justify-content:center;"><span style="color:#4f6e85;font-size:22px;line-height:1;">+</span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#3a5568;text-align:center;">Zdjęcie certyfikatu<br>BHP ISO 45001</div>
+      </div>
+      <div style="padding:16px 22px;border-top:1px solid rgba(160,200,225,0.08);">
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:#eaf2f8;margin-bottom:4px;">System Zarządzania BHP</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7f9bb0;">PN-EN ISO 45001:2018</div>
+      </div>
+    </div>
+  </div>
+  <footer style="border-top:1px solid rgba(255,255,255,0.05);padding:26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:#040e19;">
+    <div style="display:flex;align-items:center;gap:18px;"><img src="uploads/epd-logo-white.png" alt="" style="height:24px;opacity:0.6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#2f4558;">© 2025 Energy Piping Design Sp. z o.o.</span></div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2f4558;">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2f4558;">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2fb6d6;text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
+  </footer>
+</div>
+
+<!-- ═══════ WYCENA MODAL ═══════════════════════════════════════════════════ -->
+<div id="pg-wycena" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:200;background:rgba(4,10,20,0.97);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:#eaf2f8;">
+  <div style="width:100%;max-width:1060px;padding:clamp(40px,6vh,72px) clamp(22px,5vw,72px);">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:44px;gap:20px;">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#2fb6d6;margin-bottom:12px;">KONTAKT</div>
+        <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(28px,4vw,52px);color:#f3f8fc;line-height:1.06;letter-spacing:-0.02em;">Zapytaj o wycenę</h2>
+      </div>
+      <button onclick="closeWycena()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(160,200,225,0.18);border-radius:2px;color:#bcd2e2;font-size:20px;width:44px;height:44px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;transition:background .2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'">×</button>
+    </div>
+    <div style="display:flex;gap:clamp(40px,6vw,80px);flex-wrap:wrap;align-items:flex-start;">
+      <form id="wycena-form" onsubmit="submitWycena(event)" style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:18px;">
+        <div style="display:flex;gap:18px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px;"><label style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#4f6e85;">Imię i Nazwisko</label><input type="text" name="name" placeholder="Jan Kowalski" required class="form-input"></div>
+          <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px;"><label style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#4f6e85;">Firma</label><input type="text" name="company" placeholder="Nazwa firmy" class="form-input"></div>
+        </div>
+        <div style="display:flex;gap:18px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px;"><label style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#4f6e85;">E-mail</label><input type="email" name="email" placeholder="email@firma.pl" required class="form-input"></div>
+          <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px;"><label style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#4f6e85;">Telefon</label><input type="tel" name="phone" placeholder="+48 000 000 000" class="form-input"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#4f6e85;">Przedmiot zapytania</label><input type="text" name="subject" placeholder="np. Analiza podatności rurociągów parowych" class="form-input"></div>
+        <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#4f6e85;">Treść wiadomości</label><textarea name="message" placeholder="Opisz projekt lub zakres prac..." rows="5" class="form-input" style="resize:vertical;"></textarea></div>
+        <button type="submit" class="bp" style="align-self:flex-start;border:none;cursor:pointer;font-size:15px;padding:15px 32px;">Wyślij zapytanie →</button>
+      </form>
+      <div id="wycena-success" style="display:none;flex:1;min-width:280px;flex-direction:column;align-items:flex-start;gap:16px;padding:40px;border:1px solid rgba(47,182,214,0.25);border-radius:2px;background:rgba(47,182,214,0.05);">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#2fb6d6;">WYSŁANO</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;color:#f3f8fc;">Dziękujemy za zapytanie.</div>
+        <p style="font-size:15px;line-height:1.65;color:#8fa9bd;">Odpowiemy na wiadomość w ciągu 1–2 dni roboczych na podany adres e-mail.</p>
+      </div>
+      <div style="flex:none;width:clamp(220px,22vw,280px);display:flex;flex-direction:column;gap:28px;padding-top:4px;">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4f6e85;margin-bottom:10px;">Adres</div>
+          <div style="font-size:14px;line-height:1.7;color:#8fa9bd;">Energy Piping Design Sp. z o.o.<br>ul. Jesionowa 15<br>40-159 Katowice</div>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4f6e85;margin-bottom:10px;">Kontakt</div>
+          <div style="font-size:14px;line-height:1.9;color:#8fa9bd;"><a href="mailto:kontakt@epdesign.pl" style="color:#bcd2e2;text-decoration:none;">kontakt@epdesign.pl</a></div>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4f6e85;margin-bottom:10px;">Dane rejestrowe</div>
+          <div style="font-size:13px;line-height:1.9;color:#7f9bb0;font-family:'IBM Plex Mono',monospace;">NIP: 9542829277<br>KRS: 0000914400<br>REGON: 389584790</div>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4f6e85;margin-bottom:10px;">Media społecznościowe</div>
+          <a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;color:#2fb6d6;text-decoration:none;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn — Energy Piping Design</a>
+        </div>
+        <div style="margin-top:8px;padding:16px;background:rgba(47,182,214,0.06);border:1px solid rgba(47,182,214,0.18);border-radius:2px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#2fb6d6;margin-bottom:8px;">Czas odpowiedzi</div>
+          <div style="font-size:13px;line-height:1.6;color:#7f9bb0;">Odpowiadamy na zapytania w ciągu 1–2 dni roboczych.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Navigation ────────────────────────────────────────────────────────────
+function navigate(pg) {
+  var scan = document.getElementById('scan');
+  if (scan) {
+    scan.style.animation = 'none';
+    void scan.offsetWidth;
+    scan.style.animation = 'epdScanSweep 0.6s ease-in-out forwards';
+  }
+  setTimeout(function() { setPage(pg); }, pg === 'home' ? 0 : 260);
+}
+
+function setPage(pg) {
+  var pages = ['uslugi', 'realizacje', 'ofirmie', 'certyfikaty'];
+  pages.forEach(function(p) {
+    var el = document.getElementById('pg-' + p);
+    if (!el) return;
+    if (p === pg) {
+      el.style.transform = 'translateX(0)';
+      el.style.pointerEvents = 'all';
+      el.style.zIndex = '50';
+      el.scrollTop = 0;
+    } else {
+      el.style.transform = 'translateX(100%)';
+      el.style.pointerEvents = 'none';
+      el.style.zIndex = '49';
+    }
+  });
+}
+
+function openWycena() {
+  document.getElementById('pg-wycena').style.display = 'flex';
+}
+
+function closeWycena() {
+  document.getElementById('pg-wycena').style.display = 'none';
+}
+
+function submitWycena(e) {
+  e.preventDefault();
+  document.getElementById('wycena-form').style.display = 'none';
+  document.getElementById('wycena-success').style.display = 'flex';
+}
+
+// Close modal on backdrop click
+document.getElementById('pg-wycena').addEventListener('click', function(e) {
+  if (e.target === this) closeWycena();
+});
+
+// ─── Canvas Animation ──────────────────────────────────────────────────────
+(function() {
+  var canvas = document.getElementById('canvas');
+  var root   = document.getElementById('root');
+  var mouse  = { x:0, y:0, tx:0, ty:0 };
+
+  var ctx, W, H, scale, cx, cy;
+  var chains, edges, nodes, cloud, noise, source3d;
+  var midX, midY, spanX, spanY, minWX, spanWX;
+  var raf, startTime;
+
+  var ACCENT     = '#2fb6d6';
+  var FLOW_SPEED = 0.3;
+  var DENSITY    = 30;
+  var SHOW_GRID  = true;
+
+  function _rgb(hex) {
+    hex = (hex || '#2fb6d6').replace('#', '');
+    if (hex.length === 3) hex = hex.split('').map(function(x){ return x+x; }).join('');
+    return [parseInt(hex.slice(0,2),16), parseInt(hex.slice(2,4),16), parseInt(hex.slice(4,6),16)];
+  }
+
+  function buildGeometry() {
+    var source3dV = [-4.5,2.4,-1.7];
+    var chainsRaw = [
+      [[-4.5,2.4,-1.7],[-4.5,2.4,0]],
+      [[-4.5,2.4,0],[-7,2.4,0],[-7,2.4,2.2]],
+      [[-4.5,2.4,0],[-1,2.4,0],[1.6,2.4,0],[3.5,2.4,0],[6,2.4,0],[6,2.4,1.4]],
+      [[-4.5,2.4,0],[-4.5,-1.8,0],[-4.5,-1.8,4.6],[4.2,-1.8,4.6],[4.2,0.7,4.6]],
+      [[-1,2.4,0],[-1,2.4,5],[-1,0.2,5]],
+      [[3.5,2.4,0],[3.5,0.4,0],[3.5,0.4,3.4]],
+      [[1.6,2.4,0],[1.6,1.0,0]]
+    ];
+    function dist(a,b){ return Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]); }
+    var edgesArr=[]; var C=[]; var allV=[]; var vertMap={};
+    function key(p){ return p[0].toFixed(2)+'_'+p[1].toFixed(2)+'_'+p[2].toFixed(2); }
+    chainsRaw.forEach(function(pts) {
+      var cum=[0], total=0;
+      for(var i=0;i<pts.length-1;i++){ total+=dist(pts[i],pts[i+1]); cum.push(total); }
+      for(var i=0;i<pts.length-1;i++){
+        edgesArr.push({a:pts[i],b:pts[i+1],len:dist(pts[i],pts[i+1]),s0:cum[i]/total,s1:cum[i+1]/total,phase:Math.random()});
+      }
+      pts.forEach(function(p){ allV.push(p); vertMap[key(p)]=p; });
+      C.push({points:pts,cum:cum,total:total});
+    });
+    var deg={};
+    edgesArr.forEach(function(e){ var ka=key(e.a),kb=key(e.b); deg[ka]=(deg[ka]||0)+1; deg[kb]=(deg[kb]||0)+1; });
+    var iso=function(x,y,z){ var X=x,Z=z; return [(X-Z)*0.8660254,(X+Z)*0.5-y]; };
+    var minIx=1e9,maxIx=-1e9,minIy=1e9,maxIy=-1e9,minWXv=1e9,maxWXv=-1e9;
+    allV.forEach(function(n){
+      var r=iso(n[0],n[1],n[2]);
+      if(r[0]<minIx)minIx=r[0]; if(r[0]>maxIx)maxIx=r[0];
+      if(r[1]<minIy)minIy=r[1]; if(r[1]>maxIy)maxIy=r[1];
+      if(n[0]<minWXv)minWXv=n[0]; if(n[0]>maxWXv)maxWXv=n[0];
+    });
+    midX=(minIx+maxIx)/2; midY=(minIy+maxIy)/2;
+    spanX=maxIx-minIx; spanY=maxIy-minIy;
+    minWX=minWXv; spanWX=Math.max(0.001,maxWXv-minWXv);
+
+    var sk=key(source3dV);
+    var adj={};
+    edgesArr.forEach(function(e){
+      var ka=key(e.a),kb=key(e.b);
+      (adj[ka]=adj[ka]||[]).push({k:kb,d:e.len});
+      (adj[kb]=adj[kb]||[]).push({k:ka,d:e.len});
+    });
+    var dMap={}; Object.keys(vertMap).forEach(function(k2){ dMap[k2]=Infinity; }); dMap[sk]=0;
+    var vis=new Set(), pq=[[0,sk]];
+    while(pq.length>0){
+      pq.sort(function(a,b){ return a[0]-b[0]; });
+      var du=pq.shift(), d=du[0], u=du[1];
+      if(vis.has(u)) continue; vis.add(u);
+      (adj[u]||[]).forEach(function(nb){
+        if(dMap[u]+nb.d<dMap[nb.k]){ dMap[nb.k]=dMap[u]+nb.d; pq.push([dMap[nb.k],nb.k]); }
+      });
+    }
+    C.forEach(function(c){ c.distNear=dMap[key(c.points[0])]||0; });
+    var maxDN=Math.max.apply(null,[0.001].concat(C.map(function(c){ return c.distNear; })));
+    C.forEach(function(c){ c.order=c.distNear/maxDN*0.85; });
+    var nodes2=Object.values(vertMap).filter(function(p){ return deg[key(p)]===1&&key(p)!==sk; });
+    chains=C; edges=edgesArr; nodes=nodes2; source3d=source3dV;
+  }
+
+  function buildCloud() {
+    if(!edges) return;
+    var density=DENSITY||6;
+    var cl=[], total=0;
+    function lerp(a,b,t){ return a+(b-a)*t; }
+    chains.forEach(function(c,ci){
+      for(var ei=0;ei<c.points.length-1;ei++){
+        var A=c.points[ei],B=c.points[ei+1];
+        var segLen=c.cum[ei+1]-c.cum[ei];
+        var n=Math.max(2,Math.round(segLen*density*0.22));
+        for(var i=0;i<n;i++){
+          var uSeg=i/(n-1);
+          var tx=lerp(A[0],B[0],uSeg)+(Math.random()-0.5)*0.14;
+          var ty=lerp(A[1],B[1],uSeg)+(Math.random()-0.5)*0.14;
+          var tz=lerp(A[2],B[2],uSeg)+(Math.random()-0.5)*0.14;
+          var su=(c.cum[ei]+uSeg*segLen)/c.total;
+          var sc=2.0+Math.random()*1.8;
+          cl.push({tx:tx,ty:ty,tz:tz,ox:(Math.random()-0.5)*sc,oy:(Math.random()-0.5)*sc,oz:(Math.random()-0.5)*sc,rx:(tx-minWX)/spanWX,ci:ci,su:su});
+          total++;
+        }
+      }
+    });
+    var ns=[], nn=Math.round(total*0.45);
+    for(var i=0;i<nn;i++) ns.push({x:-8+Math.random()*15,y:-3+Math.random()*7.5,z:-3+Math.random()*9,rx:Math.random()});
+    cloud=cl; noise=ns;
+  }
+
+  function resize() {
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    var Wv=root.clientWidth, Hv=root.clientHeight;
+    canvas.width=Math.round(Wv*dpr); canvas.height=Math.round(Hv*dpr);
+    ctx=canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+    W=Wv; H=Hv;
+    var fitW=W*0.6, fitH=H*0.58;
+    scale=Math.min(fitW/spanX, fitH/spanY);
+    cx=W<820?W*0.62:W*0.665;
+    cy=H*0.5;
+  }
+
+  function draw(t) {
+    if(!ctx) return;
+    ctx.clearRect(0,0,W,H);
+    mouse.x+=(mouse.tx-mouse.x)*0.05;
+    mouse.y+=(mouse.ty-mouse.y)*0.05;
+    var rot=Math.sin(t*0.00018)*0.10+mouse.x*0.05;
+    var ca=Math.cos(rot), sa=Math.sin(rot);
+    var cxv=cx+mouse.x*20, cyv=cy+mouse.y*14+Math.sin(t*0.00022)*6;
+    var sc=scale, mX=midX, mY=midY;
+    function S(x,y,z){
+      var X=x*ca-z*sa, Z=x*sa+z*ca;
+      var ix=(X-Z)*0.8660254, iy=(X+Z)*0.5-y;
+      return [cxv+(ix-mX)*sc, cyv+(iy-mY)*sc];
+    }
+    var speed=FLOW_SPEED||1;
+    var acc=_rgb(ACCENT);
+    function clamp(v,a,b){ return v<a?a:v>b?b:v; }
+    function ease(v){ return v<.5?2*v*v:1-Math.pow(-2*v+2,2)/2; }
+    function lerp(a,b,p){ return a+(b-a)*p; }
+
+    var w=Math.max(5,sc*0.16);
+    var front01=clamp((t-200)/3000,0,1);
+    var buildP=clamp((t-3600)/3200,0,1);
+    var flowA=clamp((t-5400)/1800,0,1);
+    var nodeA=clamp((t-6200)/1000,0,1);
+
+    if(SHOW_GRID){
+      var gA=clamp((t-300)/1500,0,1)*0.16;
+      if(gA>0){
+        ctx.lineWidth=1; ctx.strokeStyle='rgba(120,180,215,'+gA+')';
+        for(var gx=-8;gx<=6;gx+=2){ var p1=S(gx,-1.95,-3),p2=S(gx,-1.95,6); ctx.beginPath(); ctx.moveTo(p1[0],p1[1]); ctx.lineTo(p2[0],p2[1]); ctx.stroke(); }
+        for(var gz=-3;gz<=6;gz+=2){ var p1=S(-8,-1.95,gz),p2=S(6,-1.95,gz); ctx.beginPath(); ctx.moveTo(p1[0],p1[1]); ctx.lineTo(p2[0],p2[1]); ctx.stroke(); }
+      }
+    }
+
+    var noiseA=clamp(t/900,0,1)*clamp((4300-t)/1400,0,1);
+    if(noiseA>0.01&&noise){
+      ctx.fillStyle='rgba(95,150,190,'+(noiseA*0.6)+')';
+      var r=Math.max(1,sc*0.014);
+      for(var pi=0;pi<noise.length;pi++){ var p=noise[pi]; if(front01<p.rx) continue; var s=S(p.x,p.y,p.z); ctx.fillRect(s[0]-r,s[1]-r,r*2,r*2); }
+    }
+
+    var chainProg=chains.map(function(){ return ease(buildP); });
+    function _arc(P,Q,R,r){
+      var v1x=P[0]-Q[0],v1y=P[1]-Q[1],v2x=R[0]-Q[0],v2y=R[1]-Q[1];
+      var l1=Math.hypot(v1x,v1y),l2=Math.hypot(v2x,v2y); if(l1<2||l2<2) return null;
+      var u1x=v1x/l1,u1y=v1y/l1,u2x=v2x/l2,u2y=v2y/l2;
+      var cross=u1x*u2y-u1y*u2x,dot=u1x*u2x+u1y*u2y; if(Math.abs(cross)<0.02) return null;
+      var tanH=Math.abs(cross)/(1+Math.max(-0.999,dot)); if(!isFinite(tanH)||tanH<1e-4) return null;
+      var td=Math.min(r/tanH,l1*0.46,l2*0.46),aR=td*tanH;
+      var T1=[Q[0]+u1x*td,Q[1]+u1y*td],T2=[Q[0]+u2x*td,Q[1]+u2y*td];
+      var sg=cross>0?1:-1,Ox=T1[0]+(-u1y)*sg*aR,Oy=T1[1]+(u1x)*sg*aR;
+      return{T1:T1,T2:T2,Ox:Ox,Oy:Oy,aR:aR,sA:Math.atan2(T1[1]-Oy,T1[0]-Ox),eA:Math.atan2(T2[1]-Oy,T2[0]-Ox)};
+    }
+    function _smpArc(a,N){
+      var dA=a.eA-a.sA; while(dA>Math.PI)dA-=Math.PI*2; while(dA<-Math.PI)dA+=Math.PI*2;
+      var pts=[]; for(var k=1;k<=N;k++){var ang=a.sA+dA*k/N;pts.push([a.Ox+Math.cos(ang)*a.aR,a.Oy+Math.sin(ang)*a.aR]);} return pts;
+    }
+    function _dense(spts,r){
+      var n=spts.length; if(n<2) return spts.slice(); var res=[spts[0]];
+      for(var i=1;i<n-1;i++){var a=_arc(spts[i-1],spts[i],spts[i+1],r);if(!a){res.push(spts[i]);}else{res.push(a.T1);_smpArc(a,10).forEach(function(p){res.push(p);});}}
+      res.push(spts[n-1]); return res;
+    }
+    var pR=w*2.2, chainDPts=[], chainCumL=[], chainTotL=[];
+    for(var ci=0;ci<chains.length;ci++){
+      var c=chains[ci],prog=chainProg[ci];
+      if(prog<=0.001){chainDPts.push(null);chainCumL.push(null);chainTotL.push(0);continue;}
+      var tgt=prog*c.total,raw=[S(c.points[0][0],c.points[0][1],c.points[0][2])];
+      var acl=0;
+      for(var i=1;i<c.points.length;i++){
+        var sl=c.cum[i]-c.cum[i-1];
+        if(acl+sl<=tgt+1e-6){raw.push(S(c.points[i][0],c.points[i][1],c.points[i][2]));acl+=sl;}
+        else{var f=(tgt-acl)/sl,A=c.points[i-1],B=c.points[i];raw.push(S(lerp(A[0],B[0],f),lerp(A[1],B[1],f),lerp(A[2],B[2],f)));break;}
+      }
+      if(raw.length<2){chainDPts.push(null);chainCumL.push(null);chainTotL.push(0);continue;}
+      var dp=_dense(raw,pR);
+      var cl2=[0]; for(var i=1;i<dp.length;i++){var dx=dp[i][0]-dp[i-1][0],dy=dp[i][1]-dp[i-1][1];cl2.push(cl2[i-1]+Math.hypot(dx,dy));}
+      chainDPts.push(dp);chainCumL.push(cl2);chainTotL.push(cl2[cl2.length-1]);
+    }
+    function getChainPos(ci,u){
+      var dp=chainDPts[ci],cl=chainCumL[ci],tL=chainTotL[ci]; if(!dp||tL<1) return null;
+      var d=u*tL; var j=0; while(j<cl.length-2&&cl[j+1]<d)j++;
+      var f=(d-cl[j])/Math.max(0.001,cl[j+1]-cl[j]);
+      return[lerp(dp[j][0],dp[j+1][0],f),lerp(dp[j][1],dp[j+1][1],f)];
+    }
+    var chainDPtsFull=[],chainCumLFull=[],chainTotLFull=[];
+    for(var ci=0;ci<chains.length;ci++){
+      var c=chains[ci];
+      var rawF=[S(c.points[0][0],c.points[0][1],c.points[0][2])];
+      for(var i=1;i<c.points.length;i++) rawF.push(S(c.points[i][0],c.points[i][1],c.points[i][2]));
+      var dpF=_dense(rawF,pR);
+      var clF=[0]; for(var i=1;i<dpF.length;i++){var dx=dpF[i][0]-dpF[i-1][0],dy=dpF[i][1]-dpF[i-1][1];clF.push(clF[i-1]+Math.hypot(dx,dy));}
+      chainDPtsFull.push(dpF);chainCumLFull.push(clF);chainTotLFull.push(clF[clF.length-1]);
+    }
+    function getChainPosFull(ci,u){
+      var dp=chainDPtsFull[ci],cl=chainCumLFull[ci],tL=chainTotLFull[ci]; if(!dp||tL<1) return null;
+      var d=u*tL; var j=0; while(j<cl.length-2&&cl[j+1]<d)j++;
+      var f=(d-cl[j])/Math.max(0.001,cl[j+1]-cl[j]);
+      return[lerp(dp[j][0],dp[j+1][0],f),lerp(dp[j][1],dp[j+1][1],f)];
+    }
+
+    if(cloud){
+      var mix=ease(clamp((t-1000)/2400,0,1));
+      var settle=clamp((t-6800)/1200,0,1);
+      var fin=clamp(t/900,0,1);
+      var r2=Math.max(1.1,sc*0.018);
+      for(var pi=0;pi<cloud.length;pi++){
+        var p=cloud[pi];
+        var reveal=t<3600?(front01>=p.rx?1:0):1; if(!reveal) continue;
+        var a=0.9*fin*(1-settle); if(a<0.01) continue;
+        var wx=p.tx+p.ox*(1-mix),wy=p.ty+p.oy*(1-mix),wz=p.tz+p.oz*(1-mix);
+        var scS=S(wx,wy,wz); var sx=scS[0],sy=scS[1];
+        if(mix>0&&p.ci!==undefined){ var arcS=getChainPosFull(p.ci,p.su); if(arcS){sx=lerp(scS[0],arcS[0],mix);sy=lerp(scS[1],arcS[1],mix);} }
+        var near=t<3700?clamp(1-Math.abs(front01-p.rx)/0.05,0,1):0;
+        ctx.fillStyle=near>0.05?'rgba(220,245,255,'+clamp(a+near*0.6,0,1)+')':'rgba('+(150+near*70)+',210,240,'+a+')';
+        ctx.fillRect(sx-r2,sy-r2,r2*2,r2*2);
+      }
+    }
+
+    var sweepA=clamp(t/400,0,1)*clamp((3600-t)/700,0,1);
+    if(sweepA>0.01){
+      var leftX=cxv-spanX/2*sc-w, rightX=cxv+spanX/2*sc+w;
+      var xf=lerp(leftX,rightX,front01);
+      var g=ctx.createLinearGradient(xf-3,0,xf+3,0);
+      g.addColorStop(0,'rgba('+acc[0]+','+acc[1]+','+acc[2]+',0)');
+      g.addColorStop(0.5,'rgba('+acc[0]+','+acc[1]+','+acc[2]+','+(sweepA*0.9)+')');
+      g.addColorStop(1,'rgba('+acc[0]+','+acc[1]+','+acc[2]+',0)');
+      ctx.fillStyle=g; ctx.fillRect(xf-14,cyv-spanY*sc*0.7-30,28,spanY*sc*1.4+60);
+    }
+
+    ctx.lineCap='round'; ctx.lineJoin='round';
+    for(var ci=0;ci<chains.length;ci++){
+      var dp=chainDPts[ci]; if(!dp) continue;
+      var path=function(){ctx.beginPath();ctx.moveTo(dp[0][0],dp[0][1]);for(var i=1;i<dp.length;i++)ctx.lineTo(dp[i][0],dp[i][1]);};
+      path(); ctx.lineWidth=w*1.36; ctx.strokeStyle='rgba(6,22,38,0.88)'; ctx.stroke();
+      path(); ctx.lineWidth=w;      ctx.strokeStyle='#2c77a0';            ctx.stroke();
+      path(); ctx.lineWidth=w*0.58; ctx.strokeStyle='#3f8cb4';            ctx.stroke();
+      path(); ctx.lineWidth=Math.max(2,w*0.22); ctx.strokeStyle='rgba(165,224,247,0.82)'; ctx.stroke();
+    }
+
+    if(flowA>0.01){
+      var netSpeed=(FLOW_SPEED||1)*3.0;
+      var T_sec=t*0.001;
+      ctx.globalCompositeOperation='lighter';
+      for(var ci=0;ci<chains.length;ci++){
+        var tL=chainTotL[ci]; if(!chainDPts[ci]||tL<1) continue;
+        var c=chains[ci], dNear=c.distNear||0;
+        var nP=Math.max(1,Math.floor(c.total/4));
+        for(var k=0;k<nP;k++){
+          var u=((T_sec*netSpeed-dNear)/c.total+k/nP)%1;
+          if(T_sec*netSpeed<dNear-c.total/nP) continue;
+          var s=getChainPos(ci,Math.max(0,Math.min(1,u))); if(!s) continue;
+          var rad=w*1.1;
+          var gg=ctx.createRadialGradient(s[0],s[1],0,s[0],s[1],rad);
+          gg.addColorStop(0,'rgba('+Math.min(255,acc[0]+90)+','+Math.min(255,acc[1]+40)+','+Math.min(255,acc[2]+25)+','+(flowA*0.95)+')');
+          gg.addColorStop(0.35,'rgba('+acc[0]+','+acc[1]+','+acc[2]+','+(flowA*0.55)+')');
+          gg.addColorStop(1,'rgba('+acc[0]+','+acc[1]+','+acc[2]+',0)');
+          ctx.fillStyle=gg; ctx.beginPath(); ctx.arc(s[0],s[1],rad,0,7); ctx.fill();
+        }
+      }
+      ctx.globalCompositeOperation='source-over';
+    }
+
+    if(nodeA>0.01){
+      for(var i=0;i<nodes.length;i++){
+        var n=nodes[i]; var s=S(n[0],n[1],n[2]);
+        var pulse=0.5+0.5*Math.sin(t*0.004+i*1.3);
+        var r3=w*0.42*(0.85+0.25*pulse);
+        ctx.globalCompositeOperation='lighter';
+        var gg2=ctx.createRadialGradient(s[0],s[1],0,s[0],s[1],r3*2.4);
+        gg2.addColorStop(0,'rgba('+acc[0]+','+acc[1]+','+acc[2]+','+(nodeA*0.5)+')');
+        gg2.addColorStop(1,'rgba('+acc[0]+','+acc[1]+','+acc[2]+',0)');
+        ctx.fillStyle=gg2; ctx.beginPath(); ctx.arc(s[0],s[1],r3*2.4,0,7); ctx.fill();
+        ctx.globalCompositeOperation='source-over';
+        ctx.fillStyle='rgba(8,26,42,'+nodeA+')'; ctx.beginPath(); ctx.arc(s[0],s[1],r3,0,7); ctx.fill();
+        ctx.strokeStyle='rgba('+acc[0]+','+acc[1]+','+acc[2]+','+nodeA+')'; ctx.lineWidth=Math.max(1.4,w*0.12);
+        ctx.beginPath(); ctx.arc(s[0],s[1],r3,0,7); ctx.stroke();
+        ctx.fillStyle='rgba(235,248,255,'+(nodeA*(0.5+0.5*pulse))+')'; ctx.beginPath(); ctx.arc(s[0],s[1],r3*0.34,0,7); ctx.fill();
+      }
+    }
+
+    if(nodeA>0.01&&source3d){
+      var sn=source3d, ss=S(sn[0],sn[1],sn[2]);
+      var sp=0.5+0.5*Math.sin(t*0.006);
+      var sr=w*0.46*(0.85+0.28*sp);
+      ctx.globalCompositeOperation='lighter';
+      var sg=ctx.createRadialGradient(ss[0],ss[1],0,ss[0],ss[1],sr*3.2);
+      sg.addColorStop(0,'rgba('+acc[0]+','+acc[1]+','+acc[2]+','+(nodeA*0.7)+')');
+      sg.addColorStop(1,'rgba('+acc[0]+','+acc[1]+','+acc[2]+',0)');
+      ctx.fillStyle=sg; ctx.beginPath(); ctx.arc(ss[0],ss[1],sr*3.2,0,7); ctx.fill();
+      ctx.globalCompositeOperation='source-over';
+      ctx.fillStyle='rgba(8,26,42,'+nodeA+')'; ctx.beginPath(); ctx.arc(ss[0],ss[1],sr,0,7); ctx.fill();
+      ctx.strokeStyle='rgba('+acc[0]+','+acc[1]+','+acc[2]+','+nodeA+')'; ctx.lineWidth=Math.max(1.4,w*0.12);
+      ctx.beginPath(); ctx.arc(ss[0],ss[1],sr,0,7); ctx.stroke();
+      ctx.fillStyle='rgba(235,248,255,'+(nodeA*(0.5+0.5*sp))+')'; ctx.beginPath(); ctx.arc(ss[0],ss[1],sr*0.34,0,7); ctx.fill();
+    }
+  }
+
+  function loop() {
+    draw(performance.now() - startTime);
+    raf = requestAnimationFrame(loop);
+  }
+
+  buildGeometry();
+  buildCloud();
+  startTime = performance.now();
+
+  window.addEventListener('mousemove', function(e){
+    var r = root.getBoundingClientRect();
+    mouse.tx = ((e.clientX - r.left)/r.width - 0.5)*2;
+    mouse.ty = ((e.clientY - r.top)/r.height - 0.5)*2;
+  });
+
+  var ro = new ResizeObserver(function(){ resize(); });
+  ro.observe(root);
+  resize();
+
+  raf = requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
