@@ -33,12 +33,12 @@
 }
 [data-theme="light"]{
   --bg-main:#f0f4f8;--bg-surface:#e8eef5;--bg-footer:#dde5ee;
-  --bg-nav:rgba(240,244,248,0.97);--bg-modal:rgba(240,244,248,0.98);
+  --bg-nav:#dde5ee;--bg-modal:rgba(240,244,248,0.98);
   --bg-input:rgba(0,0,0,0.04);--btn-sec-hover:rgba(0,0,0,0.04);
   --close-hover:rgba(0,0,0,0.08);--cert-stripe:rgba(0,0,0,0.02);
-  --text-primary:#0d2135;--text-heading:#061525;--text-sub:#2a5070;
+  --text-primary:#0d2135;--text-heading:#06101c;--text-sub:#2a5070;
   --text-secondary:#2a4a62;--text-muted:#3a5a74;--nl-color:#1a4060;
-  --text-dim:#5a7a94;--text-darker:#8aaabb;--text-ph:#9ab4c4;
+  --text-dim:#5a7a94;--text-darker:var(--nl-color);--text-ph:#9ab4c4;
   --accent:#0d8fab;--accent-h:#0b7294;
   --accent-bg:rgba(0,140,180,0.1);--accent-info:rgba(0,120,160,0.06);
   --accent-subtle:rgba(0,120,160,0.05);
@@ -154,38 +154,38 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
   <div id="uslugi-grid" style="padding:0 clamp(22px,5vw,72px) 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--border);">
     <div style="background:var(--bg-surface);padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);padding-bottom:12px;border-bottom:1px solid var(--border-acc);">EPD-SRV-01</div>
-      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-primary);line-height:1.25;">Analizy przedprojektowe</h3>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-heading);line-height:1.25;">Analizy przedprojektowe</h3>
       <p style="font-size:14px;line-height:1.68;color:var(--text-muted);flex:1;">Kompleksowe badania wstępne i ocena wykonalności przed realizacją projektu rurociągowego. Optymalizacja tras, układów i doboru materiałów w środowisku energetycznym i przemysłowym.</p>
     </div>
     <div style="background:var(--bg-surface);padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);padding-bottom:12px;border-bottom:1px solid var(--border-acc);">EPD-SRV-02</div>
-      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-primary);line-height:1.25;">Podatność rurociągów</h3>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-heading);line-height:1.25;">Podatność rurociągów</h3>
       <p style="font-size:14px;line-height:1.68;color:var(--text-muted);flex:1;">Analizy wytrzymałościowe i podatnościowe metodą MES. Ocena naprężeń termicznych, mechanicznych i dynamicznych zgodnie z normami EN, ASME i branżowymi standardami energetycznymi.</p>
     </div>
     <div style="background:var(--bg-surface);padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);padding-bottom:12px;border-bottom:1px solid var(--border-acc);">EPD-SRV-03</div>
-      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-primary);line-height:1.25;">Projekty wykonawcze i powykonawcze</h3>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-heading);line-height:1.25;">Projekty wykonawcze i powykonawcze</h3>
       <p style="font-size:14px;line-height:1.68;color:var(--text-muted);flex:1;">Pełna dokumentacja techniczna wykonawcza i powykonawcza zgodna z normami branżowymi. Izometrie, schematy P&amp;ID, wykazy materiałów — dla sektora energetycznego i przemysłowego.</p>
     </div>
     <div style="background:var(--bg-surface);padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);padding-bottom:12px;border-bottom:1px solid var(--border-acc);">EPD-SRV-04</div>
-      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-primary);line-height:1.25;">Skanowanie laserowe 3D</h3>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-heading);line-height:1.25;">Skanowanie laserowe 3D</h3>
       <p style="font-size:14px;line-height:1.68;color:var(--text-muted);flex:1;">Precyzyjne skanowanie laserowe istniejących instalacji przemysłowych i energetycznych. Generowanie chmur punktów wysokiej rozdzielczości jako podstawa do dalszych prac projektowych.</p>
     </div>
     <div style="background:var(--bg-surface);padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);padding-bottom:12px;border-bottom:1px solid var(--border-acc);">EPD-SRV-05</div>
-      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-primary);line-height:1.25;">Modelowanie 3D instalacji</h3>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-heading);line-height:1.25;">Modelowanie 3D instalacji</h3>
       <p style="font-size:14px;line-height:1.68;color:var(--text-muted);flex:1;">Tworzenie wiernych modeli cyfrowych instalacji rurociągowych na podstawie skanów i dokumentacji. Formaty PDMS, SP3D, E3D. Kompletna dokumentacja as-built dla zarządzania majątkiem.</p>
     </div>
     <div style="background:var(--bg-surface);padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);padding-bottom:12px;border-bottom:1px solid var(--border-acc);">EPD-SRV-06</div>
-      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-primary);line-height:1.25;">Automatyzacja — IRiESP &amp; NC-RfG</h3>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-heading);line-height:1.25;">Automatyzacja — IRiESP &amp; NC-RfG</h3>
       <p style="font-size:14px;line-height:1.68;color:var(--text-muted);flex:1;">Eksperckie wsparcie w obszarze automatyzacji na wszystkich etapach prac. Analiza i weryfikacja logik sterowania zgodnie z wymaganiami IRiESP oraz europejską normą NC-RfG.</p>
     </div>
   </div>
-  <footer style="border-top:1px solid var(--border-ft);padding:26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:var(--bg-footer);">
-    <div style="display:flex;align-items:center;gap:18px;"><img src="uploads/epd-logo.png" alt="" class="logo-img" style="height:24px;opacity:0.6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-darker);">© 2025 Energy Piping Design Sp. z o.o.</span></div>
-    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-darker);">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-darker);">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
+  <footer style="border-top:1px solid var(--border-ft);padding:26px clamp(22px,5vw,72px) 26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:var(--bg-footer);">
+    <div style="display:flex;align-items:center;gap:18px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--nl-color);">© 2025 Energy Piping Design Sp. z o.o.</span></div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:20px;padding-right:clamp(88px,9vw,132px);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
   </footer>
 </div>
 
@@ -209,44 +209,44 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
   <div id="realizacje-grid" style="padding:0 clamp(22px,5vw,72px) 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--border);">
     <div style="background:var(--bg-surface);padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);">EPD-2023-004 · Energetyka</div>
-      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-primary);line-height:1.3;">EC Katowice — Modernizacja rurociągów pary technologicznej</h3>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-heading);line-height:1.3;">EC Katowice — Modernizacja rurociągów pary technologicznej</h3>
       <p style="font-size:13.5px;line-height:1.6;color:var(--text-muted);flex:1;">Projekt wykonawczy modernizacji sieci rurociągów pary i kondensatu w elektrociepłowni. Analiza podatności, izometrie i dobór kompensatorów.</p>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);margin-top:6px;">2023</div>
     </div>
     <div style="background:var(--bg-surface);padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);">EPD-2023-003 · Górnictwo</div>
-      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-primary);line-height:1.3;">KGHM Polska Miedź — Instalacje technologiczne kopalni</h3>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-heading);line-height:1.3;">KGHM Polska Miedź — Instalacje technologiczne kopalni</h3>
       <p style="font-size:13.5px;line-height:1.6;color:var(--text-muted);flex:1;">Dokumentacja wykonawcza instalacji rurociągów chłodzenia i sprężonego powietrza. Skanowanie laserowe i model 3D istniejącej infrastruktury.</p>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);margin-top:6px;">2023</div>
     </div>
     <div style="background:var(--bg-surface);padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);">EPD-2022-006 · Petrochemia</div>
-      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-primary);line-height:1.3;">PKN Orlen — Model as-built terminalu paliw</h3>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-heading);line-height:1.3;">PKN Orlen — Model as-built terminalu paliw</h3>
       <p style="font-size:13.5px;line-height:1.6;color:var(--text-muted);flex:1;">Skanowanie laserowe 3D i opracowanie modelu cyfrowego terminalu paliw. Weryfikacja kolizji z nową infrastrukturą i aktualizacja dokumentacji powykonawczej.</p>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);margin-top:6px;">2022</div>
     </div>
     <div style="background:var(--bg-surface);padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);">EPD-2022-002 · Energetyka</div>
-      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-primary);line-height:1.3;">Enea Wytwarzanie — Analiza rurociągów parowych bloku energetycznego</h3>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-heading);line-height:1.3;">Enea Wytwarzanie — Analiza rurociągów parowych bloku energetycznego</h3>
       <p style="font-size:13.5px;line-height:1.6;color:var(--text-muted);flex:1;">Kompleksowa analiza podatności rurociągów parowych i zasilających bloku 200 MW. Optymalizacja układu podpór i kompensatorów termicznych.</p>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);margin-top:6px;">2022</div>
     </div>
     <div style="background:var(--bg-surface);padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);">EPD-2021-005 · Energetyka</div>
-      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-primary);line-height:1.3;">Tauron Polska Energia — Weryfikacja logik sterowania IRiESP</h3>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-heading);line-height:1.3;">Tauron Polska Energia — Weryfikacja logik sterowania IRiESP</h3>
       <p style="font-size:13.5px;line-height:1.6;color:var(--text-muted);flex:1;">Analiza i weryfikacja logik sterowania jednostki wytwórczej pod kątem zgodności z Instrukcją Ruchu i Eksploatacji Sieci Przesyłowej oraz wymaganiami NC-RfG.</p>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);margin-top:6px;">2021</div>
     </div>
     <div style="background:var(--bg-surface);padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);">EPD-2021-001 · Oil &amp; Gas</div>
-      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-primary);line-height:1.3;">Lotos Petrobaltic — Instalacja procesowa platformy wydobywczej</h3>
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-heading);line-height:1.3;">Lotos Petrobaltic — Instalacja procesowa platformy wydobywczej</h3>
       <p style="font-size:13.5px;line-height:1.6;color:var(--text-muted);flex:1;">Projekt wykonawczy instalacji procesowej i użytkowej platformy wydobywczej na Bałtyku. Dobór materiałów odpornych na korozję morską i weryfikacja normowa.</p>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);margin-top:6px;">2021</div>
     </div>
   </div>
-  <footer style="border-top:1px solid var(--border-ft);padding:26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:var(--bg-footer);">
-    <div style="display:flex;align-items:center;gap:18px;"><img src="uploads/epd-logo.png" alt="" class="logo-img" style="height:24px;opacity:0.6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-darker);">© 2025 Energy Piping Design Sp. z o.o.</span></div>
-    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-darker);">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-darker);">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
+  <footer style="border-top:1px solid var(--border-ft);padding:26px clamp(22px,5vw,72px) 26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:var(--bg-footer);">
+    <div style="display:flex;align-items:center;gap:18px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--nl-color);">© 2025 Energy Piping Design Sp. z o.o.</span></div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:20px;padding-right:clamp(88px,9vw,132px);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
   </footer>
 </div>
 
@@ -324,9 +324,9 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
     </div>
   </div>
 
-  <footer style="border-top:1px solid var(--border-ft);padding:26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:var(--bg-footer);">
-    <div style="display:flex;align-items:center;gap:18px;"><img src="uploads/epd-logo.png" alt="" class="logo-img" style="height:24px;opacity:0.6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-darker);">© 2025 Energy Piping Design Sp. z o.o.</span></div>
-    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-darker);">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-darker);">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
+  <footer style="border-top:1px solid var(--border-ft);padding:26px clamp(22px,5vw,72px) 26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:var(--bg-footer);">
+    <div style="display:flex;align-items:center;gap:18px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--nl-color);">© 2025 Energy Piping Design Sp. z o.o.</span></div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:20px;padding-right:clamp(88px,9vw,132px);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
   </footer>
 </div>
 
@@ -377,9 +377,9 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
       </div>
     </div>
   </div>
-  <footer style="border-top:1px solid var(--border-ft);padding:26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:var(--bg-footer);">
-    <div style="display:flex;align-items:center;gap:18px;"><img src="uploads/epd-logo.png" alt="" class="logo-img" style="height:24px;opacity:0.6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-darker);">© 2025 Energy Piping Design Sp. z o.o.</span></div>
-    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-darker);">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-darker);">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
+  <footer style="border-top:1px solid var(--border-ft);padding:26px clamp(22px,5vw,72px) 26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:var(--bg-footer);">
+    <div style="display:flex;align-items:center;gap:18px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--nl-color);">© 2025 Energy Piping Design Sp. z o.o.</span></div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:20px;padding-right:clamp(88px,9vw,132px);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
   </footer>
 </div>
 
@@ -450,7 +450,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
     return items.map(p => `
       <div style="background:var(--bg-surface);padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);">${h(p.code)} · ${h(p.category)}</div>
-        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-primary);line-height:1.3;">${h(p.title)}</h3>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:var(--text-heading);line-height:1.3;">${h(p.title)}</h3>
         <p style="font-size:13.5px;line-height:1.6;color:var(--text-muted);flex:1;">${h(p.description)}</p>
         <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);margin-top:6px;">${h(p.year)}</div>
       </div>
@@ -462,7 +462,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
     return items.map(s => `
       <div style="background:var(--bg-surface);padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);padding-bottom:12px;border-bottom:1px solid var(--border-acc);">${h(s.code)}</div>
-        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-primary);line-height:1.25;">${h(s.title)}</h3>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:var(--text-heading);line-height:1.25;">${h(s.title)}</h3>
         <p style="font-size:14px;line-height:1.68;color:var(--text-muted);flex:1;">${h(s.description)}</p>
       </div>
     `).join('');
