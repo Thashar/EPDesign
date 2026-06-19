@@ -387,31 +387,6 @@ function renderHero() {
       </div>
     </div>
 
-    <div class="card" style="margin-top:8px">
-      <div class="card-head" onclick="toggleCard('hero-uslugi-body')">
-        <span class="card-code">USŁUGI</span>
-        <span class="card-title">Intro podstrony Usługi</span>
-      </div>
-      <div class="card-body" id="hero-uslugi-body">
-        <div class="form-group">
-          <label class="fl">Mały napis nad tytułem</label>
-          <input type="text" id="hu-tag" value="${esc(hu.tag || '')}" placeholder="np. OFERTA">
-        </div>
-        <div class="form-group">
-          <label class="fl">Nagłówek</label>
-          <textarea id="hu-heading" rows="2">${esc(hu.heading || '')}</textarea>
-          <div style="font-size:11px;color:#4f6e85;font-family:'IBM Plex Mono',monospace;margin-top:4px;">Nowa linia = łamanie na stronie</div>
-        </div>
-        <div class="form-group">
-          <label class="fl">Opis</label>
-          <textarea id="hu-subheading" rows="4">${esc(hu.subheading || '')}</textarea>
-        </div>
-        <div class="form-actions">
-          <button class="btn-sm" onclick="saveHeroUslugi()">Zapisz</button>
-          <span class="mono" id="hu-msg"></span>
-        </div>
-      </div>
-    </div>
   `;
 }
 
@@ -424,15 +399,6 @@ function collectHero() {
     if (hhTagline) DATA.hero_home.tagline     = hhTagline.value.trim();
     if (hhHeading) DATA.hero_home.heading     = hhHeading.value.trim();
     if (hhDesc)    DATA.hero_home.description = hhDesc.value.trim();
-  }
-  const huTag = document.getElementById('hu-tag');
-  const huHd  = document.getElementById('hu-heading');
-  const huSub = document.getElementById('hu-subheading');
-  if (huTag || huHd || huSub) {
-    DATA.hero_uslugi = DATA.hero_uslugi || {};
-    if (huTag) DATA.hero_uslugi.tag        = huTag.value.trim();
-    if (huHd)  DATA.hero_uslugi.heading    = huHd.value.trim();
-    if (huSub) DATA.hero_uslugi.subheading = huSub.value.trim();
   }
 }
 
@@ -551,6 +517,7 @@ function addRealizacja() {
 // ─── USŁUGI ──────────────────────────────────────────────────────────────────
 function renderUslugi() {
   const items = DATA.uslugi || [];
+  const hu = DATA.hero_uslugi || {};
   return `
     <div class="section-header">
       <span class="section-title">Usługi</span>
@@ -559,6 +526,33 @@ function renderUslugi() {
         <button class="btn-add" onclick="addUsluga()">+ Dodaj usługę</button>
       </div>
     </div>
+
+    <div class="card">
+      <div class="card-head" onclick="toggleCard('hu-intro-body')">
+        <span class="card-code">INTRO</span>
+        <span class="card-title">Nagłówek podstrony Usługi</span>
+      </div>
+      <div class="card-body" id="hu-intro-body">
+        <div class="form-group">
+          <label class="fl">Mały napis nad tytułem</label>
+          <input type="text" id="hu-tag" value="${esc(hu.tag || '')}" placeholder="np. OFERTA">
+        </div>
+        <div class="form-group">
+          <label class="fl">Nagłówek</label>
+          <textarea id="hu-heading" rows="2">${esc(hu.heading || '')}</textarea>
+          <div style="font-size:11px;color:#4f6e85;font-family:'IBM Plex Mono',monospace;margin-top:4px;">Nowa linia = łamanie na stronie</div>
+        </div>
+        <div class="form-group">
+          <label class="fl">Opis</label>
+          <textarea id="hu-subheading" rows="4">${esc(hu.subheading || '')}</textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn-sm" onclick="saveHeroUslugi()">Zapisz</button>
+          <span class="mono" id="hu-msg"></span>
+        </div>
+      </div>
+    </div>
+    <hr class="form-divider">
     ${items.length === 0 ? '<div class="empty-state">BRAK USŁUG</div>' : ''}
     ${items.map((s, i) => `
       <div class="card">
@@ -580,6 +574,15 @@ function renderUslugi() {
 }
 
 function collectUslugi() {
+  const huTag = document.getElementById('hu-tag');
+  const huHd  = document.getElementById('hu-heading');
+  const huSub = document.getElementById('hu-subheading');
+  if (huTag || huHd || huSub) {
+    DATA.hero_uslugi = DATA.hero_uslugi || {};
+    if (huTag) DATA.hero_uslugi.tag        = huTag.value.trim();
+    if (huHd)  DATA.hero_uslugi.heading    = huHd.value.trim();
+    if (huSub) DATA.hero_uslugi.subheading = huSub.value.trim();
+  }
   (DATA.uslugi || []).forEach((s, i) => {
     const c = document.getElementById(`s-code-${i}`);
     const t = document.getElementById(`s-title-${i}`);
