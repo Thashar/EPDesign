@@ -96,9 +96,9 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
     </div>
   </nav>
   <div style="padding:clamp(48px,6vh,72px) clamp(22px,5vw,72px) 40px;">
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#2fb6d6;margin-bottom:14px;">OFERTA</div>
-    <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.5vw,60px);line-height:1.04;letter-spacing:-0.02em;color:#f3f8fc;margin-bottom:18px;text-wrap:balance;">Kompleksowe usługi inżynierskie<br>dla sektora energetycznego</h1>
-    <p style="font-size:clamp(15px,1.4vw,18px);line-height:1.65;color:#8fa9bd;max-width:620px;text-wrap:pretty;">Specjalistyczne usługi inżynierskie w zakresie orurowania — od analiz i projektów, przez skanowanie i modelowanie 3D, po eksperckie wsparcie w automatyzacji i weryfikację zgodności z IRiESP i NC-RfG.</p>
+    <div id="hero-tag" style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#2fb6d6;margin-bottom:14px;">OFERTA</div>
+    <h1 id="hero-heading" style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.5vw,60px);line-height:1.04;letter-spacing:-0.02em;color:#f3f8fc;margin-bottom:18px;text-wrap:balance;">Kompleksowe usługi inżynierskie<br>dla sektora energetycznego</h1>
+    <p id="hero-subheading" style="font-size:clamp(15px,1.4vw,18px);line-height:1.65;color:#8fa9bd;max-width:620px;text-wrap:pretty;">Specjalistyczne usługi inżynierskie w zakresie orurowania — od analiz i projektów, przez skanowanie i modelowanie 3D, po eksperckie wsparcie w automatyzacji i weryfikację zgodności z IRiESP i NC-RfG.</p>
   </div>
   <div id="uslugi-grid" style="padding:0 clamp(22px,5vw,72px) 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:rgba(160,200,225,0.07);">
     <div style="background:#05101c;padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
@@ -470,6 +470,15 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
   }
 
   function applyContent(d) {
+    if (d.hero) {
+      var tag = document.getElementById('hero-tag');
+      var hd  = document.getElementById('hero-heading');
+      var sub = document.getElementById('hero-subheading');
+      if (tag && d.hero.tag) tag.textContent = d.hero.tag;
+      if (hd  && d.hero.heading) hd.innerHTML = d.hero.heading.replace(/\n/g, '<br>');
+      if (sub && d.hero.subheading) sub.textContent = d.hero.subheading;
+    }
+
     var rg = document.getElementById('realizacje-grid');
     if (rg && d.realizacje) rg.innerHTML = renderRealizacjeGrid(d.realizacje);
 

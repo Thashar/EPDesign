@@ -169,7 +169,8 @@ select option{background:#040e19}
   <!-- SIDEBAR -->
   <nav class="sidebar">
     <div class="nav-label">Treść strony</div>
-    <div class="nav-item active" onclick="showSection('realizacje')">Realizacje</div>
+    <div class="nav-item active" onclick="showSection('hero')">Hero</div>
+    <div class="nav-item" onclick="showSection('realizacje')">Realizacje</div>
     <div class="nav-item" onclick="showSection('uslugi')">Usługi</div>
     <div class="nav-label">Firma</div>
     <div class="nav-item" onclick="showSection('ofirmie')">O firmie</div>
@@ -196,7 +197,7 @@ select option{background:#040e19}
 // ─── State ──────────────────────────────────────────────────────────────────
 let TOKEN = '';
 let DATA = {};
-let currentSection = 'realizacje';
+let currentSection = 'hero';
 let pendingPhotoCallback = null;
 let pendingCertCallback = null;
 
@@ -321,6 +322,7 @@ function showSection(name) {
 function renderSection(name) {
   const main = document.getElementById('main');
   switch (name) {
+    case 'hero':       main.innerHTML = renderHero();       break;
     case 'realizacje': main.innerHTML = renderRealizacje(); break;
     case 'uslugi':     main.innerHTML = renderUslugi();     break;
     case 'ofirmie':    main.innerHTML = renderOfirmie();    break;
@@ -334,10 +336,73 @@ function renderSection(name) {
 // ─── Collect before save/navigate ───────────────────────────────────────────
 function collectFormData() {
   switch (currentSection) {
+    case 'hero':    collectHero();    break;
     case 'uslugi':  collectUslugi();  break;
     case 'ofirmie': collectOfirmie(); break;
     case 'kontakt': collectKontakt(); break;
   }
+}
+
+// ─── HERO ────────────────────────────────────────────────────────────────────
+function renderHero() {
+  const h = DATA.hero || {};
+  return `
+    <div class="section-header">
+      <span class="section-title">Sekcja Hero</span>
+      <span class="section-badge">Strona główna</span>
+    </div>
+    <div class="card">
+      <div class="card-body open">
+        <div class="form-group">
+          <label class="fl">Tag nad nagłówkiem</label>
+          <input type="text" id="hero-tag" value="${esc(h.tag || 'OFERTA')}" placeholder="np. OFERTA">
+        </div>
+        <div class="form-group">
+          <label class="fl">Nagłówek główny</label>
+          <textarea id="hero-heading" rows="3" placeholder="Tytuł strony głównej...">${esc(h.heading || '')}</textarea>
+          <div style="font-size:11px;color:#4f6e85;font-family:'IBM Plex Mono',monospace;margin-top:5px;">Nowa linia w tekście = &lt;br&gt; na stronie</div>
+        </div>
+        <div class="form-group">
+          <label class="fl">Podtytuł / opis</label>
+          <textarea id="hero-subheading" rows="4" placeholder="Krótki opis firmy...">${esc(h.subheading || '')}</textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn-sm" onclick="saveHero()">Zapisz hero</button>
+          <span class="mono" id="hero-msg"></span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:20px;padding:20px;background:#06121f;border:1px solid rgba(160,200,225,0.08);border-radius:3px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;margin-bottom:14px;">Podgląd</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#2fb6d6;margin-bottom:10px;" id="hero-prev-tag">${esc(h.tag || 'OFERTA')}</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(20px,3vw,32px);line-height:1.15;color:#f3f8fc;margin-bottom:12px;" id="hero-prev-heading">${(h.heading||'').replace(/\n/g,'<br>')}</div>
+      <div style="font-size:14px;line-height:1.65;color:#8fa9bd;max-width:560px;" id="hero-prev-sub">${esc(h.subheading || '')}</div>
+    </div>
+  `;
+}
+
+function collectHero() {
+  DATA.hero = DATA.hero || {};
+  const tag = document.getElementById('hero-tag');
+  const hd  = document.getElementById('hero-heading');
+  const sub = document.getElementById('hero-subheading');
+  if (tag) DATA.hero.tag        = tag.value.trim();
+  if (hd)  DATA.hero.heading    = hd.value.trim();
+  if (sub) DATA.hero.subheading = sub.value.trim();
+}
+
+function saveHero() {
+  collectHero();
+  // Live preview update
+  const pt = document.getElementById('hero-prev-tag');
+  const ph = document.getElementById('hero-prev-heading');
+  const ps = document.getElementById('hero-prev-sub');
+  if (pt) pt.textContent = DATA.hero.tag;
+  if (ph) ph.innerHTML   = DATA.hero.heading.replace(/\n/g, '<br>');
+  if (ps) ps.textContent = DATA.hero.subheading;
+  const msg = document.getElementById('hero-msg');
+  msg.textContent = '✓ Gotowe — kliknij Zapisz zmiany aby opublikować';
+  setTimeout(() => msg.textContent = '', 3000);
 }
 
 // ─── REALIZACJE ─────────────────────────────────────────────────────────────
@@ -429,15 +494,23 @@ function renderUslugi() {
   return `
     <div class="section-header">
       <span class="section-title">Usługi</span>
-      <span class="section-badge">${items.length} usług</span>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span class="section-badge">${items.length} usług</span>
+        <button class="btn-add" onclick="addUsluga()">+ Dodaj usługę</button>
+      </div>
     </div>
+    ${items.length === 0 ? '<div class="empty-state">BRAK USŁUG</div>' : ''}
     ${items.map((s, i) => `
       <div class="card">
         <div class="card-head" onclick="toggleCard('srv-body-${i}')">
           <span class="card-code">${esc(s.code)}</span>
           <span class="card-title">${esc(s.title)}</span>
+          <div class="card-actions" onclick="event.stopPropagation()">
+            <button class="btn-del" title="Usuń" onclick="delUsluga(${i})">✕</button>
+          </div>
         </div>
         <div class="card-body" id="srv-body-${i}">
+          <div class="form-group"><label class="fl">Kod</label><input type="text" id="s-code-${i}" value="${esc(s.code)}"></div>
           <div class="form-group"><label class="fl">Tytuł usługi</label><input type="text" id="s-title-${i}" value="${esc(s.title)}"></div>
           <div class="form-group"><label class="fl">Opis</label><textarea id="s-desc-${i}" rows="4">${esc(s.description)}</textarea></div>
         </div>
@@ -448,11 +521,34 @@ function renderUslugi() {
 
 function collectUslugi() {
   (DATA.uslugi || []).forEach((s, i) => {
+    const c = document.getElementById(`s-code-${i}`);
     const t = document.getElementById(`s-title-${i}`);
     const d = document.getElementById(`s-desc-${i}`);
-    if (t) DATA.uslugi[i].title = t.value.trim();
+    if (c) DATA.uslugi[i].code        = c.value.trim();
+    if (t) DATA.uslugi[i].title       = t.value.trim();
     if (d) DATA.uslugi[i].description = d.value.trim();
   });
+}
+
+function addUsluga() {
+  DATA.uslugi = DATA.uslugi || [];
+  const next = DATA.uslugi.length + 1;
+  DATA.uslugi.push({
+    code: `EPD-SRV-${String(next).padStart(2,'0')}`,
+    title: 'Nowa usługa',
+    description: ''
+  });
+  renderSection('uslugi');
+  setTimeout(() => {
+    const body = document.getElementById(`srv-body-${DATA.uslugi.length - 1}`);
+    if (body) body.classList.add('open');
+  }, 50);
+}
+
+function delUsluga(i) {
+  if (!confirm('Usunąć tę usługę?')) return;
+  DATA.uslugi.splice(i, 1);
+  renderSection('uslugi');
 }
 
 // ─── O FIRMIE ────────────────────────────────────────────────────────────────
@@ -674,24 +770,34 @@ function renderCertyfikaty() {
   return `
     <div class="section-header">
       <span class="section-title">Certyfikaty</span>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span class="section-badge">${certs.length} certyfikatów</span>
+        <button class="btn-add" onclick="addCertyfikat()">+ Dodaj certyfikat</button>
+      </div>
     </div>
+    ${certs.length === 0 ? '<div class="empty-state">BRAK CERTYFIKATÓW</div>' : ''}
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px">
       ${certs.map((c,i) => `
         <div class="cert-card">
           <div class="cert-header">
             <span class="cert-code">${esc(c.code)}</span>
-            <span class="cert-label">${esc(c.label)}</span>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span class="cert-label">${esc(c.label)}</span>
+              <button class="btn-del" title="Usuń certyfikat" onclick="delCertyfikat(${i})" style="padding:2px 6px">✕</button>
+            </div>
           </div>
           <div class="cert-preview" id="cert-prev-${i}">
             ${c.image
               ? `<img src="${esc(c.image)}" style="width:100%;height:100%;object-fit:contain">`
               : `<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#3a5568;text-align:center;letter-spacing:.08em">BRAK ZDJĘCIA<br>CERTYFIKATU</div>`}
           </div>
+          <div class="form-group"><label class="fl">Kod (np. ISO 9001)</label><input type="text" id="c-code-${i}" value="${esc(c.code)}"></div>
+          <div class="form-group"><label class="fl">Etykieta (np. Jakość)</label><input type="text" id="c-label-${i}" value="${esc(c.label||'')}"></div>
           <div class="form-group"><label class="fl">Tytuł</label><input type="text" id="c-title-${i}" value="${esc(c.title)}"></div>
           <div class="form-group"><label class="fl">Norma</label><input type="text" id="c-norm-${i}" value="${esc(c.norm)}"></div>
-          <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
-            <button class="btn-file" onclick="triggerCertPhoto(${i})">📎 Wgraj certyfikat</button>
-            <input type="text" id="c-img-${i}" value="${esc(c.image||'')}" placeholder="URL zdjęcia" style="flex:1;font-size:11px;padding:7px 10px">
+          <div style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap">
+            <button class="btn-file" onclick="triggerCertPhoto(${i})">Wgraj certyfikat</button>
+            <input type="text" id="c-img-${i}" value="${esc(c.image||'')}" placeholder="URL zdjęcia" style="flex:1;min-width:120px;font-size:11px;padding:7px 10px">
           </div>
           <div class="form-actions">
             <button class="btn-sm" onclick="saveCert(${i})">Zapisz</button>
@@ -701,6 +807,18 @@ function renderCertyfikaty() {
       `).join('')}
     </div>
   `;
+}
+
+function addCertyfikat() {
+  DATA.certyfikaty = DATA.certyfikaty || [];
+  DATA.certyfikaty.push({ code: '', label: '', title: 'Nowy certyfikat', norm: '', image: '' });
+  renderSection('certyfikaty');
+}
+
+function delCertyfikat(i) {
+  if (!confirm('Usunąć ten certyfikat?')) return;
+  DATA.certyfikaty.splice(i, 1);
+  renderSection('certyfikaty');
 }
 
 function triggerCertPhoto(i) {
@@ -716,6 +834,8 @@ function saveCert(i) {
   DATA.certyfikaty = DATA.certyfikaty || [];
   DATA.certyfikaty[i] = {
     ...DATA.certyfikaty[i],
+    code:  document.getElementById(`c-code-${i}`)?.value.trim()  || DATA.certyfikaty[i].code,
+    label: document.getElementById(`c-label-${i}`)?.value.trim() || DATA.certyfikaty[i].label,
     title: document.getElementById(`c-title-${i}`).value.trim(),
     norm:  document.getElementById(`c-norm-${i}`).value.trim(),
     image: document.getElementById(`c-img-${i}`).value.trim()
