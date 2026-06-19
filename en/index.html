@@ -584,11 +584,14 @@ document.getElementById('pg-wycena').addEventListener('click', function(e) {
 
 // ─── Language switcher ────────────────────────────────────────────────────────
 (function() {
-  var sw = document.createElement('div');
-  sw.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:300;display:flex;align-items:center;gap:4px;background:rgba(4,14,26,0.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(160,200,225,0.13);border-radius:4px;padding:4px 8px;';
-  sw.innerHTML = '<a href="/" style="font-size:21px;line-height:1;opacity:0.38;text-decoration:none;display:block;transition:opacity .2s;" title="Wersja polska" onmouseover="this.style.opacity=\'0.85\'" onmouseout="this.style.opacity=\'0.38\'">🇵🇱</a>'
-    + '<span style="font-size:21px;line-height:1;cursor:default;" title="English version">🇬🇧</span>';
-  document.body.appendChild(sw);
+  var a = document.createElement('a');
+  a.href = '/';
+  a.title = 'Przełącz na polski';
+  a.style.cssText = 'position:fixed;bottom:22px;right:22px;z-index:300;display:block;width:42px;height:28px;border-radius:3px;overflow:hidden;border:1px solid rgba(255,255,255,0.22);box-shadow:0 2px 12px rgba(0,0,0,0.55);opacity:0.72;transition:opacity .2s,transform .18s;text-decoration:none;';
+  a.onmouseover = function(){ this.style.opacity='1'; this.style.transform='scale(1.1)'; };
+  a.onmouseout  = function(){ this.style.opacity='0.72'; this.style.transform='scale(1)'; };
+  a.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" style="display:block;width:100%;height:100%"><rect width="60" height="30" fill="#fff"/><rect y="15" width="60" height="15" fill="#dc143c"/></svg>';
+  document.body.appendChild(a);
 })();
 
 // ─── Canvas Animation ──────────────────────────────────────────────────────
