@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#040e19;font-family:'IBM Plex Sans',sans-serif;color:#eaf2f8;font-size:14px}
+html,body{height:100%;background:#040e19;font-family:'Space Grotesk',sans-serif;color:#eaf2f8;font-size:14px}
 
 /* Layout */
 .layout{display:grid;grid-template-rows:80px 1fr;grid-template-columns:220px 1fr;height:100vh;overflow:hidden}
@@ -19,23 +19,22 @@ html,body{height:100%;background:#040e19;font-family:'IBM Plex Sans',sans-serif;
 
 /* Topbar */
 .topbar-logo{height:64px;opacity:0.85}
-.topbar-right{display:flex;align-items:center;gap:16px}
+.topbar-right{display:flex;align-items:center;gap:12px}
 .topbar-status{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#4f6e85}
 .topbar-status.ok{color:#3ecf8e}
 .topbar-status.err{color:#e05555}
 .topbar-status.saving{color:#2fb6d6}
-.btn-logout{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#4f6e85;background:none;border:1px solid rgba(160,200,225,0.12);border-radius:2px;padding:6px 14px;cursor:pointer;transition:color .2s,border-color .2s}
+.btn-logout{font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:12px;letter-spacing:.04em;color:#4f6e85;background:none;border:1px solid rgba(160,200,225,0.12);border-radius:2px;padding:7px 14px;cursor:pointer;transition:color .2s,border-color .2s}
 .btn-logout:hover{color:#eaf2f8;border-color:rgba(160,200,225,0.3)}
-.btn-save{font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:13px;color:#04121d;background:#2fb6d6;border:none;border-radius:3px;padding:8px 20px;cursor:pointer;transition:background .2s}
+.btn-save{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:#04121d;background:#2fb6d6;border:none;border-radius:3px;padding:8px 20px;cursor:pointer;transition:background .2s}
 .btn-save:hover{background:#56cce6}
 .btn-save:disabled{opacity:0.4;cursor:not-allowed}
 
 /* Sidebar */
 .nav-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#2f4558;padding:12px 20px 6px;margin-top:4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;cursor:pointer;color:#7f9bb0;font-size:13px;font-family:'IBM Plex Sans',sans-serif;transition:color .15s,background .15s;border-left:2px solid transparent}
+.nav-item{display:flex;align-items:center;padding:11px 20px;cursor:pointer;color:#7f9bb0;font-size:13px;font-family:'Space Grotesk',sans-serif;font-weight:500;transition:color .15s,background .15s;border-left:2px solid transparent;white-space:nowrap}
 .nav-item:hover{color:#bcd2e2;background:rgba(255,255,255,0.02)}
 .nav-item.active{color:#eaf2f8;border-left-color:#2fb6d6;background:rgba(47,182,214,0.06)}
-.nav-icon{font-size:15px;width:18px;text-align:center;flex:none}
 
 /* Section headers */
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
@@ -47,50 +46,50 @@ html,body{height:100%;background:#040e19;font-family:'IBM Plex Sans',sans-serif;
 .card-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;gap:12px;user-select:none}
 .card-head:hover{background:rgba(255,255,255,0.02)}
 .card-code{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#2fb6d6;flex:none}
-.card-title{font-weight:500;color:#eaf2f8;font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-title{font-family:'Space Grotesk',sans-serif;font-weight:500;color:#eaf2f8;font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card-actions{display:flex;gap:6px;flex:none}
 .card-body{display:none;padding:18px;border-top:1px solid rgba(160,200,225,0.06);background:#040e19}
 .card-body.open{display:block}
 
 /* Buttons */
-.btn-add{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#2fb6d6;background:rgba(47,182,214,0.08);border:1px solid rgba(47,182,214,0.25);border-radius:2px;padding:8px 16px;cursor:pointer;transition:background .2s,border-color .2s}
+.btn-add{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;letter-spacing:.04em;color:#2fb6d6;background:rgba(47,182,214,0.08);border:1px solid rgba(47,182,214,0.25);border-radius:2px;padding:8px 16px;cursor:pointer;transition:background .2s,border-color .2s}
 .btn-add:hover{background:rgba(47,182,214,0.15);border-color:rgba(47,182,214,0.45)}
 .btn-del{font-size:13px;background:none;border:none;color:#4f6e85;cursor:pointer;padding:4px 8px;border-radius:2px;transition:color .15s,background .15s}
 .btn-del:hover{color:#e05555;background:rgba(224,85,85,0.08)}
-.btn-edit{font-size:12px;font-family:'IBM Plex Mono',monospace;background:none;border:1px solid rgba(160,200,225,0.15);color:#7f9bb0;cursor:pointer;padding:4px 10px;border-radius:2px;transition:color .15s,border-color .15s}
+.btn-edit{font-size:12px;font-family:'Space Grotesk',sans-serif;font-weight:500;background:none;border:1px solid rgba(160,200,225,0.15);color:#7f9bb0;cursor:pointer;padding:5px 12px;border-radius:2px;transition:color .15s,border-color .15s}
 .btn-edit:hover{color:#eaf2f8;border-color:rgba(160,200,225,0.35)}
-.btn-sm{font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:12px;color:#04121d;background:#2fb6d6;border:none;border-radius:2px;padding:7px 14px;cursor:pointer;transition:background .2s}
+.btn-sm{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:#04121d;background:#2fb6d6;border:none;border-radius:2px;padding:8px 16px;cursor:pointer;transition:background .2s}
 .btn-sm:hover{background:#56cce6}
 
 /* Forms */
 .form-group{margin-bottom:16px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
 label.fl{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#4f6e85;margin-bottom:6px}
-input[type=text],input[type=email],input[type=tel],input[type=url],select,textarea{display:block;width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(160,200,225,0.15);border-radius:2px;padding:10px 13px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:#eaf2f8;outline:none;transition:border-color .2s;color-scheme:dark}
+input[type=text],input[type=email],input[type=tel],input[type=url],select,textarea{display:block;width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(160,200,225,0.15);border-radius:2px;padding:10px 13px;font-family:'Space Grotesk',sans-serif;font-size:13px;color:#eaf2f8;outline:none;transition:border-color .2s;color-scheme:dark}
 input::placeholder,textarea::placeholder{color:#3a5568}
 input:focus,textarea:focus,select:focus{border-color:rgba(47,182,214,0.5)}
 textarea{resize:vertical;min-height:80px;line-height:1.55}
 select option{background:#040e19}
-.form-actions{display:flex;gap:10px;margin-top:16px;align-items:center}
+.form-actions{display:flex;gap:10px;margin-top:16px;align-items:center;flex-wrap:wrap}
 .form-divider{border:none;border-top:1px solid rgba(160,200,225,0.07);margin:20px 0}
 
 /* Photo upload */
-.photo-zone{display:flex;align-items:center;gap:16px;margin-bottom:16px}
-.photo-preview{width:72px;height:72px;border-radius:2px;object-fit:cover;border:1px solid rgba(160,200,225,0.15);background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;color:#3a5568;font-size:11px;text-align:center;font-family:'IBM Plex Mono',monospace;overflow:hidden}
+.photo-zone{display:flex;align-items:center;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+.photo-preview{width:72px;height:72px;border-radius:2px;object-fit:cover;border:1px solid rgba(160,200,225,0.15);background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;color:#3a5568;font-size:11px;text-align:center;font-family:'IBM Plex Mono',monospace;overflow:hidden;flex:none}
 .photo-preview img{width:100%;height:100%;object-fit:cover}
 .photo-controls{display:flex;flex-direction:column;gap:8px}
-.btn-file{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#2fb6d6;background:rgba(47,182,214,0.08);border:1px solid rgba(47,182,214,0.22);border-radius:2px;padding:7px 14px;cursor:pointer;transition:background .2s}
+.btn-file{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;color:#2fb6d6;background:rgba(47,182,214,0.08);border:1px solid rgba(47,182,214,0.22);border-radius:2px;padding:8px 14px;cursor:pointer;transition:background .2s}
 .btn-file:hover{background:rgba(47,182,214,0.16)}
-.photo-url-note{font-size:11px;color:#4f6e85;font-family:'IBM Plex Mono',monospace}
+.photo-url-note{font-size:12px;color:#4f6e85;font-family:'Space Grotesk',sans-serif}
 
 /* Grid for team */
-.person-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:16px}
+.person-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-bottom:16px}
 .person-card{background:#06121f;border:1px solid rgba(160,200,225,0.08);border-radius:3px;padding:16px}
 .person-card-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .person-photo{width:48px;height:48px;border-radius:2px;object-fit:cover;border:1px solid rgba(160,200,225,0.12);flex:none;background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;color:#3a5568;font-size:10px;overflow:hidden}
 .person-photo img{width:100%;height:100%;object-fit:cover}
 .person-info{flex:1;overflow:hidden}
-.person-name{font-weight:600;font-size:14px;color:#eaf2f8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.person-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;color:#eaf2f8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .person-role{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2fb6d6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .person-subrole{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4f6e85}
 
@@ -112,7 +111,7 @@ select option{background:#040e19}
 .kontakt-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 
 /* Toast */
-.toast{position:fixed;bottom:24px;right:24px;background:#06121f;border:1px solid rgba(47,182,214,0.35);border-radius:3px;padding:14px 20px;font-size:13px;color:#eaf2f8;font-family:'IBM Plex Mono',monospace;z-index:999;transform:translateY(80px);opacity:0;transition:transform .3s,opacity .3s;letter-spacing:.04em}
+.toast{position:fixed;bottom:24px;right:24px;background:#06121f;border:1px solid rgba(47,182,214,0.35);border-radius:3px;padding:14px 20px;font-size:13px;color:#eaf2f8;font-family:'Space Grotesk',sans-serif;font-weight:500;z-index:999;transform:translateY(80px);opacity:0;transition:transform .3s,opacity .3s}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.err{border-color:rgba(224,85,85,0.45);color:#f8a0a0}
 
@@ -120,6 +119,37 @@ select option{background:#040e19}
 .mono{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4f6e85}
 .hidden{display:none!important}
 .empty-state{padding:40px;text-align:center;color:#3a5568;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em}
+
+/* ── Mobile ─────────────────────────────────────────────────────────────── */
+@media (max-width:720px){
+  .layout{grid-template-rows:64px auto 1fr;grid-template-columns:1fr;height:auto;min-height:100vh;overflow:visible}
+  .topbar{padding:0 16px}
+  .topbar-logo{height:44px}
+  .topbar-status{display:none}
+  .btn-save{padding:8px 14px;font-size:12px}
+  .btn-logout{padding:7px 10px;font-size:11px}
+
+  .sidebar{grid-row:2;grid-column:1;border-right:none;border-bottom:1px solid rgba(160,200,225,0.08);padding:0;display:flex;overflow-x:auto;overflow-y:visible;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .sidebar::-webkit-scrollbar{display:none}
+  .nav-label{display:none}
+  .nav-item{display:inline-flex;flex-shrink:0;padding:14px 18px;border-left:none;border-bottom:2px solid transparent;font-size:13px}
+  .nav-item.active{background:rgba(47,182,214,0.06);border-left-color:transparent;border-bottom-color:#2fb6d6}
+
+  .main{grid-row:3;grid-column:1;padding:20px 16px;overflow-y:visible}
+
+  .form-row{grid-template-columns:1fr}
+  .kontakt-grid{grid-template-columns:1fr}
+  .person-grid{grid-template-columns:1fr}
+  .section-header{flex-direction:column;align-items:flex-start}
+  .section-title{font-size:18px}
+  .card-head{padding:12px 14px}
+  .card-body{padding:14px}
+  .cert-preview{max-width:100%}
+  .photo-zone{flex-direction:column;align-items:flex-start}
+  .form-actions{flex-direction:column;align-items:flex-start}
+  .timeline-row{flex-wrap:wrap}
+  .tl-year{width:100%}
+}
 </style>
 </head>
 <body>
@@ -139,13 +169,13 @@ select option{background:#040e19}
   <!-- SIDEBAR -->
   <nav class="sidebar">
     <div class="nav-label">Treść strony</div>
-    <div class="nav-item active" onclick="showSection('realizacje')"><span class="nav-icon">📁</span>Realizacje</div>
-    <div class="nav-item" onclick="showSection('uslugi')"><span class="nav-icon">⚙️</span>Usługi</div>
+    <div class="nav-item active" onclick="showSection('realizacje')">Realizacje</div>
+    <div class="nav-item" onclick="showSection('uslugi')">Usługi</div>
     <div class="nav-label">Firma</div>
-    <div class="nav-item" onclick="showSection('ofirmie')"><span class="nav-icon">📝</span>O firmie</div>
-    <div class="nav-item" onclick="showSection('kadra')"><span class="nav-icon">👤</span>Kadra</div>
-    <div class="nav-item" onclick="showSection('certyfikaty')"><span class="nav-icon">🏅</span>Certyfikaty</div>
-    <div class="nav-item" onclick="showSection('kontakt')"><span class="nav-icon">📍</span>Kontakt</div>
+    <div class="nav-item" onclick="showSection('ofirmie')">O firmie</div>
+    <div class="nav-item" onclick="showSection('kadra')">Kadra</div>
+    <div class="nav-item" onclick="showSection('certyfikaty')">Certyfikaty</div>
+    <div class="nav-item" onclick="showSection('kontakt')">Kontakt</div>
   </nav>
 
   <!-- MAIN -->
