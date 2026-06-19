@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EPD Admin — Logowanie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#040e19;font-family:'IBM Plex Sans',sans-serif;color:#eaf2f8}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+.card{width:100%;max-width:400px;padding:48px 40px;background:#06121f;border:1px solid rgba(160,200,225,0.1);border-radius:4px}
+.logo{height:48px;width:auto;display:block;margin:0 auto 36px;opacity:0.9}
+.label{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#4f6e85;margin-bottom:8px}
+.input{display:block;width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(160,200,225,0.15);border-radius:2px;padding:13px 16px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;color:#eaf2f8;outline:none;transition:border-color .2s;margin-bottom:24px}
+.input:focus{border-color:rgba(47,182,214,0.5)}
+.btn{display:block;width:100%;font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:15px;color:#04121d;background:#2fb6d6;border:none;border-radius:3px;padding:14px;cursor:pointer;transition:background .2s;letter-spacing:.01em}
+.btn:hover{background:#56cce6}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.error{font-size:13px;color:#e05555;font-family:'IBM Plex Mono',monospace;margin-top:16px;text-align:center;display:none}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;text-align:center;margin-bottom:20px}
+h1{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:26px;color:#f3f8fc;text-align:center;margin-bottom:32px}
+.back{display:block;text-align:center;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#4f6e85;text-decoration:none;transition:color .2s}
+.back:hover{color:#bcd2e2}
+</style>
+</head>
+<body>
+<div class="card">
+  <img src="uploads/epd-logo-white.png" alt="Energy Piping Design" class="logo">
+  <div class="tag">Panel Administracyjny</div>
+  <h1>Logowanie</h1>
+  <form id="form" onsubmit="doLogin(event)">
+    <label class="label" for="pwd">Hasło</label>
+    <input class="input" id="pwd" type="password" placeholder="••••••••••••" autocomplete="current-password" required>
+    <button class="btn" id="btn" type="submit">Zaloguj się</button>
+    <div class="error" id="err"></div>
+  </form>
+  <a href="/" class="back">← Wróć do strony</a>
+</div>
+
+<script>
+async function doLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btn');
+  const err = document.getElementById('err');
+  const pwd = document.getElementById('pwd').value;
+  btn.disabled = true;
+  btn.textContent = 'Logowanie...';
+  err.style.display = 'none';
+
+  try {
+    const r = await fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pwd })
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || 'Błąd logowania');
+    sessionStorage.setItem('epd_token', data.token);
+    window.location.href = '/admin-panel.html';
+  } catch (ex) {
+    err.textContent = ex.message;
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Zaloguj się';
+  }
+}
+
+// Auto-redirect if already logged in
+if (sessionStorage.getItem('epd_token')) {
+  window.location.href = '/admin-panel.html';
+}
+</script>
+</body>
+</html>

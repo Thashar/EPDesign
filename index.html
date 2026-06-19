@@ -100,7 +100,7 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
     <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.5vw,60px);line-height:1.04;letter-spacing:-0.02em;color:#f3f8fc;margin-bottom:18px;text-wrap:balance;">Kompleksowe usługi inżynierskie<br>dla sektora energetycznego</h1>
     <p style="font-size:clamp(15px,1.4vw,18px);line-height:1.65;color:#8fa9bd;max-width:620px;text-wrap:pretty;">Specjalistyczne usługi inżynierskie w zakresie orurowania — od analiz i projektów, przez skanowanie i modelowanie 3D, po eksperckie wsparcie w automatyzacji i weryfikację zgodności z IRiESP i NC-RfG.</p>
   </div>
-  <div style="padding:0 clamp(22px,5vw,72px) 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:rgba(160,200,225,0.07);">
+  <div id="uslugi-grid" style="padding:0 clamp(22px,5vw,72px) 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:rgba(160,200,225,0.07);">
     <div style="background:#05101c;padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;padding-bottom:12px;border-bottom:1px solid rgba(47,182,214,0.18);">EPD-SRV-01</div>
       <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:#eaf2f8;line-height:1.25;">Analizy przedprojektowe</h3>
@@ -155,7 +155,7 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
     <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.5vw,60px);line-height:1.04;letter-spacing:-0.02em;color:#f3f8fc;margin-bottom:18px;">Wybrane realizacje</h1>
     <p style="font-size:clamp(15px,1.4vw,18px);line-height:1.65;color:#8fa9bd;max-width:560px;">Projekty zrealizowane dla czołowych podmiotów sektora energetycznego, petrochemicznego i przemysłowego w Polsce i za granicą.</p>
   </div>
-  <div style="padding:0 clamp(22px,5vw,72px) 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:rgba(160,200,225,0.07);">
+  <div id="realizacje-grid" style="padding:0 clamp(22px,5vw,72px) 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:rgba(160,200,225,0.07);">
     <div style="background:#05101c;padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;">EPD-2023-004 · Energetyka</div>
       <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:#eaf2f8;line-height:1.3;">EC Katowice — Modernizacja rurociągów pary technologicznej</h3>
@@ -215,13 +215,13 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
   <div style="padding:clamp(48px,6vh,72px) clamp(22px,5vw,72px) 60px;border-bottom:1px solid rgba(255,255,255,0.05);">
     <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#2fb6d6;margin-bottom:14px;">HISTORIA</div>
     <div style="display:flex;gap:clamp(40px,6vw,100px);flex-wrap:wrap;align-items:flex-start;">
-      <div style="flex:1;min-width:300px;">
+      <div id="ofirmie-paragraphs" style="flex:1;min-width:300px;">
         <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(30px,4vw,54px);line-height:1.05;letter-spacing:-0.02em;color:#f3f8fc;margin-bottom:28px;text-wrap:balance;">Inżynieria rurociągów<br>z pasji do precyzji</h1>
         <p style="font-size:clamp(15px,1.4vw,17px);line-height:1.78;color:#8fa9bd;text-wrap:pretty;margin-bottom:20px;">Energy Piping Design Sp. z o.o. powstała w 2017 roku jako odpowiedź na rosnące zapotrzebowanie rynku energetycznego na wyspecjalizowane usługi inżynieryjne w zakresie projektowania orurowania. Firmę założyli doświadczeni inżynierowie z wieloletnią praktyką w największych polskich i europejskich projektach energetycznych.</p>
         <p style="font-size:clamp(15px,1.4vw,17px);line-height:1.78;color:#8fa9bd;text-wrap:pretty;margin-bottom:20px;">W 2019 roku rozszerzyliśmy ofertę o zaawansowane usługi skanowania laserowego 3D, stając się jednym z nielicznych podmiotów w Polsce łączących kompetencje projektowe z możliwościami cyfrowego odwzorowania istniejących instalacji.</p>
         <p style="font-size:clamp(15px,1.4vw,17px);line-height:1.78;color:#8fa9bd;text-wrap:pretty;">W 2021 roku nawiązaliśmy strategiczną współpracę z partnerami z Europy Zachodniej, co umożliwiło realizację projektów transgranicznych i wdrożenie metodologii zgodnych z NC-RfG na rynkach europejskich. Dziś EPDesign to ponad 20 wyspecjalizowanych inżynierów realizujących rocznie kilkanaście projektów dla sektora energetycznego, petrochemicznego i przemysłowego.</p>
       </div>
-      <div style="flex:none;display:flex;flex-direction:column;gap:0;">
+      <div id="ofirmie-timeline" style="flex:none;display:flex;flex-direction:column;gap:0;">
         <div style="display:flex;gap:20px;align-items:baseline;padding:20px 0;border-top:1px solid rgba(255,255,255,0.07);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2fb6d6;width:48px;flex:none;">2017</span><span style="font-size:14px;line-height:1.55;color:#7f9bb0;">Założenie spółki Energy Piping Design w Warszawie</span></div>
         <div style="display:flex;gap:20px;align-items:baseline;padding:20px 0;border-top:1px solid rgba(255,255,255,0.07);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2fb6d6;width:48px;flex:none;">2019</span><span style="font-size:14px;line-height:1.55;color:#7f9bb0;">Wdrożenie usług skanowania laserowego 3D i modelowania</span></div>
         <div style="display:flex;gap:20px;align-items:baseline;padding:20px 0;border-top:1px solid rgba(255,255,255,0.07);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2fb6d6;width:48px;flex:none;">2021</span><span style="font-size:14px;line-height:1.55;color:#7f9bb0;">Pierwsza weryfikacja logik IRiESP i certyfikacja NC-RfG</span></div>
@@ -233,7 +233,7 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
   <div style="padding:clamp(48px,5vh,64px) clamp(22px,5vw,72px) 48px;">
     <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#2fb6d6;margin-bottom:14px;">KADRA</div>
     <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(24px,3vw,40px);color:#f3f8fc;margin-bottom:40px;">Zarząd</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,260px));gap:48px 56px;">
+    <div id="kadra-zarzad-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,260px));gap:48px 56px;">
       <div style="display:flex;flex-direction:column;gap:18px;">
         <div style="width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid rgba(160,200,225,0.12);"><img src="uploads/ulbrich.jpg" alt="Paweł Ulbrich" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"></div>
         <div>
@@ -255,7 +255,7 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
 
   <div style="padding:0 clamp(22px,5vw,72px) 80px;border-top:1px solid rgba(255,255,255,0.05);">
     <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(24px,3vw,40px);color:#f3f8fc;margin-bottom:40px;margin-top:48px;">Kadra menedżerska</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,260px));gap:48px 56px;">
+    <div id="kadra-mng-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,260px));gap:48px 56px;">
       <div style="display:flex;flex-direction:column;gap:18px;">
         <div style="width:100%;aspect-ratio:1;border-radius:2px;border:1px solid rgba(160,200,225,0.1);background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#3a5568;">zdjęcie</span></div>
         <div>
@@ -296,7 +296,7 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
     <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.5vw,60px);line-height:1.04;letter-spacing:-0.02em;color:#f3f8fc;margin-bottom:18px;">Certyfikaty</h1>
     <p style="font-size:clamp(15px,1.4vw,18px);line-height:1.65;color:#8fa9bd;max-width:560px;">Energy Piping Design Sp. z o.o. posiada wdrożone i certyfikowane systemy zarządzania jakością oraz bezpieczeństwem i higieną pracy.</p>
   </div>
-  <div style="padding:0 clamp(22px,5vw,72px) 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:32px;max-width:900px;">
+  <div id="certyfikaty-grid" style="padding:0 clamp(22px,5vw,72px) 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:32px;max-width:900px;">
     <div style="border:1px solid rgba(160,200,225,0.12);border-radius:2px;overflow:hidden;display:flex;flex-direction:column;">
       <div style="background:rgba(47,182,214,0.06);border-bottom:1px solid rgba(160,200,225,0.1);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;">ISO 9001</div>
@@ -388,6 +388,124 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
 </div>
 
 <script>
+// ─── Dynamic content from content.json ────────────────────────────────────
+(function() {
+  function h(str) {
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderRealizacjeGrid(items) {
+    if (!items || !items.length) return '';
+    return items.map(p => `
+      <div style="background:#05101c;padding:28px 26px 24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;">${h(p.code)} · ${h(p.category)}</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,1.4vw,18px);color:#eaf2f8;line-height:1.3;">${h(p.title)}</h3>
+        <p style="font-size:13.5px;line-height:1.6;color:#7f9bb0;flex:1;">${h(p.description)}</p>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2fb6d6;margin-top:6px;">${h(p.year)}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderUslugiGrid(items) {
+    if (!items || !items.length) return '';
+    return items.map(s => `
+      <div style="background:#05101c;padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;padding-bottom:12px;border-bottom:1px solid rgba(47,182,214,0.18);">${h(s.code)}</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,1.5vw,19px);color:#eaf2f8;line-height:1.25;">${h(s.title)}</h3>
+        <p style="font-size:14px;line-height:1.68;color:#7f9bb0;flex:1;">${h(s.description)}</p>
+      </div>
+    `).join('');
+  }
+
+  function renderKadraGrid(members) {
+    if (!members || !members.length) return '';
+    return members.map(p => {
+      const img = p.photo
+        ? `<div style="width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid rgba(160,200,225,0.12);"><img src="${h(p.photo)}" alt="${h(p.name)}" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"></div>`
+        : `<div style="width:100%;aspect-ratio:1;border-radius:2px;border:1px solid rgba(160,200,225,0.1);background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#3a5568;">zdjęcie</span></div>`;
+      return `
+        <div style="display:flex;flex-direction:column;gap:18px;">
+          ${img}
+          <div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:#eaf2f8;margin-bottom:6px;">${h(p.name)}</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;color:#2fb6d6;margin-bottom:3px;">${h(p.role)}</div>
+            ${p.subrole ? `<div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;color:#7f9bb0;">${h(p.subrole)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderTimeline(entries) {
+    if (!entries || !entries.length) return '';
+    return entries.map((e, i) => {
+      const isLast = i === entries.length - 1;
+      return `<div style="display:flex;gap:20px;align-items:baseline;padding:20px 0;border-top:1px solid rgba(255,255,255,0.07);${isLast ? 'border-bottom:1px solid rgba(255,255,255,0.07);' : ''}">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2fb6d6;width:48px;flex:none;">${h(e.year)}</span>
+        <span style="font-size:14px;line-height:1.55;color:#7f9bb0;">${h(e.text)}</span>
+      </div>`;
+    }).join('');
+  }
+
+  function renderCertGrid(certs) {
+    if (!certs || !certs.length) return '';
+    return certs.map(c => {
+      const imgBlock = c.image
+        ? `<img src="${h(c.image)}" alt="${h(c.code)}" style="width:100%;height:100%;object-fit:contain;">`
+        : `<div style="width:44px;height:44px;border:1.5px solid rgba(160,200,225,0.25);border-radius:2px;display:flex;align-items:center;justify-content:center;"><span style="color:#4f6e85;font-size:22px;line-height:1;">+</span></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#3a5568;text-align:center;">Zdjęcie certyfikatu<br>${h(c.label)} ${h(c.code)}</div>`;
+      return `
+        <div style="border:1px solid rgba(160,200,225,0.12);border-radius:2px;overflow:hidden;display:flex;flex-direction:column;">
+          <div style="background:rgba(47,182,214,0.06);border-bottom:1px solid rgba(160,200,225,0.1);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;">${h(c.code)}</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4f6e85;">${h(c.label)}</div>
+          </div>
+          <div style="flex:1;aspect-ratio:1.414;background:repeating-linear-gradient(-45deg,rgba(255,255,255,0.02) 0px,rgba(255,255,255,0.02) 1px,transparent 1px,transparent 8px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:32px;">${imgBlock}</div>
+          <div style="padding:16px 22px;border-top:1px solid rgba(160,200,225,0.08);">
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:#eaf2f8;margin-bottom:4px;">${h(c.title)}</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7f9bb0;">${h(c.norm)}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function applyContent(d) {
+    var rg = document.getElementById('realizacje-grid');
+    if (rg && d.realizacje) rg.innerHTML = renderRealizacjeGrid(d.realizacje);
+
+    var ug = document.getElementById('uslugi-grid');
+    if (ug && d.uslugi) ug.innerHTML = renderUslugiGrid(d.uslugi);
+
+    var kz = document.getElementById('kadra-zarzad-grid');
+    if (kz && d.kadra_zarzad) kz.innerHTML = renderKadraGrid(d.kadra_zarzad);
+
+    var km = document.getElementById('kadra-mng-grid');
+    if (km && d.kadra_managerska) km.innerHTML = renderKadraGrid(d.kadra_managerska);
+
+    var tl = document.getElementById('ofirmie-timeline');
+    if (tl && d.ofirmie && d.ofirmie.timeline) tl.innerHTML = renderTimeline(d.ofirmie.timeline);
+
+    var op = document.getElementById('ofirmie-paragraphs');
+    if (op && d.ofirmie && d.ofirmie.paragraphs) {
+      var ps = d.ofirmie.paragraphs;
+      var p0 = op.querySelector('p:nth-of-type(1)');
+      var p1 = op.querySelector('p:nth-of-type(2)');
+      var p2 = op.querySelector('p:nth-of-type(3)');
+      if (p0 && ps[0]) p0.textContent = ps[0];
+      if (p1 && ps[1]) p1.textContent = ps[1];
+      if (p2 && ps[2]) p2.textContent = ps[2];
+    }
+
+    var cg = document.getElementById('certyfikaty-grid');
+    if (cg && d.certyfikaty) cg.innerHTML = renderCertGrid(d.certyfikaty);
+  }
+
+  fetch('/api/content')
+    .then(function(r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function(data) { if (data && Object.keys(data).length) applyContent(data); })
+    .catch(function() {});
+})();
+
 // ─── Navigation ────────────────────────────────────────────────────────────
 function navigate(pg) {
   var scan = document.getElementById('scan');

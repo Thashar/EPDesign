@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EPD Admin — Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#040e19;font-family:'IBM Plex Sans',sans-serif;color:#eaf2f8;font-size:14px}
+
+/* Layout */
+.layout{display:grid;grid-template-rows:56px 1fr;grid-template-columns:220px 1fr;height:100vh;overflow:hidden}
+.topbar{grid-column:1/-1;background:#040e19;border-bottom:1px solid rgba(160,200,225,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px}
+.sidebar{background:#040e19;border-right:1px solid rgba(160,200,225,0.08);overflow-y:auto;padding:16px 0}
+.main{overflow-y:auto;padding:32px;background:#05101c}
+
+/* Topbar */
+.topbar-logo{height:32px;opacity:0.85}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.topbar-status{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#4f6e85}
+.topbar-status.ok{color:#3ecf8e}
+.topbar-status.err{color:#e05555}
+.topbar-status.saving{color:#2fb6d6}
+.btn-logout{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#4f6e85;background:none;border:1px solid rgba(160,200,225,0.12);border-radius:2px;padding:6px 14px;cursor:pointer;transition:color .2s,border-color .2s}
+.btn-logout:hover{color:#eaf2f8;border-color:rgba(160,200,225,0.3)}
+.btn-save{font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:13px;color:#04121d;background:#2fb6d6;border:none;border-radius:3px;padding:8px 20px;cursor:pointer;transition:background .2s}
+.btn-save:hover{background:#56cce6}
+.btn-save:disabled{opacity:0.4;cursor:not-allowed}
+
+/* Sidebar */
+.nav-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#2f4558;padding:12px 20px 6px;margin-top:4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;cursor:pointer;color:#7f9bb0;font-size:13px;font-family:'IBM Plex Sans',sans-serif;transition:color .15s,background .15s;border-left:2px solid transparent}
+.nav-item:hover{color:#bcd2e2;background:rgba(255,255,255,0.02)}
+.nav-item.active{color:#eaf2f8;border-left-color:#2fb6d6;background:rgba(47,182,214,0.06)}
+.nav-icon{font-size:15px;width:18px;text-align:center;flex:none}
+
+/* Section headers */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.section-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;color:#f3f8fc}
+.section-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;background:rgba(47,182,214,0.08);border:1px solid rgba(47,182,214,0.2);border-radius:2px;padding:3px 10px}
+
+/* Cards */
+.card{background:#06121f;border:1px solid rgba(160,200,225,0.08);border-radius:3px;margin-bottom:12px;overflow:hidden}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;gap:12px;user-select:none}
+.card-head:hover{background:rgba(255,255,255,0.02)}
+.card-code{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#2fb6d6;flex:none}
+.card-title{font-weight:500;color:#eaf2f8;font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-actions{display:flex;gap:6px;flex:none}
+.card-body{display:none;padding:18px;border-top:1px solid rgba(160,200,225,0.06);background:#040e19}
+.card-body.open{display:block}
+
+/* Buttons */
+.btn-add{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#2fb6d6;background:rgba(47,182,214,0.08);border:1px solid rgba(47,182,214,0.25);border-radius:2px;padding:8px 16px;cursor:pointer;transition:background .2s,border-color .2s}
+.btn-add:hover{background:rgba(47,182,214,0.15);border-color:rgba(47,182,214,0.45)}
+.btn-del{font-size:13px;background:none;border:none;color:#4f6e85;cursor:pointer;padding:4px 8px;border-radius:2px;transition:color .15s,background .15s}
+.btn-del:hover{color:#e05555;background:rgba(224,85,85,0.08)}
+.btn-edit{font-size:12px;font-family:'IBM Plex Mono',monospace;background:none;border:1px solid rgba(160,200,225,0.15);color:#7f9bb0;cursor:pointer;padding:4px 10px;border-radius:2px;transition:color .15s,border-color .15s}
+.btn-edit:hover{color:#eaf2f8;border-color:rgba(160,200,225,0.35)}
+.btn-sm{font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:12px;color:#04121d;background:#2fb6d6;border:none;border-radius:2px;padding:7px 14px;cursor:pointer;transition:background .2s}
+.btn-sm:hover{background:#56cce6}
+
+/* Forms */
+.form-group{margin-bottom:16px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+label.fl{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#4f6e85;margin-bottom:6px}
+input[type=text],input[type=email],input[type=tel],input[type=url],select,textarea{display:block;width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(160,200,225,0.15);border-radius:2px;padding:10px 13px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:#eaf2f8;outline:none;transition:border-color .2s;color-scheme:dark}
+input::placeholder,textarea::placeholder{color:#3a5568}
+input:focus,textarea:focus,select:focus{border-color:rgba(47,182,214,0.5)}
+textarea{resize:vertical;min-height:80px;line-height:1.55}
+select option{background:#040e19}
+.form-actions{display:flex;gap:10px;margin-top:16px;align-items:center}
+.form-divider{border:none;border-top:1px solid rgba(160,200,225,0.07);margin:20px 0}
+
+/* Photo upload */
+.photo-zone{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.photo-preview{width:72px;height:72px;border-radius:2px;object-fit:cover;border:1px solid rgba(160,200,225,0.15);background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;color:#3a5568;font-size:11px;text-align:center;font-family:'IBM Plex Mono',monospace;overflow:hidden}
+.photo-preview img{width:100%;height:100%;object-fit:cover}
+.photo-controls{display:flex;flex-direction:column;gap:8px}
+.btn-file{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#2fb6d6;background:rgba(47,182,214,0.08);border:1px solid rgba(47,182,214,0.22);border-radius:2px;padding:7px 14px;cursor:pointer;transition:background .2s}
+.btn-file:hover{background:rgba(47,182,214,0.16)}
+.photo-url-note{font-size:11px;color:#4f6e85;font-family:'IBM Plex Mono',monospace}
+
+/* Grid for team */
+.person-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:16px}
+.person-card{background:#06121f;border:1px solid rgba(160,200,225,0.08);border-radius:3px;padding:16px}
+.person-card-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.person-photo{width:48px;height:48px;border-radius:2px;object-fit:cover;border:1px solid rgba(160,200,225,0.12);flex:none;background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;color:#3a5568;font-size:10px;overflow:hidden}
+.person-photo img{width:100%;height:100%;object-fit:cover}
+.person-info{flex:1;overflow:hidden}
+.person-name{font-weight:600;font-size:14px;color:#eaf2f8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.person-role{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2fb6d6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.person-subrole{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4f6e85}
+
+/* Cert upload */
+.cert-card{background:#06121f;border:1px solid rgba(160,200,225,0.08);border-radius:3px;padding:20px;margin-bottom:12px}
+.cert-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cert-code{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#2fb6d6}
+.cert-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4f6e85}
+.cert-preview{width:100%;aspect-ratio:1.414;background:repeating-linear-gradient(-45deg,rgba(255,255,255,0.02) 0px,rgba(255,255,255,0.02) 1px,transparent 1px,transparent 8px);border:1px solid rgba(160,200,225,0.1);border-radius:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;overflow:hidden;max-width:280px}
+.cert-preview img{width:100%;height:100%;object-fit:contain}
+
+/* Timeline */
+.timeline-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.tl-year{width:60px;flex:none}
+.tl-text{flex:1}
+.tl-del{flex:none;align-self:center}
+
+/* Kontakt form */
+.kontakt-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:#06121f;border:1px solid rgba(47,182,214,0.35);border-radius:3px;padding:14px 20px;font-size:13px;color:#eaf2f8;font-family:'IBM Plex Mono',monospace;z-index:999;transform:translateY(80px);opacity:0;transition:transform .3s,opacity .3s;letter-spacing:.04em}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.err{border-color:rgba(224,85,85,0.45);color:#f8a0a0}
+
+/* Util */
+.mono{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4f6e85}
+.hidden{display:none!important}
+.empty-state{padding:40px;text-align:center;color:#3a5568;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <img src="uploads/epd-logo-white.png" alt="EPD" class="topbar-logo">
+    <div class="topbar-right">
+      <span class="topbar-status" id="status">Ładowanie...</span>
+      <button class="btn-save" id="btnSave" onclick="saveAll()" disabled>Zapisz zmiany</button>
+      <button class="btn-logout" onclick="logout()">Wyloguj</button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="nav-label">Treść strony</div>
+    <div class="nav-item active" onclick="showSection('realizacje')"><span class="nav-icon">📁</span>Realizacje</div>
+    <div class="nav-item" onclick="showSection('uslugi')"><span class="nav-icon">⚙️</span>Usługi</div>
+    <div class="nav-label">Firma</div>
+    <div class="nav-item" onclick="showSection('ofirmie')"><span class="nav-icon">📝</span>O firmie</div>
+    <div class="nav-item" onclick="showSection('kadra')"><span class="nav-icon">👤</span>Kadra</div>
+    <div class="nav-item" onclick="showSection('certyfikaty')"><span class="nav-icon">🏅</span>Certyfikaty</div>
+    <div class="nav-item" onclick="showSection('kontakt')"><span class="nav-icon">📍</span>Kontakt</div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main" id="main">
+    <div class="empty-state">ŁADOWANIE DANYCH...</div>
+  </main>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- HIDDEN FILE INPUTS -->
+<input type="file" id="fileInput" accept="image/*" class="hidden">
+<input type="file" id="certFileInput" accept="image/*" class="hidden">
+
+<script>
+// ─── State ──────────────────────────────────────────────────────────────────
+let TOKEN = '';
+let DATA = {};
+let currentSection = 'realizacje';
+let pendingPhotoCallback = null;
+let pendingCertCallback = null;
+
+// ─── Auth guard ─────────────────────────────────────────────────────────────
+TOKEN = sessionStorage.getItem('epd_token') || '';
+if (!TOKEN) window.location.href = '/admin.html';
+
+function logout() {
+  sessionStorage.removeItem('epd_token');
+  window.location.href = '/admin.html';
+}
+
+// ─── Toast ──────────────────────────────────────────────────────────────────
+function toast(msg, type = 'ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (type === 'err' ? ' err' : '');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.className = 'toast', 3500);
+}
+
+function setStatus(msg, type = '') {
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = 'topbar-status ' + type;
+}
+
+// ─── API ────────────────────────────────────────────────────────────────────
+async function apiFetch(url, opts = {}) {
+  const r = await fetch(url, {
+    ...opts,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${TOKEN}`,
+      ...(opts.headers || {})
+    }
+  });
+  if (r.status === 401) { logout(); return null; }
+  return r;
+}
+
+async function loadData() {
+  setStatus('Ładowanie...', '');
+  try {
+    const r = await fetch('/api/content');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    DATA = await r.json();
+    document.getElementById('btnSave').disabled = false;
+    setStatus('Dane załadowane', 'ok');
+    renderSection(currentSection);
+  } catch (e) {
+    setStatus('Błąd ładowania', 'err');
+    toast('Nie można załadować danych: ' + e.message, 'err');
+  }
+}
+
+async function saveAll() {
+  const btn = document.getElementById('btnSave');
+  btn.disabled = true;
+  setStatus('Zapisywanie...', 'saving');
+  collectFormData();
+
+  try {
+    const r = await apiFetch('/api/content', {
+      method: 'POST',
+      body: JSON.stringify(DATA)
+    });
+    if (!r || !r.ok) {
+      const d = r ? await r.json() : {};
+      throw new Error(d.error || 'Błąd zapisu');
+    }
+    DATA.meta = { lastUpdated: new Date().toISOString().slice(0,10) };
+    setStatus('Zapisano ✓', 'ok');
+    toast('Zmiany zapisane pomyślnie');
+  } catch (e) {
+    setStatus('Błąd zapisu', 'err');
+    toast(e.message, 'err');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function uploadPhoto(file, callback) {
+  const reader = new FileReader();
+  reader.onload = async () => {
+    const b64 = reader.result.split(',')[1];
+    setStatus('Przesyłanie zdjęcia...', 'saving');
+    try {
+      const r = await apiFetch('/api/upload', {
+        method: 'POST',
+        body: JSON.stringify({ filename: file.name, data: b64 })
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error);
+      setStatus('Zdjęcie przesłane', 'ok');
+      callback(d.url);
+    } catch (e) {
+      setStatus('Błąd uploadu', 'err');
+      toast('Błąd przesyłania: ' + e.message, 'err');
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── Navigation ─────────────────────────────────────────────────────────────
+function showSection(name) {
+  collectFormData();
+  currentSection = name;
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.classList.toggle('active', el.textContent.trim().toLowerCase().includes(name) ||
+      (name === 'ofirmie' && el.textContent.includes('firmie')) ||
+      (name === 'kadra' && el.textContent.includes('Kadra')) ||
+      (name === 'certyfikaty' && el.textContent.includes('Certyfi')) ||
+      (name === 'kontakt' && el.textContent.includes('Kontakt')) ||
+      (name === 'realizacje' && el.textContent.includes('Realizacje')) ||
+      (name === 'uslugi' && el.textContent.includes('sługi'))
+    );
+  });
+  renderSection(name);
+}
+
+function renderSection(name) {
+  const main = document.getElementById('main');
+  switch (name) {
+    case 'realizacje': main.innerHTML = renderRealizacje(); break;
+    case 'uslugi':     main.innerHTML = renderUslugi();     break;
+    case 'ofirmie':    main.innerHTML = renderOfirmie();    break;
+    case 'kadra':      main.innerHTML = renderKadra();      break;
+    case 'certyfikaty':main.innerHTML = renderCertyfikaty();break;
+    case 'kontakt':    main.innerHTML = renderKontakt();    break;
+  }
+  bindSectionEvents(name);
+}
+
+// ─── Collect before save/navigate ───────────────────────────────────────────
+function collectFormData() {
+  switch (currentSection) {
+    case 'uslugi':  collectUslugi();  break;
+    case 'ofirmie': collectOfirmie(); break;
+    case 'kontakt': collectKontakt(); break;
+  }
+}
+
+// ─── REALIZACJE ─────────────────────────────────────────────────────────────
+function renderRealizacje() {
+  const items = DATA.realizacje || [];
+  return `
+    <div class="section-header">
+      <span class="section-title">Realizacje</span>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span class="section-badge">${items.length} projektów</span>
+        <button class="btn-add" onclick="addRealizacja()">+ Dodaj projekt</button>
+      </div>
+    </div>
+    ${items.length === 0 ? '<div class="empty-state">BRAK PROJEKTÓW</div>' : ''}
+    ${items.map((p, i) => `
+      <div class="card" id="rc-${i}">
+        <div class="card-head" onclick="toggleCard('rc-body-${i}')">
+          <span class="card-code">${esc(p.code)}</span>
+          <span class="card-title">${esc(p.title)}</span>
+          <div class="card-actions" onclick="event.stopPropagation()">
+            <button class="btn-del" title="Usuń" onclick="delRealizacja(${i})">✕</button>
+          </div>
+        </div>
+        <div class="card-body" id="rc-body-${i}">
+          <div class="form-row">
+            <div><label class="fl">Kod</label><input type="text" id="r-code-${i}" value="${esc(p.code)}"></div>
+            <div><label class="fl">Rok</label><input type="text" id="r-year-${i}" value="${esc(p.year)}"></div>
+          </div>
+          <div class="form-group"><label class="fl">Kategoria</label><input type="text" id="r-cat-${i}" value="${esc(p.category)}"></div>
+          <div class="form-group"><label class="fl">Tytuł projektu</label><input type="text" id="r-title-${i}" value="${esc(p.title)}"></div>
+          <div class="form-group"><label class="fl">Opis</label><textarea id="r-desc-${i}" rows="3">${esc(p.description)}</textarea></div>
+          <div class="form-actions">
+            <button class="btn-sm" onclick="saveRealizacja(${i})">Zapisz wiersz</button>
+            <span class="mono" id="r-msg-${i}"></span>
+          </div>
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function toggleCard(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+
+function saveRealizacja(i) {
+  DATA.realizacje[i] = {
+    ...DATA.realizacje[i],
+    code:        document.getElementById(`r-code-${i}`).value.trim(),
+    year:        document.getElementById(`r-year-${i}`).value.trim(),
+    category:    document.getElementById(`r-cat-${i}`).value.trim(),
+    title:       document.getElementById(`r-title-${i}`).value.trim(),
+    description: document.getElementById(`r-desc-${i}`).value.trim()
+  };
+  const msg = document.getElementById(`r-msg-${i}`);
+  msg.textContent = '✓ Zaktualizowano';
+  setTimeout(() => msg.textContent = '', 2000);
+}
+
+function delRealizacja(i) {
+  if (!confirm('Usunąć ten projekt?')) return;
+  DATA.realizacje.splice(i, 1);
+  renderSection('realizacje');
+}
+
+function addRealizacja() {
+  DATA.realizacje = DATA.realizacje || [];
+  const next = DATA.realizacje.length + 1;
+  const year = new Date().getFullYear();
+  DATA.realizacje.unshift({
+    id: `epd-${year}-${String(next).padStart(3,'0')}`,
+    code: `EPD-${year}-${String(next).padStart(3,'0')}`,
+    category: '',
+    title: 'Nowy projekt',
+    description: '',
+    year: String(year)
+  });
+  renderSection('realizacje');
+  setTimeout(() => {
+    const body = document.getElementById('rc-body-0');
+    if (body) body.classList.add('open');
+  }, 50);
+}
+
+// ─── USŁUGI ──────────────────────────────────────────────────────────────────
+function renderUslugi() {
+  const items = DATA.uslugi || [];
+  return `
+    <div class="section-header">
+      <span class="section-title">Usługi</span>
+      <span class="section-badge">${items.length} usług</span>
+    </div>
+    ${items.map((s, i) => `
+      <div class="card">
+        <div class="card-head" onclick="toggleCard('srv-body-${i}')">
+          <span class="card-code">${esc(s.code)}</span>
+          <span class="card-title">${esc(s.title)}</span>
+        </div>
+        <div class="card-body" id="srv-body-${i}">
+          <div class="form-group"><label class="fl">Tytuł usługi</label><input type="text" id="s-title-${i}" value="${esc(s.title)}"></div>
+          <div class="form-group"><label class="fl">Opis</label><textarea id="s-desc-${i}" rows="4">${esc(s.description)}</textarea></div>
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function collectUslugi() {
+  (DATA.uslugi || []).forEach((s, i) => {
+    const t = document.getElementById(`s-title-${i}`);
+    const d = document.getElementById(`s-desc-${i}`);
+    if (t) DATA.uslugi[i].title = t.value.trim();
+    if (d) DATA.uslugi[i].description = d.value.trim();
+  });
+}
+
+// ─── O FIRMIE ────────────────────────────────────────────────────────────────
+function renderOfirmie() {
+  const of = DATA.ofirmie || { paragraphs: ['','',''], timeline: [] };
+  const ps = of.paragraphs || [];
+  const tl = of.timeline || [];
+  return `
+    <div class="section-header">
+      <span class="section-title">O firmie</span>
+    </div>
+    <div class="card">
+      <div class="card-head" onclick="toggleCard('of-body-p')">
+        <span class="card-code">HISTORIA</span>
+        <span class="card-title">Paragraf opisowy firmy</span>
+      </div>
+      <div class="card-body open" id="of-body-p">
+        ${[0,1,2].map(i => `
+          <div class="form-group">
+            <label class="fl">Paragraf ${i+1}</label>
+            <textarea id="of-p-${i}" rows="5">${esc(ps[i] || '')}</textarea>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head" onclick="toggleCard('of-body-tl')">
+        <span class="card-code">TIMELINE</span>
+        <span class="card-title">Kamienie milowe</span>
+      </div>
+      <div class="card-body open" id="of-body-tl">
+        <div id="tl-list">
+          ${tl.map((e,i) => `
+            <div class="timeline-row" id="tl-row-${i}">
+              <input type="text" class="tl-year" id="tl-year-${i}" value="${esc(e.year)}" placeholder="Rok">
+              <input type="text" class="tl-text" id="tl-text-${i}" value="${esc(e.text)}" placeholder="Opis">
+              <button class="btn-del tl-del" onclick="delTimeline(${i})">✕</button>
+            </div>
+          `).join('')}
+        </div>
+        <button class="btn-add" style="margin-top:12px" onclick="addTimeline()">+ Dodaj wpis</button>
+      </div>
+    </div>
+  `;
+}
+
+function collectOfirmie() {
+  DATA.ofirmie = DATA.ofirmie || { paragraphs: [], timeline: [] };
+  DATA.ofirmie.paragraphs = [0,1,2].map(i => {
+    const el = document.getElementById(`of-p-${i}`);
+    return el ? el.value.trim() : (DATA.ofirmie.paragraphs[i] || '');
+  });
+  const tl = DATA.ofirmie.timeline || [];
+  DATA.ofirmie.timeline = tl.map((e,i) => {
+    const y = document.getElementById(`tl-year-${i}`);
+    const t = document.getElementById(`tl-text-${i}`);
+    return { year: y ? y.value.trim() : e.year, text: t ? t.value.trim() : e.text };
+  });
+}
+
+function addTimeline() {
+  collectOfirmie();
+  DATA.ofirmie.timeline.push({ year: '', text: '' });
+  renderSection('ofirmie');
+  const rows = document.querySelectorAll('[id^="tl-row-"]');
+  const last = rows[rows.length - 1];
+  if (last) last.querySelector('input').focus();
+}
+
+function delTimeline(i) {
+  collectOfirmie();
+  DATA.ofirmie.timeline.splice(i, 1);
+  renderSection('ofirmie');
+}
+
+// ─── KADRA ───────────────────────────────────────────────────────────────────
+function renderKadra() {
+  return `
+    <div class="section-header">
+      <span class="section-title">Kadra</span>
+    </div>
+
+    <div class="card">
+      <div class="card-head" onclick="toggleCard('k-zarzad-body')">
+        <span class="card-code">ZARZĄD</span>
+        <span class="card-title">Prezes i wiceprezes</span>
+        <div class="card-actions" onclick="event.stopPropagation()">
+          <button class="btn-add" onclick="addPerson('zarzad')">+ Dodaj</button>
+        </div>
+      </div>
+      <div class="card-body open" id="k-zarzad-body">
+        <div class="person-grid">
+          ${(DATA.kadra_zarzad||[]).map((p,i) => personCard(p, i, 'zarzad')).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head" onclick="toggleCard('k-mgr-body')">
+        <span class="card-code">KADRA MENEDŻERSKA</span>
+        <span class="card-title">Prokurenci i kierownicy</span>
+        <div class="card-actions" onclick="event.stopPropagation()">
+          <button class="btn-add" onclick="addPerson('managerska')">+ Dodaj</button>
+        </div>
+      </div>
+      <div class="card-body open" id="k-mgr-body">
+        <div class="person-grid">
+          ${(DATA.kadra_managerska||[]).map((p,i) => personCard(p, i, 'managerska')).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit modal-like form below grid -->
+    <div id="person-edit-panel"></div>
+  `;
+}
+
+function personCard(p, i, group) {
+  const photoEl = p.photo
+    ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}">`
+    : `<span>BRAK<br>ZDJĘCIA</span>`;
+  return `
+    <div class="person-card">
+      <div class="person-card-top">
+        <div class="person-photo">${photoEl}</div>
+        <div class="person-info">
+          <div class="person-name">${esc(p.name || '—')}</div>
+          <div class="person-role">${esc(p.role || '')}</div>
+          <div class="person-subrole">${esc(p.subrole || '')}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-edit" onclick="editPerson(${i},'${group}')">Edytuj</button>
+        <button class="btn-del" onclick="delPerson(${i},'${group}')">✕ Usuń</button>
+      </div>
+    </div>
+  `;
+}
+
+function editPerson(i, group) {
+  const arr = group === 'zarzad' ? DATA.kadra_zarzad : DATA.kadra_managerska;
+  const p = arr[i];
+  const panel = document.getElementById('person-edit-panel');
+  panel.innerHTML = `
+    <hr class="form-divider">
+    <div class="section-header">
+      <span class="section-title" style="font-size:16px">Edycja: ${esc(p.name || 'Nowa osoba')}</span>
+    </div>
+    <div class="form-row">
+      <div><label class="fl">Imię i Nazwisko</label><input type="text" id="pe-name" value="${esc(p.name)}"></div>
+      <div><label class="fl">Stanowisko / Rola</label><input type="text" id="pe-role" value="${esc(p.role)}"></div>
+    </div>
+    <div class="form-group"><label class="fl">Dodatkowa rola (opcja)</label><input type="text" id="pe-subrole" value="${esc(p.subrole || '')}"></div>
+    <div class="photo-zone">
+      <div class="photo-preview" id="pe-photo-preview">
+        ${p.photo ? `<img src="${esc(p.photo)}" id="pe-photo-img">` : '<img id="pe-photo-img" style="display:none">'}
+      </div>
+      <div class="photo-controls">
+        <button class="btn-file" onclick="triggerPersonPhoto(${i},'${group}')">📷 Wybierz zdjęcie</button>
+        <span class="photo-url-note">lub wklej URL:</span>
+        <input type="text" id="pe-photo-url" value="${esc(p.photo || '')}" placeholder="https://... lub uploads/plik.jpg" style="font-size:11px;padding:6px 10px">
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-sm" onclick="savePerson(${i},'${group}')">Zapisz osobę</button>
+      <button class="btn-edit" onclick="cancelPersonEdit()">Anuluj</button>
+    </div>
+  `;
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function triggerPersonPhoto(i, group) {
+  pendingPhotoCallback = (url) => {
+    document.getElementById('pe-photo-url').value = url;
+    const img = document.getElementById('pe-photo-img');
+    img.src = url; img.style.display = '';
+    const prev = document.getElementById('pe-photo-preview');
+    prev.innerHTML = `<img src="${url}" id="pe-photo-img">`;
+  };
+  document.getElementById('fileInput').click();
+}
+
+function savePerson(i, group) {
+  const arr = group === 'zarzad' ? DATA.kadra_zarzad : DATA.kadra_managerska;
+  arr[i] = {
+    ...arr[i],
+    name:    document.getElementById('pe-name').value.trim(),
+    role:    document.getElementById('pe-role').value.trim(),
+    subrole: document.getElementById('pe-subrole').value.trim(),
+    photo:   document.getElementById('pe-photo-url').value.trim()
+  };
+  toast('Zaktualizowano osobę');
+  renderSection('kadra');
+}
+
+function cancelPersonEdit() {
+  document.getElementById('person-edit-panel').innerHTML = '';
+}
+
+function delPerson(i, group) {
+  if (!confirm('Usunąć tę osobę?')) return;
+  const arr = group === 'zarzad' ? DATA.kadra_zarzad : DATA.kadra_managerska;
+  arr.splice(i, 1);
+  renderSection('kadra');
+}
+
+function addPerson(group) {
+  const arr = group === 'zarzad'
+    ? (DATA.kadra_zarzad = DATA.kadra_zarzad || [])
+    : (DATA.kadra_managerska = DATA.kadra_managerska || []);
+  arr.push({ id: Date.now().toString(), name: '', role: '', subrole: '', photo: '' });
+  renderSection('kadra');
+  setTimeout(() => editPerson(arr.length - 1, group), 50);
+}
+
+// ─── CERTYFIKATY ──────────────────────────────────────────────────────────────
+function renderCertyfikaty() {
+  const certs = DATA.certyfikaty || [];
+  return `
+    <div class="section-header">
+      <span class="section-title">Certyfikaty</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px">
+      ${certs.map((c,i) => `
+        <div class="cert-card">
+          <div class="cert-header">
+            <span class="cert-code">${esc(c.code)}</span>
+            <span class="cert-label">${esc(c.label)}</span>
+          </div>
+          <div class="cert-preview" id="cert-prev-${i}">
+            ${c.image
+              ? `<img src="${esc(c.image)}" style="width:100%;height:100%;object-fit:contain">`
+              : `<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#3a5568;text-align:center;letter-spacing:.08em">BRAK ZDJĘCIA<br>CERTYFIKATU</div>`}
+          </div>
+          <div class="form-group"><label class="fl">Tytuł</label><input type="text" id="c-title-${i}" value="${esc(c.title)}"></div>
+          <div class="form-group"><label class="fl">Norma</label><input type="text" id="c-norm-${i}" value="${esc(c.norm)}"></div>
+          <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
+            <button class="btn-file" onclick="triggerCertPhoto(${i})">📎 Wgraj certyfikat</button>
+            <input type="text" id="c-img-${i}" value="${esc(c.image||'')}" placeholder="URL zdjęcia" style="flex:1;font-size:11px;padding:7px 10px">
+          </div>
+          <div class="form-actions">
+            <button class="btn-sm" onclick="saveCert(${i})">Zapisz</button>
+            <span class="mono" id="c-msg-${i}"></span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function triggerCertPhoto(i) {
+  pendingCertCallback = (url) => {
+    document.getElementById(`c-img-${i}`).value = url;
+    const prev = document.getElementById(`cert-prev-${i}`);
+    prev.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:contain">`;
+  };
+  document.getElementById('certFileInput').click();
+}
+
+function saveCert(i) {
+  DATA.certyfikaty = DATA.certyfikaty || [];
+  DATA.certyfikaty[i] = {
+    ...DATA.certyfikaty[i],
+    title: document.getElementById(`c-title-${i}`).value.trim(),
+    norm:  document.getElementById(`c-norm-${i}`).value.trim(),
+    image: document.getElementById(`c-img-${i}`).value.trim()
+  };
+  const msg = document.getElementById(`c-msg-${i}`);
+  msg.textContent = '✓';
+  setTimeout(() => msg.textContent = '', 2000);
+}
+
+// ─── KONTAKT ──────────────────────────────────────────────────────────────────
+function renderKontakt() {
+  const k = DATA.kontakt || {};
+  return `
+    <div class="section-header">
+      <span class="section-title">Dane kontaktowe</span>
+    </div>
+    <div class="card">
+      <div class="card-body open" id="kontakt-body">
+        <div class="form-group"><label class="fl">Nazwa firmy</label><input type="text" id="k-firma" value="${esc(k.firma||'')}"></div>
+        <div class="form-row">
+          <div><label class="fl">Ulica</label><input type="text" id="k-ulica" value="${esc(k.ulica||'')}"></div>
+          <div><label class="fl">Miasto</label><input type="text" id="k-miasto" value="${esc(k.miasto||'')}"></div>
+        </div>
+        <div class="form-group"><label class="fl">E-mail</label><input type="email" id="k-email" value="${esc(k.email||'')}"></div>
+        <hr class="form-divider">
+        <div class="kontakt-grid">
+          <div class="form-group"><label class="fl">NIP</label><input type="text" id="k-nip" value="${esc(k.nip||'')}"></div>
+          <div class="form-group"><label class="fl">KRS</label><input type="text" id="k-krs" value="${esc(k.krs||'')}"></div>
+          <div class="form-group"><label class="fl">REGON</label><input type="text" id="k-regon" value="${esc(k.regon||'')}"></div>
+          <div class="form-group"><label class="fl">LinkedIn URL</label><input type="url" id="k-linkedin" value="${esc(k.linkedin||'')}"></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function collectKontakt() {
+  const fields = ['firma','ulica','miasto','email','nip','krs','regon','linkedin'];
+  DATA.kontakt = DATA.kontakt || {};
+  fields.forEach(f => {
+    const el = document.getElementById(`k-${f}`);
+    if (el) DATA.kontakt[f] = el.value.trim();
+  });
+}
+
+// ─── File input handlers ─────────────────────────────────────────────────────
+document.getElementById('fileInput').addEventListener('change', function() {
+  if (!this.files[0] || !pendingPhotoCallback) return;
+  uploadPhoto(this.files[0], pendingPhotoCallback);
+  this.value = '';
+  pendingPhotoCallback = null;
+});
+
+document.getElementById('certFileInput').addEventListener('change', function() {
+  if (!this.files[0] || !pendingCertCallback) return;
+  uploadPhoto(this.files[0], pendingCertCallback);
+  this.value = '';
+  pendingCertCallback = null;
+});
+
+// ─── Util ────────────────────────────────────────────────────────────────────
+function esc(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function bindSectionEvents() { /* events are inline */ }
+
+// ─── Init ────────────────────────────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+{
+  "meta": {
+    "lastUpdated": "2025-06-19"
+  },
+  "realizacje": [
+    {
+      "id": "epd-2023-004",
+      "code": "EPD-2023-004",
+      "category": "Energetyka",
+      "title": "EC Katowice — Modernizacja rurociągów pary technologicznej",
+      "description": "Projekt wykonawczy modernizacji sieci rurociągów pary i kondensatu w elektrociepłowni. Analiza podatności, izometrie i dobór kompensatorów.",
+      "year": "2023"
+    },
+    {
+      "id": "epd-2023-003",
+      "code": "EPD-2023-003",
+      "category": "Górnictwo",
+      "title": "KGHM Polska Miedź — Instalacje technologiczne kopalni",
+      "description": "Dokumentacja wykonawcza instalacji rurociągów chłodzenia i sprężonego powietrza. Skanowanie laserowe i model 3D istniejącej infrastruktury.",
+      "year": "2023"
+    },
+    {
+      "id": "epd-2022-006",
+      "code": "EPD-2022-006",
+      "category": "Petrochemia",
+      "title": "PKN Orlen — Model as-built terminalu paliw",
+      "description": "Skanowanie laserowe 3D i opracowanie modelu cyfrowego terminalu paliw. Weryfikacja kolizji z nową infrastrukturą i aktualizacja dokumentacji powykonawczej.",
+      "year": "2022"
+    },
+    {
+      "id": "epd-2022-002",
+      "code": "EPD-2022-002",
+      "category": "Energetyka",
+      "title": "Enea Wytwarzanie — Analiza rurociągów parowych bloku energetycznego",
+      "description": "Kompleksowa analiza podatności rurociągów parowych i zasilających bloku 200 MW. Optymalizacja układu podpór i kompensatorów termicznych.",
+      "year": "2022"
+    },
+    {
+      "id": "epd-2021-005",
+      "code": "EPD-2021-005",
+      "category": "Energetyka",
+      "title": "Tauron Polska Energia — Weryfikacja logik sterowania IRiESP",
+      "description": "Analiza i weryfikacja logik sterowania jednostki wytwórczej pod kątem zgodności z Instrukcją Ruchu i Eksploatacji Sieci Przesyłowej oraz wymaganiami NC-RfG.",
+      "year": "2021"
+    },
+    {
+      "id": "epd-2021-001",
+      "code": "EPD-2021-001",
+      "category": "Oil & Gas",
+      "title": "Lotos Petrobaltic — Instalacja procesowa platformy wydobywczej",
+      "description": "Projekt wykonawczy instalacji procesowej i użytkowej platformy wydobywczej na Bałtyku. Dobór materiałów odpornych na korozję morską i weryfikacja normowa.",
+      "year": "2021"
+    }
+  ],
+  "uslugi": [
+    {
+      "code": "EPD-SRV-01",
+      "title": "Analizy przedprojektowe",
+      "description": "Kompleksowe badania wstępne i ocena wykonalności przed realizacją projektu rurociągowego. Optymalizacja tras, układów i doboru materiałów w środowisku energetycznym i przemysłowym."
+    },
+    {
+      "code": "EPD-SRV-02",
+      "title": "Podatność rurociągów",
+      "description": "Analizy wytrzymałościowe i podatnościowe metodą MES. Ocena naprężeń termicznych, mechanicznych i dynamicznych zgodnie z normami EN, ASME i branżowymi standardami energetycznymi."
+    },
+    {
+      "code": "EPD-SRV-03",
+      "title": "Projekty wykonawcze i powykonawcze",
+      "description": "Pełna dokumentacja techniczna wykonawcza i powykonawcza zgodna z normami branżowymi. Izometrie, schematy P&ID, wykazy materiałów — dla sektora energetycznego i przemysłowego."
+    },
+    {
+      "code": "EPD-SRV-04",
+      "title": "Skanowanie laserowe 3D",
+      "description": "Precyzyjne skanowanie laserowe istniejących instalacji przemysłowych i energetycznych. Generowanie chmur punktów wysokiej rozdzielczości jako podstawa do dalszych prac projektowych."
+    },
+    {
+      "code": "EPD-SRV-05",
+      "title": "Modelowanie 3D instalacji",
+      "description": "Tworzenie wiernych modeli cyfrowych instalacji rurociągowych na podstawie skanów i dokumentacji. Formaty PDMS, SP3D, E3D. Kompletna dokumentacja as-built dla zarządzania majątkiem."
+    },
+    {
+      "code": "EPD-SRV-06",
+      "title": "Automatyzacja — IRiESP & NC-RfG",
+      "description": "Eksperckie wsparcie w obszarze automatyzacji na wszystkich etapach prac. Analiza i weryfikacja logik sterowania zgodnie z wymaganiami IRiESP oraz europejską normą NC-RfG."
+    }
+  ],
+  "kadra_zarzad": [
+    {
+      "id": "ulbrich",
+      "name": "Paweł Ulbrich",
+      "role": "Prezes Zarządu",
+      "subrole": "Dyrektor Generalny",
+      "photo": "uploads/ulbrich.jpg"
+    },
+    {
+      "id": "borowka",
+      "name": "Rafał Borówka",
+      "role": "Wiceprezes Zarządu",
+      "subrole": "Dyrektor Techniczny",
+      "photo": "uploads/borowka.jpg"
+    }
+  ],
+  "kadra_managerska": [
+    {
+      "id": "wilk",
+      "name": "Michał Wilk",
+      "role": "Prokurent",
+      "subrole": "",
+      "photo": ""
+    },
+    {
+      "id": "celmer",
+      "name": "Michał Celmer",
+      "role": "Kierownik Zespołu Projektowego",
+      "subrole": "",
+      "photo": "uploads/celmer.jpg"
+    }
+  ],
+  "ofirmie": {
+    "paragraphs": [
+      "Energy Piping Design Sp. z o.o. powstała w 2017 roku jako odpowiedź na rosnące zapotrzebowanie rynku energetycznego na wyspecjalizowane usługi inżynieryjne w zakresie projektowania orurowania. Firmę założyli doświadczeni inżynierowie z wieloletnią praktyką w największych polskich i europejskich projektach energetycznych.",
+      "W 2019 roku rozszerzyliśmy ofertę o zaawansowane usługi skanowania laserowego 3D, stając się jednym z nielicznych podmiotów w Polsce łączących kompetencje projektowe z możliwościami cyfrowego odwzorowania istniejących instalacji.",
+      "W 2021 roku nawiązaliśmy strategiczną współpracę z partnerami z Europy Zachodniej, co umożliwiło realizację projektów transgranicznych i wdrożenie metodologii zgodnych z NC-RfG na rynkach europejskich. Dziś EPDesign to ponad 20 wyspecjalizowanych inżynierów realizujących rocznie kilkanaście projektów dla sektora energetycznego, petrochemicznego i przemysłowego."
+    ],
+    "timeline": [
+      { "year": "2017", "text": "Założenie spółki Energy Piping Design w Warszawie" },
+      { "year": "2019", "text": "Wdrożenie usług skanowania laserowego 3D i modelowania" },
+      { "year": "2021", "text": "Pierwsza weryfikacja logik IRiESP i certyfikacja NC-RfG" },
+      { "year": "2024", "text": "Przekroczenie 60 zrealizowanych projektów w Polsce i za granicą" }
+    ]
+  },
+  "certyfikaty": [
+    {
+      "code": "ISO 9001",
+      "label": "ZSZ",
+      "title": "System Zarządzania Jakością",
+      "norm": "PN-EN ISO 9001:2015",
+      "image": ""
+    },
+    {
+      "code": "ISO 45001",
+      "label": "BHP",
+      "title": "System Zarządzania BHP",
+      "norm": "PN-EN ISO 45001:2018",
+      "image": ""
+    }
+  ],
+  "kontakt": {
+    "firma": "Energy Piping Design Sp. z o.o.",
+    "ulica": "ul. Jesionowa 15",
+    "miasto": "40-159 Katowice",
+    "email": "kontakt@epdesign.pl",
+    "nip": "9542829277",
+    "krs": "0000914400",
+    "regon": "389584790",
+    "linkedin": "https://www.linkedin.com/company/energy-piping-design/"
+  }
+}
