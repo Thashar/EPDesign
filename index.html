@@ -49,7 +49,6 @@ input::placeholder,textarea::placeholder{color:#4f6e85}
       <a href="#" onclick="navigate('ofirmie');return false;" class="nl">O firmie</a>
       <a href="#" onclick="navigate('certyfikaty');return false;" class="nl">Certyfikaty</a>
       <a href="#" onclick="openWycena();return false;" class="nc">Kontakt</a>
-      <a href="/en/" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:#4f6e85;text-decoration:none;padding:6px 10px;border:1px solid rgba(160,200,225,0.15);border-radius:2px;transition:color .2s,border-color .2s" onmouseover="this.style.color='#bcd2e2';this.style.borderColor='rgba(160,200,225,0.35)'" onmouseout="this.style.color='#4f6e85';this.style.borderColor='rgba(160,200,225,0.15)'">EN</a>
     </div>
   </nav>
 
@@ -582,6 +581,15 @@ function submitWycena(e) {
 document.getElementById('pg-wycena').addEventListener('click', function(e) {
   if (e.target === this) closeWycena();
 });
+
+// ─── Language switcher ────────────────────────────────────────────────────────
+(function() {
+  var sw = document.createElement('div');
+  sw.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:300;display:flex;align-items:center;gap:0;background:rgba(4,14,26,0.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(160,200,225,0.13);border-radius:4px;padding:4px 8px;gap:4px;';
+  sw.innerHTML = '<span style="font-size:21px;line-height:1;cursor:default;" title="Wersja polska">🇵🇱</span>'
+    + '<a href="/en/" style="font-size:21px;line-height:1;opacity:0.38;text-decoration:none;display:block;transition:opacity .2s;" title="English version" onmouseover="this.style.opacity=\'0.85\'" onmouseout="this.style.opacity=\'0.38\'">🇬🇧</a>';
+  document.body.appendChild(sw);
+})();
 
 // ─── Canvas Animation ──────────────────────────────────────────────────────
 (function() {
