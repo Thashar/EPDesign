@@ -54,17 +54,23 @@ function readBody(req) {
 }
 
 // ─── Lokalne fallbacki gdy brak GitHub ──────────────────────────────────────
-function localContentGet(res) {
-  const file = path.join(__dirname, 'content.json');
-  if (!fs.existsSync(file)) return res.status(500).json({ error: 'Brak content.json' });
+function localContentGet(req, res) {
+  const urlObj = new URL(req.url, 'http://localhost');
+  const lang = urlObj.searchParams.get('lang');
+  const filename = lang === 'en' ? 'content-en.json' : 'content.json';
+  const file = path.join(__dirname, filename);
+  if (!fs.existsSync(file)) return res.status(500).json({ error: `Brak ${filename}` });
   const data = JSON.parse(fs.readFileSync(file, 'utf-8'));
   return res.json(data);
 }
 
-function localContentPost(body, res) {
-  const file = path.join(__dirname, 'content.json');
+function localContentPost(req, body, res) {
+  const urlObj = new URL(req.url, 'http://localhost');
+  const lang = urlObj.searchParams.get('lang');
+  const filename = lang === 'en' ? 'content-en.json' : 'content.json';
+  const file = path.join(__dirname, filename);
   fs.writeFileSync(file, JSON.stringify(body, null, 2), 'utf-8');
-  console.log('  [content] Zapisano content.json lokalnie');
+  console.log(`  [content] Zapisano ${filename} lokalnie`);
   return res.json({ success: true });
 }
 
@@ -83,14 +89,11 @@ function patchForLocal(handlerPath, rawReq, body, mockRes) {
   const name = path.basename(handlerPath, '.js');
 
   if (name === 'content' && !process.env.GITHUB_TOKEN) {
-    // Sprawdź token normalnie przez oryginalne api, ale zamiast GitHub — plik
-    // Łatwiej: sprawdź metodę i obsłuż lokalnie
     if (rawReq.method === 'GET') {
-      return localContentGet(mockRes);
+      return localContentGet(rawReq, mockRes);
     }
     if (rawReq.method === 'POST') {
-      // Weryfikacja tokenu przez oryginalny handler jest zbędna lokalnie
-      return localContentPost(body, mockRes);
+      return localContentPost(rawReq, body, mockRes);
     }
   }
 
@@ -165,7 +168,8 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ── Pliki statyczne ──────────────────────────────────────────────────────
-  let filePath = pathname === '/' ? '/index.html' : pathname;
+  let filePath = (pathname === '/' || pathname === '') ? '/index.html' : pathname;
+  if (filePath.endsWith('/')) filePath += 'index.html';
   filePath = path.join(__dirname, decodeURIComponent(filePath));
 
   // Zabezpieczenie przed traversal

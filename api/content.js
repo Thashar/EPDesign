@@ -47,11 +47,15 @@ module.exports = async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
+  const urlObj = new URL(req.url, 'http://localhost');
+  const lang = urlObj.searchParams.get('lang');
+  const filename = lang === 'en' ? 'content-en.json' : 'content.json';
+
   // GET — public, anyone can read
   if (req.method === 'GET') {
     res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=60');
     try {
-      const file = await githubRequest('content.json');
+      const file = await githubRequest(filename);
       if (!file) return res.json({});
       const content = JSON.parse(Buffer.from(file.content, 'base64').toString('utf-8'));
       return res.json(content);
@@ -70,21 +74,19 @@ module.exports = async function handler(req, res) {
     }
 
     try {
-      const file = await githubRequest('content.json');
+      const file = await githubRequest(filename);
       const sha = file?.sha;
       const branch = process.env.GITHUB_BRANCH || 'main';
+      const commitMsg = lang === 'en'
+        ? 'Admin: update EN content'
+        : 'Admin: aktualizacja treści strony';
 
       const newContent = JSON.stringify(req.body, null, 2);
       const encoded = Buffer.from(newContent, 'utf-8').toString('base64');
 
-      await githubRequest('content.json', {
+      await githubRequest(filename, {
         method: 'PUT',
-        body: JSON.stringify({
-          message: 'Admin: aktualizacja treści strony',
-          content: encoded,
-          sha,
-          branch
-        })
+        body: JSON.stringify({ message: commitMsg, content: encoded, sha, branch })
       });
 
       return res.json({ success: true });

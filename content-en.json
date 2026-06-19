@@ -1,0 +1,167 @@
+{
+  "meta": { "lastUpdated": "2026-06-19" },
+  "hero_home": {
+    "tagline": "Piping engineering · Energy & industry",
+    "heading": "Pipelines designed with engineering precision.",
+    "description": "From pre-project analyses and piping flexibility studies, through executive and as-built designs, to 3D laser scanning and modelling — with expert automation support at every stage of the project."
+  },
+  "hero_uslugi": {
+    "tag": "SERVICES",
+    "heading": "Comprehensive engineering services\nfor the energy sector",
+    "subheading": "Specialist piping engineering services — from analyses and designs, through 3D scanning and modelling, to expert automation support and compliance verification with IRiESP and NC-RfG."
+  },
+  "realizacje": [
+    {
+      "id": "epd-2023-004",
+      "code": "EPD-2023-004",
+      "category": "Energy",
+      "title": "EC Katowice — Process steam pipeline modernisation",
+      "description": "Executive design for the modernisation of steam and condensate pipeline networks at a combined heat and power plant. Flexibility analysis, isometrics and compensator selection.",
+      "year": "2023"
+    },
+    {
+      "id": "epd-2023-003",
+      "code": "EPD-2023-003",
+      "category": "Mining",
+      "title": "KGHM Polska Miedź — Mine process installations",
+      "description": "Executive documentation for cooling and compressed air pipeline installations. Laser scanning and 3D modelling of existing infrastructure.",
+      "year": "2023"
+    },
+    {
+      "id": "epd-2022-006",
+      "code": "EPD-2022-006",
+      "category": "Petrochemicals",
+      "title": "PKN Orlen — As-built model of fuel terminal",
+      "description": "3D laser scanning and digital model development of a fuel terminal. Clash detection against new infrastructure and update of as-built documentation.",
+      "year": "2022"
+    },
+    {
+      "id": "epd-2022-002",
+      "code": "EPD-2022-002",
+      "category": "Energy",
+      "title": "Enea Wytwarzanie — Steam pipeline analysis for power unit",
+      "description": "Comprehensive flexibility analysis of steam and feed pipelines for a 200 MW power unit. Optimisation of support and thermal compensator layout.",
+      "year": "2022"
+    },
+    {
+      "id": "epd-2021-005",
+      "code": "EPD-2021-005",
+      "category": "Energy",
+      "title": "Tauron Polska Energia — IRiESP control logic verification",
+      "description": "Analysis and verification of control logics for a generation unit in terms of compliance with the Transmission System Operation and Maintenance Instructions and NC-RfG requirements.",
+      "year": "2021"
+    },
+    {
+      "id": "epd-2021-001",
+      "code": "EPD-2021-001",
+      "category": "Oil & Gas",
+      "title": "Lotos Petrobaltic — Process installation for offshore platform",
+      "description": "Executive design of process and utility installations for an offshore production platform in the Baltic Sea. Selection of marine corrosion-resistant materials and standards verification.",
+      "year": "2021"
+    }
+  ],
+  "uslugi": [
+    {
+      "code": "EPD-SRV-01",
+      "title": "Pre-project analyses",
+      "description": "Comprehensive preliminary studies and feasibility assessments prior to piping project execution. Route, layout and material optimisation for energy and industrial environments."
+    },
+    {
+      "code": "EPD-SRV-02",
+      "title": "Piping flexibility analysis",
+      "description": "FEM-based stress and flexibility analyses. Assessment of thermal, mechanical and dynamic stresses in accordance with EN, ASME and sector-specific energy standards."
+    },
+    {
+      "code": "EPD-SRV-03",
+      "title": "Executive & as-built designs",
+      "description": "Complete executive and as-built technical documentation compliant with industry standards. Isometrics, P&ID diagrams, material lists — for the energy and industrial sectors."
+    },
+    {
+      "code": "EPD-SRV-04",
+      "title": "3D laser scanning",
+      "description": "Precision laser scanning of existing industrial and energy installations. Generation of high-resolution point clouds as the basis for further design work."
+    },
+    {
+      "code": "EPD-SRV-05",
+      "title": "3D installation modelling",
+      "description": "Creation of accurate digital models of piping installations based on scans and documentation. PDMS, SP3D, E3D formats. Complete as-built documentation for asset management."
+    },
+    {
+      "code": "EPD-SRV-06",
+      "title": "Automation — IRiESP & NC-RfG",
+      "description": "Expert automation support at all project stages. Analysis and verification of control logics in compliance with IRiESP requirements and the European NC-RfG standard."
+    }
+  ],
+  "kadra_zarzad": [
+    {
+      "id": "ulbrich",
+      "name": "Paweł Ulbrich",
+      "role": "President of the Management Board",
+      "subrole": "Chief Executive Officer",
+      "photo": "uploads/ulbrich.jpg"
+    },
+    {
+      "id": "borowka",
+      "name": "Rafał Borówka",
+      "role": "Vice-President of the Management Board",
+      "subrole": "Chief Technical Officer",
+      "photo": "uploads/borowka.jpg"
+    }
+  ],
+  "kadra_managerska": [
+    {
+      "id": "wilk",
+      "name": "Michał Wilk",
+      "role": "Commercial Proxy",
+      "subrole": "",
+      "photo": ""
+    },
+    {
+      "id": "celmer",
+      "name": "Michał Celmer",
+      "role": "Project Team Leader",
+      "subrole": "",
+      "photo": "uploads/celmer.jpg"
+    }
+  ],
+  "ofirmie": {
+    "paragraphs": [
+      "Energy Piping Design Sp. z o.o. was established in 2017 in response to growing market demand for specialised piping engineering services in the energy sector. The company was founded by experienced engineers with extensive practice on the largest Polish and European energy projects.",
+      "In 2019, we expanded our offering to include advanced 3D laser scanning services, becoming one of the few companies in Poland combining design expertise with digital reproduction capabilities for existing installations.",
+      "In 2021, we established strategic partnerships with Western European companies, enabling the execution of cross-border projects and implementation of NC-RfG compliant methodologies on European markets. Today, EPDesign comprises more than 20 specialist engineers completing over a dozen projects annually for the energy, petrochemical and industrial sectors."
+    ],
+    "timeline": [
+      { "year": "2017", "text": "Establishment of Energy Piping Design in Warsaw" },
+      { "year": "2019", "text": "Launch of 3D laser scanning and modelling services" },
+      { "year": "2021", "text": "First IRiESP logic verification and NC-RfG certification" },
+      { "year": "2024", "text": "Over 60 completed projects in Poland and abroad" }
+    ]
+  },
+  "certyfikaty": [
+    {
+      "code": "ISO 9001",
+      "label": "QMS",
+      "title": "Quality Management System",
+      "norm": "PN-EN ISO 9001:2015",
+      "image": ""
+    },
+    {
+      "code": "ISO 45001",
+      "label": "OHS",
+      "title": "Occupational Health & Safety Management System",
+      "norm": "PN-EN ISO 45001:2018",
+      "image": ""
+    }
+  ],
+  "kontakt": {
+    "firma": "Energy Piping Design Sp. z o.o.",
+    "ulica": "ul. Jesionowa 15",
+    "miasto": "40-159 Katowice, Poland",
+    "email": "kontakt@epdesign.pl",
+    "telefon": "",
+    "nip": "9542829277",
+    "krs": "0000914400",
+    "regon": "389584790",
+    "linkedin": "https://www.linkedin.com/company/energy-piping-design/"
+  }
+}
