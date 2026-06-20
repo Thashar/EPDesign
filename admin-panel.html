@@ -199,7 +199,7 @@ select option{background:var(--a-inp-sel)}
   .tl-entry-del{grid-column:2;grid-row:1}
 }
 </style>
-<script>(function(){var t=localStorage.getItem('adm-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');})();</script>
+<script>(function(){var t=localStorage.getItem('epd-theme');if(t!=='dark')document.documentElement.setAttribute('data-theme','light');})();</script>
 </head>
 <body>
 
@@ -1060,7 +1060,6 @@ function bindSectionEvents() { /* events are inline */ }
 function toggleTheme() {
   const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('adm-theme', next);
   localStorage.setItem('epd-theme', next);
   updateThemeBtn();
 }
