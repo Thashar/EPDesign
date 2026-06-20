@@ -1187,7 +1187,7 @@ document.getElementById('pg-privacy').addEventListener('click', function(e) {
           var u=((T_sec*netSpeed-dNear)/c.total+k/nP)%1;
           if(T_sec*netSpeed<dNear-c.total/nP) continue;
           var s=getChainPos(ci,Math.max(0,Math.min(1,u))); if(!s) continue;
-          var rad=w*(window._epdLightMode?1.32:1.1);
+          var rad=w*(window._epdLightMode?1.056:1.1);
           var gg=ctx.createRadialGradient(s[0],s[1],0,s[0],s[1],rad);
           gg.addColorStop(0,window._epdLightMode?'rgba(255,255,255,'+(flowA*0.30)+')':'rgba('+Math.min(255,fR+30)+','+Math.min(255,fG+20)+','+Math.min(255,fB+15)+','+(flowA*0.95)+')');
           gg.addColorStop(0.35,'rgba('+fR+','+fG+','+fB+','+(flowA*0.55)+')');
