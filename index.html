@@ -136,6 +136,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
   .nav-burger{display:flex !important;}
   .nav-links{display:none !important;position:absolute;top:100%;left:0;right:0;flex-direction:column !important;flex-wrap:nowrap !important;background:var(--bg-nav);padding:14px 18px 18px;border-bottom:1px solid var(--border);gap:14px !important;z-index:100;}
   .nav-links.open{display:flex !important;}
+  .hero-bullets{flex-direction:column !important;gap:10px !important;}
 }
 @media (max-width: 900px){
   #root > nav,
@@ -211,7 +212,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
         <a href="#" onclick="navigate('realizacje');return false;" class="bp">Nasze realizacje <span style="font-size:18px;line-height:0;">→</span></a>
         <a href="#" onclick="navigate('uslugi');return false;" class="bs">Poznaj usługi</a>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:14px 26px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.02em;color:#7f9bb0;">
+      <div class="hero-bullets" style="display:flex;flex-wrap:wrap;gap:14px 26px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.02em;color:#7f9bb0;">
         <span style="display:inline-flex;align-items:center;gap:9px;"><span style="width:6px;height:6px;background:#2fb6d6;display:inline-block;flex:none;"></span>Analizy podatności</span>
         <span style="display:inline-flex;align-items:center;gap:9px;"><span style="width:6px;height:6px;background:#2fb6d6;display:inline-block;flex:none;"></span>Projekty &amp; modelowanie 3D</span>
         <span style="display:inline-flex;align-items:center;gap:9px;"><span style="width:6px;height:6px;background:#2fb6d6;display:inline-block;flex:none;"></span>Skanowanie laserowe</span>
