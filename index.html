@@ -5,10 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Energy Piping Design — Inżynieria Rurociągów</title>
 <meta name="description" content="Kompleksowe usługi inżynierskie w zakresie orurowania dla sektora energetycznego i przemysłowego. Analizy, projekty wykonawcze, skanowanie laserowe 3D, modelowanie, automatyka IRiESP i NC-RfG.">
+<link rel="canonical" href="https://epdesign.pl/">
+<link rel="alternate" hreflang="pl" href="https://epdesign.pl/">
+<link rel="alternate" hreflang="en" href="https://epdesign.pl/en/">
+<link rel="alternate" hreflang="x-default" href="https://epdesign.pl/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://epdesign.pl/">
+<meta property="og:title" content="Energy Piping Design — Inżynieria Rurociągów">
+<meta property="og:description" content="Kompleksowe usługi inżynierskie w zakresie orurowania dla sektora energetycznego i przemysłowego. Analizy, projekty wykonawcze, skanowanie laserowe 3D, modelowanie, automatyka IRiESP i NC-RfG.">
+<meta property="og:locale" content="pl_PL">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:site_name" content="Energy Piping Design">
+<meta property="og:image" content="https://epdesign.pl/uploads/epd-logo.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Energy Piping Design — Inżynieria Rurociągów">
+<meta name="twitter:description" content="Kompleksowe usługi inżynierskie w zakresie orurowania dla sektora energetycznego i przemysłowego.">
 <link rel="icon" type="image/png" href="/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["Organization", "LocalBusiness"],
+  "name": "Energy Piping Design Sp. z o.o.",
+  "legalName": "Energy Piping Design Sp. z o.o.",
+  "url": "https://epdesign.pl",
+  "logo": "https://epdesign.pl/uploads/epd-logo.png",
+  "image": "https://epdesign.pl/uploads/epd-logo.png",
+  "email": "kontakt@epdesign.pl",
+  "foundingDate": "2017",
+  "taxID": "9542829277",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ul. Jesionowa 15",
+    "addressLocality": "Katowice",
+    "postalCode": "40-159",
+    "addressCountry": "PL"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 50.2731,
+    "longitude": 19.0167
+  },
+  "sameAs": ["https://www.linkedin.com/company/energy-piping-design/"],
+  "description": "Kompleksowe usługi inżynierskie w zakresie orurowania dla sektora energetycznego i przemysłowego.",
+  "knowsAbout": ["Piping Engineering", "3D Laser Scanning", "Pipeline Stress Analysis", "IRiESP", "NC-RfG", "PDMS", "SP3D"],
+  "areaServed": [{"@type": "Country", "name": "Poland"}, {"@type": "Place", "name": "European Union"}]
+}
+</script>
 <script>(function(){var t=localStorage.getItem('epd-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');}());</script>
 <style>
 :root{
@@ -79,6 +124,15 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
 #root .bp:hover{background:#56cce6}
 #root .bs{color:#eaf2f8;border-color:rgba(160,200,225,0.28)}
 #root .bs:hover{border-color:rgba(160,200,225,0.6);background:rgba(255,255,255,0.04)}
+.nav-burger{display:none;background:none;border:1px solid var(--border-btn);border-radius:2px;color:var(--nl-color);font-size:20px;width:38px;height:38px;cursor:pointer;align-items:center;justify-content:center;padding:0;flex:none;transition:border-color .2s,background .2s;}
+.nav-burger:hover{border-color:var(--border-bh);background:var(--btn-sec-hover);}
+#root .nav-burger{border-color:rgba(120,200,235,0.45);color:#eaf2f8;}
+#root .nav-burger:hover{border-color:#2fb6d6;background:rgba(47,182,214,0.1);}
+@media(max-width:640px){
+  .nav-burger{display:flex !important;}
+  .nav-links{display:none !important;position:absolute;top:100%;left:0;right:0;flex-direction:column !important;flex-wrap:nowrap !important;background:var(--bg-nav);padding:14px 18px 18px;border-bottom:1px solid var(--border);gap:14px !important;z-index:100;}
+  .nav-links.open{display:flex !important;}
+}
 @media (max-width: 900px){
   #root > nav,
   #pg-uslugi > nav,
@@ -120,14 +174,15 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
 <!-- ═══════ HERO ═══════════════════════════════════════════════════════════ -->
 <section id="root" style="position:relative;width:100%;min-height:100vh;overflow:hidden;background:radial-gradient(125% 95% at 70% 38%,#133451 0%,#0a1c30 46%,#05101c 100%);font-family:'IBM Plex Sans',-apple-system,sans-serif;color:#eaf2f8;">
 
-  <canvas id="canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
+  <canvas id="canvas" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
 
   <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(102deg,#05101c 0%,rgba(5,16,28,0.92) 28%,rgba(6,18,32,0.55) 48%,rgba(6,18,32,0.12) 64%,transparent 78%);"></div>
   <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(5,16,28,0.55) 0%,transparent 22%,transparent 80%,rgba(4,12,22,0.7) 100%);"></div>
 
   <nav style="position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(20px,3vw,34px) clamp(22px,5vw,72px);">
     <img src="uploads/epd-logo.png" alt="Energy Piping Design" style="height:clamp(60px,6.8vw,84px);width:auto;display:block;">
-    <div style="display:flex;align-items:center;gap:clamp(18px,2.6vw,40px);flex-wrap:wrap;">
+    <button class="nav-burger" onclick="toggleMobileNav(this)" aria-label="Menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="0" y1="1" x2="18" y2="1"/><line x1="0" y1="7" x2="18" y2="7"/><line x1="0" y1="13" x2="18" y2="13"/></svg></button>
+    <div class="nav-links" style="display:flex;align-items:center;gap:clamp(18px,2.6vw,40px);flex-wrap:wrap;">
       <a href="#" onclick="navigate('uslugi');return false;" class="nl">Usługi</a>
       <a href="#" onclick="navigate('realizacje');return false;" class="nl">Realizacje</a>
       <a href="#" onclick="navigate('ofirmie');return false;" class="nl">O firmie</a>
@@ -172,7 +227,8 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
 <div id="pg-uslugi" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:49;overflow-y:auto;background:var(--bg-surface);transform:translateX(100%);transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);pointer-events:none;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--text-primary);">
   <nav style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(16px,2.4vw,26px) clamp(22px,5vw,72px);background:var(--bg-nav);border-bottom:1px solid var(--border);">
     <a href="#" onclick="navigate('home');return false;"><img src="uploads/epd-logo.png" alt="EPDesign" class="logo-img" style="height:clamp(60px,6.8vw,84px);width:auto;display:block;opacity:0.9;"></a>
-    <div style="display:flex;align-items:center;gap:clamp(14px,2.2vw,34px);flex-wrap:wrap;">
+    <button class="nav-burger" onclick="toggleMobileNav(this)" aria-label="Menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="0" y1="1" x2="18" y2="1"/><line x1="0" y1="7" x2="18" y2="7"/><line x1="0" y1="13" x2="18" y2="13"/></svg></button>
+    <div class="nav-links" style="display:flex;align-items:center;gap:clamp(14px,2.2vw,34px);flex-wrap:wrap;">
       <a href="#" onclick="navigate('uslugi');return false;" class="nl a">Usługi</a>
       <a href="#" onclick="navigate('realizacje');return false;" class="nl">Realizacje</a>
       <a href="#" onclick="navigate('ofirmie');return false;" class="nl">O firmie</a>
@@ -218,7 +274,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
     </div>
   </div>
   <footer style="border-top:1px solid var(--border-ft);padding:26px clamp(22px,5vw,72px) 26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:var(--bg-footer);">
-    <div style="display:flex;align-items:center;gap:18px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--nl-color);">© 2025 Energy Piping Design Sp. z o.o.</span></div>
+    <div style="display:flex;align-items:center;gap:18px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--nl-color);">© 2026 Energy Piping Design Sp. z o.o.</span><a href="#" onclick="openPrivacy();return false;" style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--nl-color);text-decoration:none;opacity:0.65;margin-left:16px;">Polityka prywatności</a></div>
     <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:20px;padding-right:clamp(88px,9vw,132px);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
   </footer>
 </div>
@@ -227,7 +283,8 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
 <div id="pg-realizacje" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:49;overflow-y:auto;background:var(--bg-surface);transform:translateX(100%);transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);pointer-events:none;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--text-primary);">
   <nav style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(16px,2.4vw,26px) clamp(22px,5vw,72px);background:var(--bg-nav);border-bottom:1px solid var(--border);">
     <a href="#" onclick="navigate('home');return false;"><img src="uploads/epd-logo.png" alt="EPDesign" class="logo-img" style="height:clamp(60px,6.8vw,84px);width:auto;display:block;opacity:0.9;"></a>
-    <div style="display:flex;align-items:center;gap:clamp(14px,2.2vw,34px);flex-wrap:wrap;">
+    <button class="nav-burger" onclick="toggleMobileNav(this)" aria-label="Menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="0" y1="1" x2="18" y2="1"/><line x1="0" y1="7" x2="18" y2="7"/><line x1="0" y1="13" x2="18" y2="13"/></svg></button>
+    <div class="nav-links" style="display:flex;align-items:center;gap:clamp(14px,2.2vw,34px);flex-wrap:wrap;">
       <a href="#" onclick="navigate('uslugi');return false;" class="nl">Usługi</a>
       <a href="#" onclick="navigate('realizacje');return false;" class="nl a">Realizacje</a>
       <a href="#" onclick="navigate('ofirmie');return false;" class="nl">O firmie</a>
@@ -279,7 +336,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
     </div>
   </div>
   <footer style="border-top:1px solid var(--border-ft);padding:26px clamp(22px,5vw,72px) 26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:var(--bg-footer);">
-    <div style="display:flex;align-items:center;gap:18px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--nl-color);">© 2025 Energy Piping Design Sp. z o.o.</span></div>
+    <div style="display:flex;align-items:center;gap:18px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--nl-color);">© 2026 Energy Piping Design Sp. z o.o.</span><a href="#" onclick="openPrivacy();return false;" style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--nl-color);text-decoration:none;opacity:0.65;margin-left:16px;">Polityka prywatności</a></div>
     <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:20px;padding-right:clamp(88px,9vw,132px);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
   </footer>
 </div>
@@ -288,7 +345,8 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
 <div id="pg-ofirmie" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:49;overflow-y:auto;background:var(--bg-surface);transform:translateX(100%);transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);pointer-events:none;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--text-primary);">
   <nav style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(16px,2.4vw,26px) clamp(22px,5vw,72px);background:var(--bg-nav);border-bottom:1px solid var(--border);">
     <a href="#" onclick="navigate('home');return false;"><img src="uploads/epd-logo.png" alt="EPDesign" class="logo-img" style="height:clamp(60px,6.8vw,84px);width:auto;display:block;opacity:0.9;"></a>
-    <div style="display:flex;align-items:center;gap:clamp(14px,2.2vw,34px);flex-wrap:wrap;">
+    <button class="nav-burger" onclick="toggleMobileNav(this)" aria-label="Menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="0" y1="1" x2="18" y2="1"/><line x1="0" y1="7" x2="18" y2="7"/><line x1="0" y1="13" x2="18" y2="13"/></svg></button>
+    <div class="nav-links" style="display:flex;align-items:center;gap:clamp(14px,2.2vw,34px);flex-wrap:wrap;">
       <a href="#" onclick="navigate('uslugi');return false;" class="nl">Usługi</a>
       <a href="#" onclick="navigate('realizacje');return false;" class="nl">Realizacje</a>
       <a href="#" onclick="navigate('ofirmie');return false;" class="nl a">O firmie</a>
@@ -320,7 +378,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
     <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(24px,3vw,40px);color:var(--text-heading);margin-bottom:40px;">Zarząd</h2>
     <div id="kadra-zarzad-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,260px));gap:48px 56px;">
       <div style="display:flex;flex-direction:column;gap:18px;">
-        <div style="width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid var(--border-card);"><img src="uploads/ulbrich.jpg" alt="Paweł Ulbrich" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"></div>
+        <div style="width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid var(--border-card);"><img src="uploads/ulbrich.jpg" alt="Paweł Ulbrich" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"></div>
         <div>
           <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:var(--text-primary);margin-bottom:6px;">Paweł Ulbrich</div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;color:var(--accent);margin-bottom:3px;">Prezes Zarządu</div>
@@ -328,7 +386,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:18px;">
-        <div style="width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid var(--border-card);"><img src="uploads/borowka.jpg" alt="Rafał Borówka" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"></div>
+        <div style="width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid var(--border-card);"><img src="uploads/borowka.jpg" alt="Rafał Borówka" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"></div>
         <div>
           <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:var(--text-primary);margin-bottom:6px;">Rafał Borówka</div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;color:var(--accent);margin-bottom:3px;">Wiceprezes Zarządu</div>
@@ -349,7 +407,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:18px;">
-        <div style="width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid var(--border-card);"><img src="uploads/celmer.jpg" alt="Michał Celmer" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"></div>
+        <div style="width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid var(--border-card);"><img src="uploads/celmer.jpg" alt="Michał Celmer" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"></div>
         <div>
           <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:var(--text-primary);margin-bottom:6px;">Michał Celmer</div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;color:var(--accent);">Kierownik Zespołu Projektowego</div>
@@ -359,7 +417,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
   </div>
 
   <footer style="border-top:1px solid var(--border-ft);padding:26px clamp(22px,5vw,72px) 26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:var(--bg-footer);">
-    <div style="display:flex;align-items:center;gap:18px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--nl-color);">© 2025 Energy Piping Design Sp. z o.o.</span></div>
+    <div style="display:flex;align-items:center;gap:18px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--nl-color);">© 2026 Energy Piping Design Sp. z o.o.</span><a href="#" onclick="openPrivacy();return false;" style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--nl-color);text-decoration:none;opacity:0.65;margin-left:16px;">Polityka prywatności</a></div>
     <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:20px;padding-right:clamp(88px,9vw,132px);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
   </footer>
 </div>
@@ -368,7 +426,8 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
 <div id="pg-certyfikaty" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:49;overflow-y:auto;background:var(--bg-surface);transform:translateX(100%);transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);pointer-events:none;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--text-primary);">
   <nav style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(16px,2.4vw,26px) clamp(22px,5vw,72px);background:var(--bg-nav);border-bottom:1px solid var(--border);">
     <a href="#" onclick="navigate('home');return false;"><img src="uploads/epd-logo.png" alt="EPDesign" class="logo-img" style="height:clamp(60px,6.8vw,84px);width:auto;display:block;opacity:0.9;"></a>
-    <div style="display:flex;align-items:center;gap:clamp(14px,2.2vw,34px);flex-wrap:wrap;">
+    <button class="nav-burger" onclick="toggleMobileNav(this)" aria-label="Menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="0" y1="1" x2="18" y2="1"/><line x1="0" y1="7" x2="18" y2="7"/><line x1="0" y1="13" x2="18" y2="13"/></svg></button>
+    <div class="nav-links" style="display:flex;align-items:center;gap:clamp(14px,2.2vw,34px);flex-wrap:wrap;">
       <a href="#" onclick="navigate('uslugi');return false;" class="nl">Usługi</a>
       <a href="#" onclick="navigate('realizacje');return false;" class="nl">Realizacje</a>
       <a href="#" onclick="navigate('ofirmie');return false;" class="nl">O firmie</a>
@@ -412,7 +471,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
     </div>
   </div>
   <footer style="border-top:1px solid var(--border-ft);padding:26px clamp(22px,5vw,72px) 26px clamp(22px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:var(--bg-footer);">
-    <div style="display:flex;align-items:center;gap:18px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--nl-color);">© 2025 Energy Piping Design Sp. z o.o.</span></div>
+    <div style="display:flex;align-items:center;gap:18px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--nl-color);">© 2026 Energy Piping Design Sp. z o.o.</span><a href="#" onclick="openPrivacy();return false;" style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--nl-color);text-decoration:none;opacity:0.65;margin-left:16px;">Polityka prywatności</a></div>
     <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:20px;padding-right:clamp(88px,9vw,132px);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">ul. Jesionowa 15, 40-159 Katowice</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nl-color);">kontakt@epdesign.pl</span><a href="https://www.linkedin.com/company/energy-piping-design/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/></svg>LinkedIn</a></div>
   </footer>
 </div>
@@ -425,21 +484,23 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
         <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">KONTAKT</div>
         <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(28px,4vw,52px);color:var(--text-heading);line-height:1.06;letter-spacing:-0.02em;">Skontaktuj się</h2>
       </div>
-      <button onclick="closeWycena()" style="background:var(--bg-input);border:1px solid var(--border-mid);border-radius:2px;color:var(--nl-color);font-size:20px;width:44px;height:44px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;transition:background .2s;" onmouseover="this.style.background='var(--close-hover)'" onmouseout="this.style.background='var(--bg-input)'">×</button>
+      <button onclick="closeWycena()" aria-label="Zamknij" style="background:var(--bg-input);border:1px solid var(--border-mid);border-radius:2px;color:var(--nl-color);font-size:20px;width:44px;height:44px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;transition:background .2s;" onmouseover="this.style.background='var(--close-hover)'" onmouseout="this.style.background='var(--bg-input)'">×</button>
     </div>
     <div style="display:flex;gap:clamp(40px,6vw,80px);flex-wrap:wrap;align-items:flex-start;">
       <form id="wycena-form" onsubmit="submitWycena(event)" style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:18px;">
         <div style="display:flex;gap:18px;flex-wrap:wrap;">
-          <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px;"><label style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);">Imię i Nazwisko</label><input type="text" name="name" placeholder="Jan Kowalski" required class="form-input"></div>
-          <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px;"><label style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);">Firma</label><input type="text" name="company" placeholder="Nazwa firmy" class="form-input"></div>
+          <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px;"><label for="f-name" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);">Imię i Nazwisko</label><input id="f-name" type="text" name="name" placeholder="Jan Kowalski" required class="form-input"></div>
+          <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px;"><label for="f-company" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);">Firma</label><input id="f-company" type="text" name="company" placeholder="Nazwa firmy" class="form-input"></div>
         </div>
         <div style="display:flex;gap:18px;flex-wrap:wrap;">
-          <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px;"><label style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);">E-mail</label><input type="email" name="email" placeholder="email@firma.pl" required class="form-input"></div>
-          <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px;"><label style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);">Telefon</label><input type="tel" name="phone" placeholder="+48 000 000 000" class="form-input"></div>
+          <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px;"><label for="f-email" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);">E-mail</label><input id="f-email" type="email" name="email" placeholder="email@firma.pl" required class="form-input"></div>
+          <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px;"><label for="f-phone" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);">Telefon</label><input id="f-phone" type="tel" name="phone" placeholder="+48 000 000 000" class="form-input"></div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);">Przedmiot zapytania</label><input type="text" name="subject" placeholder="np. Analiza podatności rurociągów parowych" class="form-input"></div>
-        <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);">Treść wiadomości</label><textarea name="message" placeholder="Opisz projekt lub zakres prac..." rows="5" class="form-input" style="resize:vertical;"></textarea></div>
-        <button type="submit" class="bp" style="align-self:flex-start;font-size:15px;padding:15px 32px;">Wyślij zapytanie →</button>
+        <div style="display:flex;flex-direction:column;gap:7px;"><label for="f-subject" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);">Przedmiot zapytania</label><input id="f-subject" type="text" name="subject" placeholder="np. Analiza podatności rurociągów parowych" class="form-input"></div>
+        <div style="display:flex;flex-direction:column;gap:7px;"><label for="f-message" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);">Treść wiadomości</label><textarea id="f-message" name="message" placeholder="Opisz projekt lub zakres prac..." rows="5" class="form-input" style="resize:vertical;"></textarea></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;"><input type="checkbox" id="f-consent" name="consent" required style="margin-top:3px;flex:none;width:16px;height:16px;accent-color:var(--accent);cursor:pointer;"><label for="f-consent" style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;line-height:1.55;color:var(--text-muted);cursor:pointer;">Wyrażam zgodę na przetwarzanie moich danych osobowych przez Energy Piping Design Sp. z o.o. w celu odpowiedzi na zapytanie, zgodnie z <a href="#" onclick="openPrivacy();return false;" style="color:var(--accent);text-decoration:underline;">Polityką Prywatności</a>. *</label></div>
+        <div id="wycena-error" style="display:none;font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:#e05a5a;padding:10px 12px;border:1px solid rgba(224,90,90,0.3);border-radius:2px;background:rgba(224,90,90,0.06);"></div>
+        <button type="submit" id="wycena-submit" class="bp" style="align-self:flex-start;font-size:15px;padding:15px 32px;">Wyślij zapytanie →</button>
       </form>
       <div id="wycena-success" style="display:none;flex:1;min-width:280px;flex-direction:column;align-items:flex-start;gap:16px;padding:40px;border:1px solid var(--border-accm);border-radius:2px;background:var(--accent-subtle);">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);">WYSŁANO</div>
@@ -467,6 +528,49 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
           <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;">Czas odpowiedzi</div>
           <div style="font-size:13px;line-height:1.6;color:var(--text-muted);">Odpowiadamy na zapytania w ciągu 1–2 dni roboczych.</div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ POLITYKA PRYWATNOŚCI MODAL ═══════════════════════════════════════ -->
+<div id="pg-privacy" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:300;background:var(--bg-modal);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--text-primary);">
+  <div style="width:100%;max-width:860px;padding:clamp(40px,6vh,72px) clamp(22px,5vw,72px);">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;gap:20px;">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">RODO</div>
+        <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(24px,3.5vw,42px);color:var(--text-heading);line-height:1.1;">Polityka Prywatności</h2>
+      </div>
+      <button onclick="closePrivacy()" aria-label="Zamknij" style="background:var(--bg-input);border:1px solid var(--border-mid);border-radius:2px;color:var(--nl-color);font-size:20px;width:44px;height:44px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;transition:background .2s;" onmouseover="this.style.background='var(--close-hover)'" onmouseout="this.style.background='var(--bg-input)'">×</button>
+    </div>
+    <div style="font-size:15px;line-height:1.78;color:var(--text-secondary);display:flex;flex-direction:column;gap:28px;">
+      <div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:var(--text-heading);margin-bottom:10px;">1. Administrator danych</h3>
+        <p>Administratorem Twoich danych osobowych jest <strong>Energy Piping Design Sp. z o.o.</strong> z siedzibą przy ul. Jesionowej 15, 40-159 Katowice, NIP: 9542829277, KRS: 0000914400. Kontakt: <a href="mailto:kontakt@epdesign.pl" style="color:var(--accent);">kontakt@epdesign.pl</a>.</p>
+      </div>
+      <div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:var(--text-heading);margin-bottom:10px;">2. Cel i podstawa prawna przetwarzania</h3>
+        <p>Dane osobowe podane w formularzu kontaktowym (imię i nazwisko, nazwa firmy, adres e-mail, numer telefonu, treść zapytania) są przetwarzane wyłącznie w celu udzielenia odpowiedzi na Twoje zapytanie. Podstawą prawną przetwarzania jest Twoja zgoda (art. 6 ust. 1 lit. a RODO).</p>
+      </div>
+      <div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:var(--text-heading);margin-bottom:10px;">3. Odbiorcy danych</h3>
+        <p>Twoje dane nie są sprzedawane ani udostępniane osobom trzecim. Mogą być przekazywane wyłącznie dostawcom usług technicznych (hosting, dostarczanie poczty e-mail) w zakresie niezbędnym do obsługi zapytania, na podstawie umów powierzenia przetwarzania.</p>
+      </div>
+      <div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:var(--text-heading);margin-bottom:10px;">4. Okres przechowywania</h3>
+        <p>Dane przechowywane są do czasu rozpatrzenia zapytania, a następnie przez okres niezbędny do obrony ewentualnych roszczeń — nie dłużej niż 3 lata od daty kontaktu.</p>
+      </div>
+      <div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:var(--text-heading);margin-bottom:10px;">5. Twoje prawa</h3>
+        <p>Przysługuje Ci prawo do: dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przenoszenia danych oraz wniesienia sprzeciwu wobec przetwarzania. Zgodę możesz wycofać w dowolnym momencie — bez wpływu na zgodność z prawem przetwarzania przed jej cofnięciem. Masz również prawo do wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych (ul. Stawki 2, Warszawa).</p>
+      </div>
+      <div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:var(--text-heading);margin-bottom:10px;">6. Pliki cookie i localStorage</h3>
+        <p>Strona nie używa analitycznych ani marketingowych plików cookie. Przeglądarka zapamiętuje wyłącznie wybrany motyw kolorystyczny (jasny/ciemny) za pomocą mechanizmu localStorage — dane te nie są wysyłane na serwer ani udostępniane podmiotom trzecim.</p>
+      </div>
+      <div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:var(--text-heading);margin-bottom:10px;">7. Kontakt w sprawach danych</h3>
+        <p>W sprawach związanych z ochroną danych osobowych prosimy o kontakt pod adresem: <a href="mailto:kontakt@epdesign.pl" style="color:var(--accent);">kontakt@epdesign.pl</a>.</p>
       </div>
     </div>
   </div>
@@ -619,7 +723,25 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
 })();
 
 // ─── Navigation ────────────────────────────────────────────────────────────
+function closeMobileNavs() {
+  document.querySelectorAll('.nav-links.open').forEach(function(el) {
+    el.classList.remove('open');
+    var nav = el.closest('nav');
+    var btn = nav && nav.querySelector('.nav-burger');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  });
+}
+
+function toggleMobileNav(btn) {
+  var nav = btn.closest('nav');
+  var links = nav && nav.querySelector('.nav-links');
+  if (!links) return;
+  var open = links.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
 function navigate(pg) {
+  closeMobileNavs();
   var scan = document.getElementById('scan');
   if (scan) {
     scan.style.animation = 'none';
@@ -630,6 +752,8 @@ function navigate(pg) {
 }
 
 function setPage(pg) {
+  if (pg === 'home') { if (window._epdCanvasResume) window._epdCanvasResume(); }
+  else { if (window._epdCanvasPause) window._epdCanvasPause(); }
   var pages = ['uslugi', 'realizacje', 'ofirmie', 'certyfikaty'];
   pages.forEach(function(p) {
     var el = document.getElementById('pg-' + p);
@@ -648,7 +772,16 @@ function setPage(pg) {
 }
 
 function openWycena() {
+  closeMobileNavs();
   document.getElementById('pg-wycena').style.display = 'flex';
+}
+
+function openPrivacy() {
+  document.getElementById('pg-privacy').style.display = 'flex';
+}
+
+function closePrivacy() {
+  document.getElementById('pg-privacy').style.display = 'none';
 }
 
 function closeWycena() {
@@ -657,13 +790,51 @@ function closeWycena() {
 
 function submitWycena(e) {
   e.preventDefault();
-  document.getElementById('wycena-form').style.display = 'none';
-  document.getElementById('wycena-success').style.display = 'flex';
+  var form = document.getElementById('wycena-form');
+  var btn  = document.getElementById('wycena-submit');
+  var errEl = document.getElementById('wycena-error');
+  if (errEl) errEl.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Wysyłanie…';
+  var data = {
+    name:    form.querySelector('[name="name"]').value.trim(),
+    company: form.querySelector('[name="company"]').value.trim(),
+    email:   form.querySelector('[name="email"]').value.trim(),
+    phone:   form.querySelector('[name="phone"]').value.trim(),
+    subject: form.querySelector('[name="subject"]').value.trim(),
+    message: form.querySelector('[name="message"]').value.trim(),
+    consent: form.querySelector('[name="consent"]').checked,
+    lang:    document.documentElement.lang || 'pl'
+  };
+  fetch('/api/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(function(r) { return r.json().then(function(j) { return { ok: r.ok, body: j }; }); })
+  .then(function(res) {
+    if (res.ok) {
+      form.style.display = 'none';
+      document.getElementById('wycena-success').style.display = 'flex';
+    } else {
+      if (errEl) { errEl.textContent = res.body.error || 'Błąd wysyłania. Spróbuj ponownie.'; errEl.style.display = 'block'; }
+      btn.disabled = false;
+      btn.textContent = 'Wyślij zapytanie →';
+    }
+  })
+  .catch(function() {
+    if (errEl) { errEl.textContent = 'Błąd połączenia. Spróbuj ponownie.'; errEl.style.display = 'block'; }
+    btn.disabled = false;
+    btn.textContent = 'Wyślij zapytanie →';
+  });
 }
 
-// Close modal on backdrop click
+// Close modals on backdrop click
 document.getElementById('pg-wycena').addEventListener('click', function(e) {
   if (e.target === this) closeWycena();
+});
+document.getElementById('pg-privacy').addEventListener('click', function(e) {
+  if (e.target === this) closePrivacy();
 });
 
 // ─── Theme toggle ─────────────────────────────────────────────────────────────
@@ -1025,8 +1196,10 @@ document.getElementById('pg-wycena').addEventListener('click', function(e) {
     }
   }
 
+  var lastT = 0;
   function loop() {
-    draw(performance.now() - startTime);
+    lastT = performance.now() - startTime;
+    draw(lastT);
     raf = requestAnimationFrame(loop);
   }
 
@@ -1045,6 +1218,8 @@ document.getElementById('pg-wycena').addEventListener('click', function(e) {
   resize();
 
   raf = requestAnimationFrame(loop);
+  window._epdCanvasPause  = function() { if (raf) { cancelAnimationFrame(raf); raf = null; } };
+  window._epdCanvasResume = function() { if (!raf) { startTime = performance.now() - lastT; raf = requestAnimationFrame(loop); } };
 })();
 </script>
 </body>
