@@ -27,16 +27,18 @@ function sanitizeFilename(name) {
     .slice(0, 64);
 }
 
-module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+function getToken(req) {
+  const cookie = req.headers.cookie || '';
+  const m = cookie.match(/(?:^|;\s*)epd_session=([^;]+)/);
+  if (m) return decodeURIComponent(m[1]);
+  return (req.headers.authorization || '').replace('Bearer ', '').trim();
+}
 
+module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
-  const authHeader = req.headers.authorization || '';
-  const token = authHeader.replace('Bearer ', '').trim();
+  const token = getToken(req);
   if (!verifyToken(token)) return res.status(401).json({ error: 'Brak autoryzacji' });
 
   const { filename, data } = req.body || {};

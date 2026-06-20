@@ -43,8 +43,14 @@ async function githubRequest(path, options = {}) {
   return res.status === 404 ? null : res.json();
 }
 
+function getToken(req) {
+  const cookie = req.headers.cookie || '';
+  const m = cookie.match(/(?:^|;\s*)epd_session=([^;]+)/);
+  if (m) return decodeURIComponent(m[1]);
+  return (req.headers.authorization || '').replace('Bearer ', '').trim();
+}
+
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
@@ -82,8 +88,7 @@ module.exports = async function handler(req, res) {
 
   // POST — protected write
   if (req.method === 'POST') {
-    const authHeader = req.headers.authorization || '';
-    const token = authHeader.replace('Bearer ', '').trim();
+    const token = getToken(req);
     if (!verifyToken(token)) {
       return res.status(401).json({ error: 'Brak autoryzacji' });
     }

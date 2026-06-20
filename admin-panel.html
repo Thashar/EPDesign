@@ -42,6 +42,7 @@
   --a-stripe:rgba(0,0,0,0.025);
 }
 *{box-sizing:border-box;margin:0;padding:0}
+body{display:none}
 html,body{height:100%;background:var(--a-bg);font-family:'Space Grotesk',sans-serif;color:var(--a-text);font-size:14px}
 
 /* Layout */
@@ -257,22 +258,26 @@ let pendingCertCallback = null;
 let LANG = 'pl';
 
 // ─── Auth guard ─────────────────────────────────────────────────────────────
-TOKEN = sessionStorage.getItem('epd_token') || '';
-if (!TOKEN) window.location.href = '/admin.html';
+function redirectToLogin() { window.location.href = '/admin.html'; }
 
-// Gdy przeglądarka przywraca stronę z bfcache (przycisk wstecz po wylogowaniu),
-// JS heap ma stary TOKEN w pamięci mimo że sessionStorage jest już pusty.
-// Ponowne sprawdzenie wymusza przekierowanie.
+function checkAuth(onSuccess) {
+  fetch('/api/auth', { credentials: 'include' })
+    .then(r => { if (r.ok) onSuccess(); else redirectToLogin(); })
+    .catch(redirectToLogin);
+}
+
+// Przy przywróceniu z bfcache (przycisk wstecz po wylogowaniu) — ponowna weryfikacja
 window.addEventListener('pageshow', function(e) {
   if (e.persisted) {
-    TOKEN = sessionStorage.getItem('epd_token') || '';
-    if (!TOKEN) window.location.href = '/admin.html';
+    fetch('/api/auth', { credentials: 'include' })
+      .then(r => { if (!r.ok) redirectToLogin(); })
+      .catch(redirectToLogin);
   }
 });
 
 function logout() {
-  sessionStorage.removeItem('epd_token');
-  window.location.href = '/admin.html';
+  fetch('/api/logout', { method: 'POST', credentials: 'include' })
+    .finally(() => { window.location.href = '/admin.html'; });
 }
 
 // ─── Toast ──────────────────────────────────────────────────────────────────
@@ -294,9 +299,9 @@ function setStatus(msg, type = '') {
 async function apiFetch(url, opts = {}) {
   const r = await fetch(url, {
     ...opts,
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${TOKEN}`,
       ...(opts.headers || {})
     }
   });
@@ -1077,7 +1082,10 @@ function updateThemeBtn() {
 
 // ─── Init ────────────────────────────────────────────────────────────────────
 updateThemeBtn();
-loadData();
+checkAuth(function() {
+  document.body.style.display = '';
+  loadData();
+});
 </script>
 </body>
 </html>

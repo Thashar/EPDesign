@@ -3,9 +3,31 @@
  * Uruchom: node server.js
  * Wymaga: Node 18+ (wbudowany fetch)
  */
-const http = require('http');
-const fs   = require('fs');
-const path = require('path');
+const http   = require('http');
+const fs     = require('fs');
+const path   = require('path');
+const crypto = require('crypto');
+
+function verifySessionCookie(req) {
+  const cookie = req.headers.cookie || '';
+  const m = cookie.match(/(?:^|;\s*)epd_session=([^;]+)/);
+  const token = m ? decodeURIComponent(m[1]) : '';
+  if (!token) return false;
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return false;
+    const [id, expires, sig] = parts;
+    if (Date.now() > parseInt(expires, 10)) return false;
+    const secret = process.env.JWT_SECRET;
+    if (!secret) return false;
+    const payload = `${id}.${expires}`;
+    const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+    if (sig.length !== expected.length) return false;
+    return crypto.timingSafeEqual(Buffer.from(sig, 'hex'), Buffer.from(expected, 'hex'));
+  } catch {
+    return false;
+  }
+}
 
 // ─── Wczytaj .env (bez npm) ─────────────────────────────────────────────────
 function loadEnv() {
@@ -168,6 +190,24 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ── Pliki statyczne ──────────────────────────────────────────────────────
+
+  // Panel admina — dostęp tylko z ważną sesją
+  if (pathname === '/admin-panel.html') {
+    if (!verifySessionCookie(req)) {
+      res.writeHead(302, { 'Location': '/admin.html' });
+      return res.end();
+    }
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+  }
+
+  if (pathname === '/admin.html') {
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+  }
+
   let filePath = (pathname === '/' || pathname === '') ? '/index.html' : pathname;
   if (filePath.endsWith('/')) filePath += 'index.html';
   filePath = path.join(__dirname, decodeURIComponent(filePath));
