@@ -1,9 +1,9 @@
-function esc(s) {
+﻿function esc(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', process.env.SITE_ORIGIN || 'https://epdesign.pl');
+  res.setHeader('Access-Control-Allow-Origin', process.env.SITE_ORIGIN || 'https://ep-design.pl');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -29,12 +29,12 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: isEn ? 'Server configuration error' : 'Błąd konfiguracji serwera' });
   }
 
-  const to    = process.env.CONTACT_EMAIL || 'kontakt@epdesign.pl';
-  const from  = process.env.CONTACT_FROM  || 'EPDesign Formularz <formularz@epdesign.pl>';
+  const to    = process.env.CONTACT_EMAIL || 'kontakt@ep-design.pl';
+  const from  = process.env.CONTACT_FROM  || 'EPDesign Formularz <formularz@ep-design.pl>';
   const subjectLine = `[EPDesign] ${subject || (isEn ? 'New inquiry' : 'Nowe zapytanie')} — ${name}`;
 
   const text = [
-    isEn ? 'New inquiry via epdesign.pl' : 'Nowe zapytanie ze strony epdesign.pl',
+    isEn ? 'New inquiry via ep-design.pl' : 'Nowe zapytanie ze strony ep-design.pl',
     '',
     `${isEn ? 'Name' : 'Imię i Nazwisko'}: ${name}`,
     `${isEn ? 'Company' : 'Firma'}: ${company || '—'}`,
@@ -49,7 +49,7 @@ module.exports = async function handler(req, res) {
   ].join('\n');
 
   const html = `<!DOCTYPE html><html><body style="font-family:sans-serif;color:#0d2135;max-width:600px;margin:0 auto;padding:24px">
-<h2 style="color:#2fb6d6;margin-bottom:20px">${isEn ? 'New inquiry via epdesign.pl' : 'Nowe zapytanie ze strony epdesign.pl'}</h2>
+<h2 style="color:#2fb6d6;margin-bottom:20px">${isEn ? 'New inquiry via ep-design.pl' : 'Nowe zapytanie ze strony ep-design.pl'}</h2>
 <table style="border-collapse:collapse;width:100%;margin-bottom:24px">
   <tr><td style="padding:8px 0;border-bottom:1px solid #e0e8f0;color:#7f9bb0;width:160px;vertical-align:top">${isEn ? 'Name' : 'Imię i Nazwisko'}</td><td style="padding:8px 0;border-bottom:1px solid #e0e8f0"><strong>${esc(name)}</strong></td></tr>
   <tr><td style="padding:8px 0;border-bottom:1px solid #e0e8f0;color:#7f9bb0;vertical-align:top">${isEn ? 'Company' : 'Firma'}</td><td style="padding:8px 0;border-bottom:1px solid #e0e8f0">${esc(company || '—')}</td></tr>
