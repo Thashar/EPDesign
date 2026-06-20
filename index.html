@@ -1264,6 +1264,48 @@ document.getElementById('pg-privacy').addEventListener('click', function(e) {
   window._epdCanvasPause  = function() { if (raf) { cancelAnimationFrame(raf); raf = null; } };
   window._epdCanvasResume = function() { if (!raf) { startTime = performance.now() - lastT; raf = requestAnimationFrame(loop); } };
 })();
+
+// ─── Swipe navigation (mobile) ──────────────────────────────────────────────
+(function() {
+  var PAGES = ['home', 'uslugi', 'realizacje', 'ofirmie', 'certyfikaty'];
+  var current = 'home';
+  var sx = 0, sy = 0;
+
+  // Przechwytuj wywołania navigate() żeby śledzić aktywną stronę
+  var _origNavigate = window.navigate;
+  window.navigate = function(pg) {
+    current = pg;
+    _origNavigate(pg);
+  };
+
+  document.addEventListener('touchstart', function(e) {
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - sx;
+    var dy = e.changedTouches[0].clientY - sy;
+
+    // Pomijaj: zbyt krótki gest, ruch bardziej pionowy niż poziomy,
+    // strefa krawędziowa iOS (systemowy "wstecz")
+    if (Math.abs(dx) < 60) return;
+    if (Math.abs(dy) > Math.abs(dx)) return;
+    if (dx > 0 && sx < 25) return;
+
+    // Pomijaj gdy otwarte mobilne menu lub modal
+    if (document.querySelector('.nav-links.open')) return;
+    var wycena = document.getElementById('pg-wycena');
+    if (wycena && wycena.style.display === 'flex') return;
+
+    var idx = PAGES.indexOf(current);
+    if (dx < 0 && idx < PAGES.length - 1) {
+      window.navigate(PAGES[idx + 1]); // swipe w lewo → następna
+    } else if (dx > 0 && idx > 0) {
+      window.navigate(PAGES[idx - 1]); // swipe w prawo → poprzednia
+    }
+  }, { passive: true });
+})();
 </script>
 </body>
 </html>
