@@ -64,6 +64,16 @@ html,body{height:100%;background:var(--a-bg);font-family:'Space Grotesk',sans-se
 .btn-save:disabled{opacity:0.4;cursor:not-allowed}
 .lang-btn{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;background:transparent;color:var(--a-dim);border:none;padding:6px 12px;cursor:pointer;transition:background .15s,color .15s;}
 .lang-btn.active{background:var(--a-acc);color:var(--a-acc-txt);font-weight:600;}
+#hero-preview-box{background:#040e19;border-radius:3px;padding:20px 24px;border:1px solid rgba(160,200,225,0.1);}
+[data-theme="light"] #hero-preview-box{background:radial-gradient(125% 95% at 70% 38%,#eef7fd 0%,#cce2f3 46%,#8ab8d4 100%);border-color:rgba(0,80,120,0.18);}
+.prev-dot{width:6px;height:6px;background:#2fb6d6;border-radius:50%;flex:none;}
+[data-theme="light"] .prev-dot{background:#2077a6;}
+.prev-tagline{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#5fd0ec;margin-bottom:10px;}
+[data-theme="light"] .prev-tagline{color:#1a6090;}
+.prev-heading{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(18px,2.5vw,28px);line-height:1.1;color:#f3f8fc;margin-bottom:10px;}
+[data-theme="light"] .prev-heading{color:#06101c;}
+.prev-desc{font-size:13px;line-height:1.6;color:#a9c2d4;max-width:500px;}
+[data-theme="light"] .prev-desc{color:#2a5070;}
 .btn-theme{background:none;border:1px solid var(--a-bd-md);border-radius:2px;color:var(--a-dim);width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .2s,border-color .2s;flex:none;padding:0}
 .btn-theme:hover{color:var(--a-text);border-color:var(--a-bd-h)}
 
@@ -437,13 +447,13 @@ function renderHero() {
         </div>
         <hr class="form-divider">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--a-dim);margin-bottom:12px;">Podgląd</div>
-        <div style="background:#040e19;border-radius:3px;padding:20px 24px;border:1px solid rgba(160,200,225,0.1);">
-          <div style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#5fd0ec;margin-bottom:10px;">
-            <span style="width:6px;height:6px;background:#2fb6d6;border-radius:50%;flex:none;"></span>
+        <div id="hero-preview-box">
+          <div class="prev-tagline">
+            <span class="prev-dot"></span>
             <span id="hh-prev-tagline">${esc(hh.tagline || '')}</span>
           </div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(18px,2.5vw,28px);line-height:1.1;color:#f3f8fc;margin-bottom:10px;" id="hh-prev-heading">${esc(hh.heading || '')}</div>
-          <div style="font-size:13px;line-height:1.6;color:#a9c2d4;max-width:500px;" id="hh-prev-desc">${esc(hh.description || '')}</div>
+          <div class="prev-heading" id="hh-prev-heading">${esc(hh.heading || '')}</div>
+          <div class="prev-desc" id="hh-prev-desc">${esc(hh.description || '')}</div>
         </div>
       </div>
     </div>
