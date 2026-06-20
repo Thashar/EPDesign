@@ -9,7 +9,8 @@ function verifyToken(token) {
     if (parts.length !== 3) return false;
     const [id, expires, sig] = parts;
     if (Date.now() > parseInt(expires, 10)) return false;
-    const secret = process.env.JWT_SECRET || 'changeme-set-jwt-secret-env-var';
+    const secret = process.env.JWT_SECRET;
+    if (!secret) return false;
     const payload = `${id}.${expires}`;
     const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex');
     if (sig.length !== expected.length) return false;
