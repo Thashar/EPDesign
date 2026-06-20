@@ -207,7 +207,7 @@ select option{background:var(--a-inp-sel)}
 
   <!-- TOPBAR -->
   <header class="topbar">
-    <img src="uploads/epd-logo.png" alt="EPD" class="topbar-logo">
+    <img src="uploads/epd-logo.png" alt="EPD" class="topbar-logo" id="panel-logo">
     <div class="topbar-right">
       <span class="topbar-status" id="status">Ładowanie...</span>
       <button class="btn-theme" id="btn-theme" onclick="toggleTheme()" title="Tryb jasny"></button>
@@ -1058,6 +1058,8 @@ function updateThemeBtn() {
   const btn = document.getElementById('btn-theme');
   if (!btn) return;
   const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  const logo = document.getElementById('panel-logo');
+  if (logo) logo.src = isLight ? 'uploads/epd-logo.png' : 'uploads/epd-logo-white.png';
   btn.title = isLight ? 'Tryb ciemny' : 'Tryb jasny';
   btn.innerHTML = isLight
     ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>'
