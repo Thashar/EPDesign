@@ -1,4 +1,6 @@
 const crypto = require('crypto');
+const fs     = require('fs');
+const path   = require('path');
 
 function verifyToken(token) {
   if (!token) return false;
@@ -51,14 +53,24 @@ module.exports = async function handler(req, res) {
   const lang = urlObj.searchParams.get('lang');
   const filename = lang === 'en' ? 'content-en.json' : 'content.json';
 
+  const hasGithub = !!(process.env.GITHUB_TOKEN && process.env.GITHUB_REPO);
+  const localFile = path.join(__dirname, '..', filename);
+
   // GET — public, anyone can read
   if (req.method === 'GET') {
     res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=60');
     try {
-      const file = await githubRequest(filename);
-      if (!file) return res.json({});
-      const content = JSON.parse(Buffer.from(file.content, 'base64').toString('utf-8'));
-      return res.json(content);
+      if (hasGithub) {
+        const file = await githubRequest(filename);
+        if (!file) return res.json({});
+        const content = JSON.parse(Buffer.from(file.content, 'base64').toString('utf-8'));
+        return res.json(content);
+      } else {
+        // fallback: czytaj z pliku na dysku (lokalny dev / Vercel bez GitHub)
+        if (!fs.existsSync(localFile)) return res.json({});
+        const content = JSON.parse(fs.readFileSync(localFile, 'utf-8'));
+        return res.json(content);
+      }
     } catch (e) {
       console.error('GET content error:', e.message);
       return res.status(500).json({ error: e.message });
@@ -74,20 +86,26 @@ module.exports = async function handler(req, res) {
     }
 
     try {
-      const file = await githubRequest(filename);
-      const sha = file?.sha;
-      const branch = process.env.GITHUB_BRANCH || 'main';
-      const commitMsg = lang === 'en'
-        ? 'Admin: update EN content'
-        : 'Admin: aktualizacja treści strony';
-
       const newContent = JSON.stringify(req.body, null, 2);
-      const encoded = Buffer.from(newContent, 'utf-8').toString('base64');
 
-      await githubRequest(filename, {
-        method: 'PUT',
-        body: JSON.stringify({ message: commitMsg, content: encoded, sha, branch })
-      });
+      if (hasGithub) {
+        const file = await githubRequest(filename);
+        const sha = file?.sha;
+        const branch = process.env.GITHUB_BRANCH || 'main';
+        const commitMsg = lang === 'en'
+          ? 'Admin: update EN content'
+          : 'Admin: aktualizacja treści strony';
+
+        const encoded = Buffer.from(newContent, 'utf-8').toString('base64');
+        await githubRequest(filename, {
+          method: 'PUT',
+          body: JSON.stringify({ message: commitMsg, content: encoded, sha, branch })
+        });
+      } else {
+        // fallback: zapisz lokalnie na dysku
+        fs.writeFileSync(localFile, newContent, 'utf-8');
+        console.log(`[content] Zapisano lokalnie: ${filename}`);
+      }
 
       return res.json({ success: true });
     } catch (e) {
