@@ -260,6 +260,16 @@ let LANG = 'pl';
 TOKEN = sessionStorage.getItem('epd_token') || '';
 if (!TOKEN) window.location.href = '/admin.html';
 
+// Gdy przeglądarka przywraca stronę z bfcache (przycisk wstecz po wylogowaniu),
+// JS heap ma stary TOKEN w pamięci mimo że sessionStorage jest już pusty.
+// Ponowne sprawdzenie wymusza przekierowanie.
+window.addEventListener('pageshow', function(e) {
+  if (e.persisted) {
+    TOKEN = sessionStorage.getItem('epd_token') || '';
+    if (!TOKEN) window.location.href = '/admin.html';
+  }
+});
+
 function logout() {
   sessionStorage.removeItem('epd_token');
   window.location.href = '/admin.html';
