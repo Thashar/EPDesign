@@ -436,13 +436,15 @@ function renderHero() {
           <span class="mono" id="hh-msg"></span>
         </div>
         <hr class="form-divider">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f6e85;margin-bottom:12px;">Podgląd</div>
-        <div style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#5fd0ec;margin-bottom:10px;">
-          <span style="width:6px;height:6px;background:#2fb6d6;border-radius:50%;flex:none;"></span>
-          <span id="hh-prev-tagline">${esc(hh.tagline || '')}</span>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--a-dim);margin-bottom:12px;">Podgląd</div>
+        <div style="background:#040e19;border-radius:3px;padding:20px 24px;border:1px solid rgba(160,200,225,0.1);">
+          <div style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#5fd0ec;margin-bottom:10px;">
+            <span style="width:6px;height:6px;background:#2fb6d6;border-radius:50%;flex:none;"></span>
+            <span id="hh-prev-tagline">${esc(hh.tagline || '')}</span>
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(18px,2.5vw,28px);line-height:1.1;color:#f3f8fc;margin-bottom:10px;" id="hh-prev-heading">${esc(hh.heading || '')}</div>
+          <div style="font-size:13px;line-height:1.6;color:#a9c2d4;max-width:500px;" id="hh-prev-desc">${esc(hh.description || '')}</div>
         </div>
-        <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(18px,2.5vw,28px);line-height:1.1;color:#f3f8fc;margin-bottom:10px;" id="hh-prev-heading">${esc(hh.heading || '')}</div>
-        <div style="font-size:13px;line-height:1.6;color:#a9c2d4;max-width:500px;" id="hh-prev-desc">${esc(hh.description || '')}</div>
       </div>
     </div>
 
