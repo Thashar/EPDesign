@@ -1270,11 +1270,10 @@ document.getElementById('pg-privacy').addEventListener('click', function(e) {
   var PAGES   = ['uslugi', 'realizacje', 'ofirmie', 'certyfikaty'];
   var FADE_PX = 90;
 
-  function navBg(alpha) {
-    var light = document.documentElement.getAttribute('data-theme') === 'light';
-    return light
-      ? 'rgba(221,229,238,' + alpha + ')'
-      : 'rgba(4,14,26,' + alpha + ')';
+  function setNavOpacity(nav, scrollTop) {
+    var t = Math.min(scrollTop / FADE_PX, 1);
+    nav.style.opacity       = (1 - t).toFixed(3);
+    nav.style.pointerEvents = t >= 1 ? 'none' : '';
   }
 
   PAGES.forEach(function(id) {
@@ -1282,11 +1281,10 @@ document.getElementById('pg-privacy').addEventListener('click', function(e) {
     if (!pg) return;
     var nav = pg.querySelector('nav');
     if (!nav) return;
-    nav.style.transition = 'background 0.12s';
+    nav.style.transition = 'opacity 0.12s';
 
     pg.addEventListener('scroll', function() {
-      var t = Math.min(pg.scrollTop / FADE_PX, 1);
-      nav.style.background = navBg((0.97 * (1 - t)).toFixed(3));
+      setNavOpacity(nav, pg.scrollTop);
     }, { passive: true });
   });
 
@@ -1298,12 +1296,7 @@ document.getElementById('pg-privacy').addEventListener('click', function(e) {
       if (!el) return;
       var nav = el.querySelector('nav');
       if (!nav) return;
-      if (id === pg) {
-        var t = Math.min(el.scrollTop / FADE_PX, 1);
-        nav.style.background = navBg((0.97 * (1 - t)).toFixed(3));
-      } else {
-        nav.style.background = navBg('0.97');
-      }
+      setNavOpacity(nav, id === pg ? el.scrollTop : 0);
     });
   };
 })();
