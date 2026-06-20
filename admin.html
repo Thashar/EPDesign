@@ -8,28 +8,48 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script>(function(){var t=localStorage.getItem('epd-theme');if(t!=='dark')document.documentElement.setAttribute('data-theme','light');}());</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#040e19;font-family:'IBM Plex Sans',sans-serif;color:#eaf2f8}
+:root{
+  --bg:#040e19;--card-bg:#06121f;--card-border:rgba(160,200,225,0.1);
+  --text:#eaf2f8;--label:#4f6e85;--heading:#f3f8fc;--tag:#2fb6d6;
+  --inp-bg:rgba(255,255,255,0.04);--inp-border:rgba(160,200,225,0.15);--inp-focus:rgba(47,182,214,0.5);
+  --btn-bg:#2fb6d6;--btn-bg-h:#56cce6;--btn-text:#04121d;
+  --back:#4f6e85;--back-h:#bcd2e2;
+  --theme-btn-bg:rgba(5,16,28,0.85);--theme-btn-border:rgba(255,255,255,0.22);
+}
+[data-theme="light"]{
+  --bg:#f0f4f8;--card-bg:#e8eef5;--card-border:rgba(0,60,100,0.12);
+  --text:#0d2135;--label:#5a7a94;--heading:#06101c;--tag:#2077a6;
+  --inp-bg:rgba(0,0,0,0.04);--inp-border:rgba(0,80,120,0.2);--inp-focus:rgba(32,119,166,0.4);
+  --btn-bg:#2077a6;--btn-bg-h:#1a6490;--btn-text:#ffffff;
+  --back:#5a7a94;--back-h:#1a4060;
+  --theme-btn-bg:rgba(240,244,248,0.95);--theme-btn-border:rgba(0,80,120,0.35);
+}
+html,body{height:100%;background:var(--bg);font-family:'IBM Plex Sans',sans-serif;color:var(--text);transition:background .2s,color .2s}
 body{display:flex;align-items:center;justify-content:center;min-height:100vh}
-.card{width:100%;max-width:400px;padding:48px 40px;background:#06121f;border:1px solid rgba(160,200,225,0.1);border-radius:4px}
+.card{width:100%;max-width:400px;padding:48px 40px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:4px;transition:background .2s,border-color .2s}
 .logo{height:96px;width:auto;display:block;margin:0 auto 36px;opacity:0.9}
-.label{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#4f6e85;margin-bottom:8px}
-.input{display:block;width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(160,200,225,0.15);border-radius:2px;padding:13px 16px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;color:#eaf2f8;outline:none;transition:border-color .2s;margin-bottom:24px}
-.input:focus{border-color:rgba(47,182,214,0.5)}
-.btn{display:block;width:100%;font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:15px;color:#04121d;background:#2fb6d6;border:none;border-radius:3px;padding:14px;cursor:pointer;transition:background .2s;letter-spacing:.01em}
-.btn:hover{background:#56cce6}
+.label{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--label);margin-bottom:8px}
+.input{display:block;width:100%;background:var(--inp-bg);border:1px solid var(--inp-border);border-radius:2px;padding:13px 16px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;color:var(--text);outline:none;transition:border-color .2s,background .2s,color .2s;margin-bottom:24px}
+.input:focus{border-color:var(--inp-focus)}
+.input::placeholder{color:var(--label)}
+.btn{display:block;width:100%;font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:15px;color:var(--btn-text);background:var(--btn-bg);border:none;border-radius:3px;padding:14px;cursor:pointer;transition:background .2s;letter-spacing:.01em}
+.btn:hover{background:var(--btn-bg-h)}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
 .error{font-size:13px;color:#e05555;font-family:'IBM Plex Mono',monospace;margin-top:16px;text-align:center;display:none}
-.tag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#2fb6d6;text-align:center;margin-bottom:20px}
-h1{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:26px;color:#f3f8fc;text-align:center;margin-bottom:32px}
-.back{display:block;text-align:center;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#4f6e85;text-decoration:none;transition:color .2s}
-.back:hover{color:#bcd2e2}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--tag);text-align:center;margin-bottom:20px}
+h1{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:26px;color:var(--heading);text-align:center;margin-bottom:32px}
+.back{display:block;text-align:center;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--back);text-decoration:none;transition:color .2s}
+.back:hover{color:var(--back-h)}
+#btn-theme{position:fixed;bottom:22px;right:22px;z-index:300;width:28px;height:28px;border-radius:3px;border:1px solid var(--theme-btn-border);background:var(--theme-btn-bg);box-shadow:0 2px 12px rgba(0,0,0,0.45);opacity:0.72;transition:opacity .2s,transform .18s,background .2s,border-color .2s;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+#btn-theme:hover{opacity:1;transform:scale(1.12)}
 </style>
 </head>
 <body>
 <div class="card">
-  <img src="uploads/epd-logo-white.png" alt="Energy Piping Design" class="logo">
+  <img id="admin-logo" src="uploads/epd-logo-white.png" alt="Energy Piping Design" class="logo">
   <div class="tag">Panel Administracyjny</div>
   <h1>Logowanie</h1>
   <form id="form" onsubmit="doLogin(event)">
@@ -40,6 +60,8 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:26px;color:#
   </form>
   <a href="/" class="back">← Wróć do strony</a>
 </div>
+
+<button id="btn-theme" title="Przełącz motyw"></button>
 
 <script>
 async function doLogin(e) {
@@ -69,10 +91,34 @@ async function doLogin(e) {
   }
 }
 
-// Auto-redirect if already logged in
 if (sessionStorage.getItem('epd_token')) {
   window.location.href = '/admin-panel.html';
 }
+
+(function() {
+  var SUN  = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5fd0ec" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/></svg>';
+  var MOON = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0d8fab" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  var btn  = document.getElementById('btn-theme');
+  var logo = document.getElementById('admin-logo');
+
+  function getTheme() { return document.documentElement.getAttribute('data-theme') || 'dark'; }
+
+  function applyTheme(t) {
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    else document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('epd-theme', t);
+    refresh();
+  }
+
+  function refresh() {
+    var isLight = getTheme() === 'light';
+    btn.innerHTML = isLight ? MOON : SUN;
+    logo.src = isLight ? 'uploads/epd-logo.png' : 'uploads/epd-logo-white.png';
+  }
+
+  btn.onclick = function() { applyTheme(getTheme() === 'light' ? 'dark' : 'light'); };
+  refresh();
+})();
 </script>
 </body>
 </html>
