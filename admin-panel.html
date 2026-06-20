@@ -26,7 +26,7 @@
   --a-stripe:rgba(255,255,255,0.02);
 }
 [data-theme="light"]{
-  --a-bg:#f0f4f8;--a-surface:#e8eef5;--a-card:#ffffff;--a-inner:#f5f8fb;
+  --a-bg:#f0f4f8;--a-surface:#e8eef5;--a-card:#edf2f7;--a-inner:#f5f8fb;
   --a-text:#0d2135;--a-heading:#060e1c;--a-muted:#3a5a74;--a-dim:#5a7a94;
   --a-faint:#8aacbc;--a-label:#9ab4c4;--a-nav-h:#1a4060;
   --a-acc:#2077a6;--a-acc-h:#1a6490;--a-acc-txt:#ffffff;
@@ -62,6 +62,8 @@ html,body{height:100%;background:var(--a-bg);font-family:'Space Grotesk',sans-se
 .btn-save{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:var(--a-acc-txt);background:var(--a-acc);border:none;border-radius:3px;padding:8px 20px;cursor:pointer;transition:background .2s}
 .btn-save:hover{background:var(--a-acc-h)}
 .btn-save:disabled{opacity:0.4;cursor:not-allowed}
+.lang-btn{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;background:transparent;color:var(--a-dim);border:none;padding:6px 12px;cursor:pointer;transition:background .15s,color .15s;}
+.lang-btn.active{background:var(--a-acc);color:var(--a-acc-txt);font-weight:600;}
 .btn-theme{background:none;border:1px solid var(--a-bd-md);border-radius:2px;color:var(--a-dim);width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .2s,border-color .2s;flex:none;padding:0}
 .btn-theme:hover{color:var(--a-text);border-color:var(--a-bd-h)}
 
@@ -200,8 +202,8 @@ select option{background:var(--a-inp-sel)}
       <span class="topbar-status" id="status">Ładowanie...</span>
       <button class="btn-theme" id="btn-theme" onclick="toggleTheme()" title="Tryb jasny"></button>
       <div style="display:flex;border:1px solid rgba(160,200,225,0.15);border-radius:2px;overflow:hidden;flex:none;">
-        <button id="lang-pl-btn" onclick="setLang('pl')" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;background:#2fb6d6;color:#04121d;border:none;padding:6px 12px;cursor:pointer;transition:background .15s;font-weight:600;">PL</button>
-        <button id="lang-en-btn" onclick="setLang('en')" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;background:transparent;color:#4f6e85;border:none;padding:6px 12px;cursor:pointer;transition:background .15s,color .15s;">EN</button>
+        <button id="lang-pl-btn" onclick="setLang('pl')" class="lang-btn active">PL</button>
+        <button id="lang-en-btn" onclick="setLang('en')" class="lang-btn">EN</button>
       </div>
       <button class="btn-save" id="btnSave" onclick="saveAll()" disabled>Zapisz zmiany</button>
       <button class="btn-logout" onclick="logout()">Wyloguj</button>
@@ -287,10 +289,8 @@ function setLang(lang) {
   const plBtn = document.getElementById('lang-pl-btn');
   const enBtn = document.getElementById('lang-en-btn');
   if (plBtn && enBtn) {
-    plBtn.style.background = lang === 'pl' ? '#2fb6d6' : 'transparent';
-    plBtn.style.color = lang === 'pl' ? '#04121d' : '#4f6e85';
-    enBtn.style.background = lang === 'en' ? '#2fb6d6' : 'transparent';
-    enBtn.style.color = lang === 'en' ? '#04121d' : '#4f6e85';
+    plBtn.classList.toggle('active', lang === 'pl');
+    enBtn.classList.toggle('active', lang === 'en');
   }
   DATA = {};
   document.getElementById('btnSave').disabled = true;
@@ -1041,6 +1041,7 @@ function toggleTheme() {
   const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('adm-theme', next);
+  localStorage.setItem('epd-theme', next);
   updateThemeBtn();
 }
 function updateThemeBtn() {
