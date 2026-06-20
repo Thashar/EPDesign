@@ -1,6 +1,9 @@
 {
   "outputDirectory": ".",
   "buildCommand": null,
+  "functions": {
+    "api/*.js": { "runtime": "nodejs20.x" }
+  },
   "headers": [
     {
       "source": "/uploads/(.*)",

@@ -63,12 +63,14 @@ module.exports = async function handler(req, res) {
       if (hasGithub) {
         const file = await githubRequest(filename);
         if (!file) return res.json({});
-        const content = JSON.parse(Buffer.from(file.content, 'base64').toString('utf-8'));
+        const raw = Buffer.from(file.content, 'base64').toString('utf-8').replace(/^﻿/, '');
+        const content = JSON.parse(raw);
         return res.json(content);
       } else {
         // fallback: czytaj z pliku na dysku (lokalny dev / Vercel bez GitHub)
         if (!fs.existsSync(localFile)) return res.json({});
-        const content = JSON.parse(fs.readFileSync(localFile, 'utf-8'));
+        const raw = fs.readFileSync(localFile, 'utf-8').replace(/^﻿/, '');
+        const content = JSON.parse(raw);
         return res.json(content);
       }
     } catch (e) {
