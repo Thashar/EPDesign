@@ -753,6 +753,25 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
         var telLine   = k.telefon ? '<a href="tel:' + h(k.telefon) + '" style="color:#bcd2e2;text-decoration:none;">' + h(k.telefon) + '</a>' : '';
         wk.innerHTML = [emailLine, telLine].filter(Boolean).join('<br>');
       }
+      var ld = document.querySelector('script[type="application/ld+json"]');
+      if (ld) {
+        try {
+          var schema = JSON.parse(ld.textContent);
+          if (k.firma)    { schema.name = k.firma; schema.legalName = k.firma; }
+          if (k.email)    schema.email = k.email;
+          if (k.nip)      schema.taxID = k.nip;
+          if (k.linkedin) schema.sameAs = [k.linkedin];
+          if (k.telefon)  schema.telephone = k.telefon; else delete schema.telephone;
+          if (k.ulica || k.miasto) {
+            var pm = (k.miasto || '').match(/^(\d{2}-\d{3})\s+(.+)$/);
+            schema.address = schema.address || {'@type':'PostalAddress','addressCountry':'PL'};
+            if (k.ulica)  schema.address.streetAddress   = k.ulica;
+            if (pm)       { schema.address.postalCode = pm[1]; schema.address.addressLocality = pm[2]; }
+            else if (k.miasto) schema.address.addressLocality = k.miasto;
+          }
+          ld.textContent = JSON.stringify(schema);
+        } catch(e) {}
+      }
     }
 
     if (d.seo) {
