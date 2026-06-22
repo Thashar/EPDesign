@@ -77,7 +77,7 @@
   --inp-focus:rgba(47,182,214,0.5);
 }
 [data-theme="light"]{
-  --bg-main:#f0f4f8;--bg-surface:#e8eef5;--bg-section:#dae3f0;--bg-card:#c8d2e0;--bg-footer:#bfc7d0;
+  --bg-main:#f0f4f8;--bg-surface:#e8eef5;--bg-section:#dae3f0;--bg-card:#dfe8f5;--bg-footer:#bfc7d0;
   --bg-nav:rgba(191,199,208,0.97);--bg-modal:rgba(240,244,248,0.98);
   --bg-input:rgba(0,0,0,0.04);--btn-sec-hover:rgba(0,0,0,0.04);
   --close-hover:rgba(0,0,0,0.08);--cert-stripe:rgba(0,0,0,0.02);
@@ -252,7 +252,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
 <div id="scan" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:150;background:linear-gradient(90deg,transparent 0%,rgba(47,182,214,0.35) 49%,rgba(47,182,214,0.55) 50%,rgba(47,182,214,0.35) 51%,transparent 100%);background-size:200% 100%;background-position:-200% 0;opacity:0;"></div>
 
 <!-- ═══════ USŁUGI ════════════════════════════════════════════════════════ -->
-<div id="pg-uslugi" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:49;overflow-y:auto;background:var(--bg-section);transform:translateX(100%);transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);pointer-events:none;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--text-primary);">
+<div id="pg-uslugi" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:49;overflow-y:auto;background:var(--bg-card);transform:translateX(100%);transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);pointer-events:none;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--text-primary);">
   <nav style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(8px,1.2vw,13px) clamp(22px,5vw,72px);background:var(--bg-nav);border-bottom:1px solid var(--border);">
     <a href="#" onclick="navigate('home');return false;"><img src="/uploads/epd-logo.png" alt="EPDesign" class="logo-img" style="height:clamp(56px,6.4vw,79px);width:auto;display:block;opacity:0.9;"></a>
     <button class="nav-burger" onclick="toggleMobileNav(this)" aria-label="Menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="0" y1="1" x2="18" y2="1"/><line x1="0" y1="7" x2="18" y2="7"/><line x1="0" y1="13" x2="18" y2="13"/></svg></button>
@@ -264,7 +264,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
       <a href="#" onclick="openWycena();return false;" class="nc">Kontakt</a>
     </div>
   </nav>
-  <div style="padding:clamp(48px,6vh,72px) clamp(22px,5vw,72px) 40px;background:var(--bg-card);">
+  <div style="padding:clamp(48px,6vh,72px) clamp(22px,5vw,72px) 40px;background:var(--bg-section);">
     <div id="hero-tag" style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;">OFERTA</div>
     <h1 id="hero-heading" style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.5vw,60px);line-height:1.04;letter-spacing:-0.02em;color:var(--text-heading);margin-bottom:18px;text-wrap:balance;">Kompleksowe usługi inżynierskie<br>dla sektora energetycznego</h1>
     <p id="hero-subheading" style="font-size:clamp(15px,1.4vw,18px);line-height:1.65;color:var(--text-secondary);max-width:620px;text-wrap:pretty;">Specjalistyczne usługi inżynierskie w zakresie orurowania — od analiz i projektów, przez skanowanie i modelowanie 3D, po eksperckie wsparcie w automatyzacji i weryfikację zgodności z IRiESP i NC-RfG.</p>
@@ -308,7 +308,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
 </div>
 
 <!-- ═══════ REALIZACJE ════════════════════════════════════════════════════ -->
-<div id="pg-realizacje" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:49;overflow-y:auto;background:var(--bg-section);transform:translateX(100%);transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);pointer-events:none;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--text-primary);">
+<div id="pg-realizacje" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:49;overflow-y:auto;background:var(--bg-card);transform:translateX(100%);transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);pointer-events:none;font-family:'IBM Plex Sans',-apple-system,sans-serif;color:var(--text-primary);">
   <nav style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(8px,1.2vw,13px) clamp(22px,5vw,72px);background:var(--bg-nav);border-bottom:1px solid var(--border);">
     <a href="#" onclick="navigate('home');return false;"><img src="/uploads/epd-logo.png" alt="EPDesign" class="logo-img" style="height:clamp(56px,6.4vw,79px);width:auto;display:block;opacity:0.9;"></a>
     <button class="nav-burger" onclick="toggleMobileNav(this)" aria-label="Menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="0" y1="1" x2="18" y2="1"/><line x1="0" y1="7" x2="18" y2="7"/><line x1="0" y1="13" x2="18" y2="13"/></svg></button>
@@ -320,7 +320,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
       <a href="#" onclick="openWycena();return false;" class="nc">Kontakt</a>
     </div>
   </nav>
-  <div id="realizacje-header" style="padding:clamp(48px,6vh,72px) clamp(22px,5vw,72px) 40px;background:var(--bg-card);">
+  <div id="realizacje-header" style="padding:clamp(48px,6vh,72px) clamp(22px,5vw,72px) 40px;background:var(--bg-section);">
     <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;">PORTFOLIO</div>
     <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,4.5vw,60px);line-height:1.04;letter-spacing:-0.02em;color:var(--text-heading);margin-bottom:18px;">Wybrane realizacje</h1>
     <p style="font-size:clamp(15px,1.4vw,18px);line-height:1.65;color:var(--text-secondary);max-width:560px;">Projekty zrealizowane dla czołowych podmiotów sektora energetycznego, petrochemicznego i przemysłowego w Polsce i za granicą.</p>
