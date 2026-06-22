@@ -181,6 +181,13 @@
   "settings": {
     "default_theme": "light"
   },
+  "seo": {
+    "title": "Energy Piping Design — Inżynieria Rurociągów",
+    "description": "Kompleksowe usługi inżynierskie w zakresie orurowania dla sektora energetycznego i przemysłowego. Analizy, projekty wykonawcze, skanowanie laserowe 3D, modelowanie, automatyka IRiESP i NC-RfG.",
+    "og_image": "https://ep-design.pl/uploads/epd-logo.png",
+    "twitter_card": "summary",
+    "twitter_image": ""
+  },
   "privacy_policy": {
     "title": "Polityka Prywatności",
     "tag": "RODO",

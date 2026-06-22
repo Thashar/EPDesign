@@ -167,6 +167,13 @@
   "settings": {
     "default_theme": "light"
   },
+  "seo": {
+    "title": "Energy Piping Design — Piping Engineering",
+    "description": "Comprehensive piping engineering services for the energy and industrial sectors. Analyses, executive designs, 3D laser scanning, modelling, IRiESP and NC-RfG automation.",
+    "og_image": "https://ep-design.pl/uploads/epd-logo.png",
+    "twitter_card": "summary",
+    "twitter_image": ""
+  },
   "privacy_policy": {
     "title": "Privacy Policy",
     "tag": "GDPR",

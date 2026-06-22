@@ -236,6 +236,7 @@ select option{background:var(--a-inp-sel)}
     <div class="nav-item" onclick="showSection('privacy')">Polityka prywatności</div>
     <div class="nav-label">Ustawienia</div>
     <div class="nav-item" onclick="showSection('settings')">Layout</div>
+    <div class="nav-item" onclick="showSection('seo')">SEO</div>
   </nav>
 
   <!-- MAIN -->
@@ -404,7 +405,8 @@ function showSection(name) {
       (name === 'realizacje' && el.textContent.includes('Realizacje')) ||
       (name === 'uslugi' && el.textContent.includes('sługi')) ||
       (name === 'privacy' && el.textContent.includes('Polityk')) ||
-      (name === 'settings' && el.textContent.includes('Layout'))
+      (name === 'settings' && el.textContent.includes('Layout')) ||
+      (name === 'seo'      && el.textContent.includes('SEO'))
     );
   });
   renderSection(name);
@@ -421,6 +423,7 @@ function renderSection(name) {
     case 'certyfikaty':main.innerHTML = renderCertyfikaty();break;
     case 'kontakt':    main.innerHTML = renderKontakt();    break;
     case 'privacy':    main.innerHTML = renderPrivacy();    break;
+    case 'seo':        main.innerHTML = renderSEO();       break;
     case 'settings':   main.innerHTML = renderSettings();  break;
   }
   bindSectionEvents(name);
@@ -434,6 +437,7 @@ function collectFormData() {
     case 'ofirmie': collectOfirmie(); break;
     case 'kontakt': collectKontakt(); break;
     case 'privacy':   collectPrivacy();  break;
+    case 'seo':       collectSEO();      break;
     case 'settings':  collectSettings(); break;
   }
 }
@@ -1010,6 +1014,144 @@ function saveCert(i) {
   setTimeout(() => msg.textContent = '', 2000);
 }
 
+// ─── SEO ─────────────────────────────────────────────────────────────────────
+function renderSEO() {
+  const s = DATA.seo || {};
+  const langLabel = LANG === 'en' ? 'EN' : 'PL';
+  return `
+    <div class="section-header">
+      <span class="section-title">SEO</span>
+      <span class="section-badge">${langLabel} · Meta &amp; Social</span>
+    </div>
+
+    <div class="card">
+      <div class="card-head" onclick="toggleCard('seo-basic')">
+        <span class="card-code">META</span>
+        <span class="card-title">Tytuł i opis strony</span>
+      </div>
+      <div class="card-body open" id="seo-basic">
+        <div class="form-group">
+          <label class="fl">Tytuł strony <span style="color:var(--a-dim);font-weight:400">(widoczny w karcie przeglądarki i wynikach Google)</span></label>
+          <input type="text" id="seo-title" value="${esc(s.title||'')}" placeholder="Nazwa firmy — Slogan" oninput="document.getElementById('seo-title-len').textContent=this.value.length+'/60 znaków'">
+          <div id="seo-title-len" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--a-dim);margin-top:4px;text-align:right;">${(s.title||'').length}/60 znaków</div>
+        </div>
+        <div class="form-group">
+          <label class="fl">Opis strony <span style="color:var(--a-dim);font-weight:400">(meta description — widoczny pod linkiem w Google)</span></label>
+          <textarea id="seo-desc" rows="3" style="width:100%;resize:vertical;" oninput="document.getElementById('seo-desc-len').textContent=this.value.length+'/160 znaków'">${esc(s.description||'')}</textarea>
+          <div id="seo-desc-len" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--a-dim);margin-top:4px;text-align:right;">${(s.description||'').length}/160 znaków</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head" onclick="toggleCard('seo-og')">
+        <span class="card-code">OG</span>
+        <span class="card-title">Zdjęcie podglądu (Open Graph)</span>
+      </div>
+      <div class="card-body open" id="seo-og">
+        <div style="font-size:12px;color:var(--a-muted);margin-bottom:16px;">Wyświetlane przy udostępnianiu strony na LinkedIn, Facebooku itp. Zalecany rozmiar: <strong>1200 × 630 px</strong>.</div>
+        <div id="seo-og-preview" style="width:100%;max-width:400px;height:200px;background:var(--a-inner);border:1px solid var(--a-bd-md);border-radius:3px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;">
+          ${s.og_image
+            ? `<img src="${esc(s.og_image)}" style="width:100%;height:100%;object-fit:cover">`
+            : `<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--a-faint);">BRAK ZDJĘCIA</span>`}
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <button class="btn-file" onclick="triggerSeoPhoto('og')">Wgraj zdjęcie</button>
+          <input type="text" id="seo-og-image" value="${esc(s.og_image||'')}" placeholder="https://ep-design.pl/uploads/..." style="flex:1;min-width:160px;font-size:11px;padding:7px 10px" oninput="updateSeoPreview('og',this.value)">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head" onclick="toggleCard('seo-twitter')">
+        <span class="card-code">X / TWITTER</span>
+        <span class="card-title">Twitter Card</span>
+      </div>
+      <div class="card-body open" id="seo-twitter">
+        <div class="form-group">
+          <label class="fl">Typ karty</label>
+          <div style="display:flex;gap:12px;margin-top:6px;">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 16px;border:2px solid ${(s.twitter_card||'summary')==='summary'?'var(--a-acc)':'var(--a-bd-md)'};border-radius:3px;flex:1;transition:border-color .2s;">
+              <input type="radio" name="tw-card" id="tw-summary" value="summary" ${(s.twitter_card||'summary')==='summary'?'checked':''} onchange="onTwitterCardChange()" style="accent-color:var(--a-acc);flex:none;">
+              <div>
+                <div style="font-weight:600;font-size:13px;color:var(--a-heading);">Summary</div>
+                <div style="font-size:11px;color:var(--a-muted);">Małe zdjęcie obok tekstu</div>
+              </div>
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 16px;border:2px solid ${s.twitter_card==='summary_large_image'?'var(--a-acc)':'var(--a-bd-md)'};border-radius:3px;flex:1;transition:border-color .2s;">
+              <input type="radio" name="tw-card" id="tw-large" value="summary_large_image" ${s.twitter_card==='summary_large_image'?'checked':''} onchange="onTwitterCardChange()" style="accent-color:var(--a-acc);flex:none;">
+              <div>
+                <div style="font-weight:600;font-size:13px;color:var(--a-heading);">Large Image</div>
+                <div style="font-size:11px;color:var(--a-muted);">Duży baner — lepszy efekt</div>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div id="tw-image-row" style="margin-top:12px;${s.twitter_card==='summary_large_image'?'':'display:none'}">
+          <div style="font-size:12px;color:var(--a-muted);margin-bottom:10px;">Zalecany rozmiar dla Large Image: <strong>1200 × 628 px</strong>.</div>
+          <div id="seo-tw-preview" style="width:100%;max-width:400px;height:200px;background:var(--a-inner);border:1px solid var(--a-bd-md);border-radius:3px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;">
+            ${s.twitter_image
+              ? `<img src="${esc(s.twitter_image)}" style="width:100%;height:100%;object-fit:cover">`
+              : `<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--a-faint);">BRAK ZDJĘCIA</span>`}
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <button class="btn-file" onclick="triggerSeoPhoto('tw')">Wgraj zdjęcie</button>
+            <input type="text" id="seo-tw-image" value="${esc(s.twitter_image||'')}" placeholder="https://ep-design.pl/uploads/..." style="flex:1;min-width:160px;font-size:11px;padding:7px 10px" oninput="updateSeoPreview('tw',this.value)">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:8px;padding:12px 16px;background:var(--a-acc-bg);border:1px solid var(--a-acc-bd);border-radius:3px;font-size:12px;color:var(--a-muted);">
+      Tytuł i opis są osobne dla każdego języka — pamiętaj żeby zapisać zmiany zarówno w wersji PL jak i EN. Zdjęcia OG i Twitter są wspólne dla obu wersji.
+    </div>
+  `;
+}
+
+function onTwitterCardChange() {
+  const val = document.querySelector('input[name="tw-card"]:checked')?.value || 'summary';
+  const row = document.getElementById('tw-image-row');
+  if (row) row.style.display = val === 'summary_large_image' ? '' : 'none';
+  document.querySelectorAll('input[name="tw-card"]').forEach(function(inp) {
+    const lbl = inp.closest('label');
+    if (lbl) lbl.style.borderColor = inp.value === val ? 'var(--a-acc)' : 'var(--a-bd-md)';
+  });
+}
+
+function updateSeoPreview(type, url) {
+  const id = type === 'og' ? 'seo-og-preview' : 'seo-tw-preview';
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = url
+    ? `<img src="${esc(url)}" style="width:100%;height:100%;object-fit:cover">`
+    : `<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--a-faint);">BRAK ZDJĘCIA</span>`;
+}
+
+let pendingSeoCallback = null;
+function triggerSeoPhoto(type) {
+  pendingSeoCallback = function(url) {
+    const inputId = type === 'og' ? 'seo-og-image' : 'seo-tw-image';
+    const inp = document.getElementById(inputId);
+    if (inp) inp.value = url;
+    updateSeoPreview(type, url);
+  };
+  document.getElementById('fileInput').click();
+}
+
+function collectSEO() {
+  DATA.seo = DATA.seo || {};
+  const title  = document.getElementById('seo-title');
+  const desc   = document.getElementById('seo-desc');
+  const ogImg  = document.getElementById('seo-og-image');
+  const twImg  = document.getElementById('seo-tw-image');
+  const twCard = document.querySelector('input[name="tw-card"]:checked');
+  if (title)  DATA.seo.title        = title.value.trim();
+  if (desc)   DATA.seo.description  = desc.value.trim();
+  if (ogImg)  DATA.seo.og_image     = ogImg.value.trim();
+  if (twCard) DATA.seo.twitter_card = twCard.value;
+  if (twImg)  DATA.seo.twitter_image = twImg.value.trim();
+}
+
 // ─── SETTINGS ────────────────────────────────────────────────────────────────
 function renderSettings() {
   const s = DATA.settings || {};
@@ -1231,10 +1373,13 @@ function collectKontakt() {
 
 // ─── File input handlers ─────────────────────────────────────────────────────
 document.getElementById('fileInput').addEventListener('change', function() {
-  if (!this.files[0] || !pendingPhotoCallback) return;
-  uploadPhoto(this.files[0], pendingPhotoCallback);
+  if (!this.files[0]) return;
+  const cb = pendingPhotoCallback || pendingSeoCallback;
+  if (!cb) return;
+  uploadPhoto(this.files[0], cb);
   this.value = '';
   pendingPhotoCallback = null;
+  pendingSeoCallback   = null;
 });
 
 document.getElementById('certFileInput').addEventListener('change', function() {

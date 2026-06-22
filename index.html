@@ -749,6 +749,32 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
       }
     }
 
+    if (d.seo) {
+      var seo = d.seo;
+      if (seo.title) {
+        document.title = seo.title;
+        var m;
+        m = document.querySelector('meta[property="og:title"]');       if (m) m.setAttribute('content', seo.title);
+        m = document.querySelector('meta[name="twitter:title"]');      if (m) m.setAttribute('content', seo.title);
+      }
+      if (seo.description) {
+        m = document.querySelector('meta[name="description"]');        if (m) m.setAttribute('content', seo.description);
+        m = document.querySelector('meta[property="og:description"]'); if (m) m.setAttribute('content', seo.description);
+        m = document.querySelector('meta[name="twitter:description"]');if (m) m.setAttribute('content', seo.description);
+      }
+      if (seo.og_image) {
+        m = document.querySelector('meta[property="og:image"]');       if (m) m.setAttribute('content', seo.og_image);
+      }
+      if (seo.twitter_card) {
+        m = document.querySelector('meta[name="twitter:card"]');       if (m) m.setAttribute('content', seo.twitter_card);
+      }
+      if (seo.twitter_image) {
+        m = document.querySelector('meta[name="twitter:image"]');
+        if (!m) { m = document.createElement('meta'); m.setAttribute('name','twitter:image'); document.head.appendChild(m); }
+        m.setAttribute('content', seo.twitter_image);
+      }
+    }
+
     if (d.settings && d.settings.default_theme) {
       var def = d.settings.default_theme;
       localStorage.setItem('epd-theme-default', def);
