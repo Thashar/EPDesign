@@ -163,6 +163,13 @@ select option{background:var(--a-inp-sel)}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.err{border-color:rgba(224,85,85,0.45);color:var(--a-err-lt)}
 
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--a-surface)}
+::-webkit-scrollbar-thumb{background:var(--a-acc-bd);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--a-acc-bdh)}
+*{scrollbar-width:thin;scrollbar-color:var(--a-acc-bd) var(--a-surface)}
+
 /* Util */
 .mono{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--a-dim)}
 .hidden{display:none!important}
