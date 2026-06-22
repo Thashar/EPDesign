@@ -237,6 +237,7 @@ select option{background:var(--a-inp-sel)}
     <div class="nav-label">Ustawienia</div>
     <div class="nav-item" onclick="showSection('settings')">Layout</div>
     <div class="nav-item" onclick="showSection('seo')">SEO</div>
+    <div class="nav-item" onclick="showSection('github')">GitHub</div>
   </nav>
 
   <!-- MAIN -->
@@ -406,7 +407,8 @@ function showSection(name) {
       (name === 'uslugi' && el.textContent.includes('sługi')) ||
       (name === 'privacy' && el.textContent.includes('Polityk')) ||
       (name === 'settings' && el.textContent.includes('Layout')) ||
-      (name === 'seo'      && el.textContent.includes('SEO'))
+      (name === 'seo'      && el.textContent.includes('SEO')) ||
+      (name === 'github'   && el.textContent.includes('GitHub'))
     );
   });
   renderSection(name);
@@ -424,9 +426,11 @@ function renderSection(name) {
     case 'kontakt':    main.innerHTML = renderKontakt();    break;
     case 'privacy':    main.innerHTML = renderPrivacy();    break;
     case 'seo':        main.innerHTML = renderSEO();       break;
+    case 'github':     main.innerHTML = renderGitHub();    break;
     case 'settings':   main.innerHTML = renderSettings();  break;
   }
   bindSectionEvents(name);
+  if (name === 'github') fetchGithubCommits();
 }
 
 // ─── Collect before save/navigate ───────────────────────────────────────────
@@ -1014,6 +1018,86 @@ function saveCert(i) {
   setTimeout(() => msg.textContent = '', 2000);
 }
 
+// ─── GITHUB ──────────────────────────────────────────────────────────────────
+function renderGitHub() {
+  return `
+    <div class="section-header">
+      <span class="section-title">GitHub</span>
+      <span class="section-badge">Historia treści</span>
+    </div>
+    <div style="margin-bottom:16px;padding:12px 16px;background:var(--a-acc-bg);border:1px solid var(--a-acc-bd);border-radius:3px;font-size:12px;color:var(--a-muted);line-height:1.6;">
+      Przywrócenie pobiera pliki <code style="font-family:'IBM Plex Mono',monospace;background:var(--a-inner);padding:1px 5px;border-radius:2px;">content.json</code> i <code style="font-family:'IBM Plex Mono',monospace;background:var(--a-inner);padding:1px 5px;border-radius:2px;">content-en.json</code> z wybranego commitu i zapisuje je jako nowy commit — historia Git pozostaje nienaruszona.
+    </div>
+    <div id="gh-list"><div class="empty-state">ŁADOWANIE HISTORII...</div></div>
+  `;
+}
+
+function formatCommitDate(iso) {
+  const d  = new Date(iso);
+  const p  = n => String(n).padStart(2, '0');
+  return `${p(d.getDate())}.${p(d.getMonth()+1)}.${d.getFullYear()}, ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+async function fetchGithubCommits() {
+  const list = document.getElementById('gh-list');
+  if (!list) return;
+  try {
+    const r = await apiFetch('/api/github?action=commits');
+    if (!r) return;
+    if (!r.ok) {
+      const d = await r.json();
+      list.innerHTML = `<div class="empty-state" style="color:var(--a-err)">${esc(d.error || 'Błąd')}</div>`;
+      return;
+    }
+    const { commits } = await r.json();
+    if (!commits || !commits.length) {
+      list.innerHTML = '<div class="empty-state">BRAK COMMITÓW</div>';
+      return;
+    }
+    list.innerHTML = commits.map((c, i) => `
+      <div class="card" style="margin-bottom:10px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:16px 18px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--a-acc);background:var(--a-acc-bg);border:1px solid var(--a-acc-bd);border-radius:2px;padding:2px 8px;">${esc(c.short)}</span>
+              ${i === 0 ? '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--a-ok);background:rgba(62,207,142,0.08);border:1px solid rgba(62,207,142,0.2);border-radius:2px;padding:2px 8px;">AKTUALNY</span>' : ''}
+            </div>
+            <div style="font-size:13px;font-weight:500;color:var(--a-heading);margin-bottom:6px;line-height:1.4;word-break:break-word;">${esc(c.message)}</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--a-dim);">${formatCommitDate(c.date)} &nbsp;·&nbsp; ${esc(c.author)}</div>
+          </div>
+          <div style="flex:none;padding-top:2px;">
+            ${i === 0
+              ? `<button class="btn-sm" disabled style="opacity:.35;cursor:not-allowed;">Aktualny</button>`
+              : `<button class="btn-sm" id="gh-btn-${esc(c.sha)}" onclick="restoreCommit('${esc(c.sha)}','${esc(c.message.replace(/'/g,"\\'"))}')">Przywróć</button>`
+            }
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } catch (e) {
+    if (list) list.innerHTML = `<div class="empty-state" style="color:var(--a-err)">Błąd: ${esc(e.message)}</div>`;
+  }
+}
+
+async function restoreCommit(sha, message) {
+  if (!confirm(`Przywrócić treść strony do stanu z commitu:\n\n„${message}"\n\nOperacja nadpisze aktualne treści PL i EN.`)) return;
+  const btn = document.getElementById('gh-btn-' + sha);
+  if (btn) { btn.disabled = true; btn.textContent = 'Przywracanie...'; }
+  setStatus('Przywracanie...', 'saving');
+  try {
+    const r = await apiFetch('/api/github', { method: 'POST', body: JSON.stringify({ sha }) });
+    const d = r ? await r.json() : {};
+    if (!r || !r.ok) throw new Error(d.error || 'Błąd przywracania');
+    setStatus('Przywrócono ✓', 'ok');
+    toast('Treść przywrócona. Odświeżam dane...');
+    setTimeout(() => { loadData(); fetchGithubCommits(); }, 1200);
+  } catch (e) {
+    setStatus('Błąd', 'err');
+    toast('Błąd: ' + e.message, 'err');
+    if (btn) { btn.disabled = false; btn.textContent = 'Przywróć'; }
+  }
+}
+
 // ─── SEO ─────────────────────────────────────────────────────────────────────
 function renderSEO() {
   const s = DATA.seo || {};
@@ -1037,8 +1121,11 @@ function renderSEO() {
         </div>
         <div class="form-group">
           <label class="fl">Opis strony <span style="color:var(--a-dim);font-weight:400">(meta description — widoczny pod linkiem w Google)</span></label>
-          <textarea id="seo-desc" rows="3" style="width:100%;resize:vertical;" oninput="document.getElementById('seo-desc-len').textContent=this.value.length+'/160 znaków'">${esc(s.description||'')}</textarea>
-          <div id="seo-desc-len" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--a-dim);margin-top:4px;text-align:right;">${(s.description||'').length}/160 znaków</div>
+          <textarea id="seo-desc" rows="3" style="width:100%;resize:vertical;" oninput="updateDescLen(this.value)">${esc(s.description||'')}</textarea>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-top:6px;gap:12px;flex-wrap:wrap;">
+            <div style="font-size:11px;color:var(--a-muted);line-height:1.5;max-width:480px;">Google może samodzielnie zdecydować, czy wyświetli ten opis czy zastąpi go fragmentem treści ze strony — nawet jeśli mieści się w limicie.</div>
+            <div id="seo-desc-len" style="font-family:'IBM Plex Mono',monospace;font-size:10px;text-align:right;white-space:nowrap;color:${(s.description||'').length>160?'var(--a-err)':'var(--a-dim)'};">${(s.description||'').length}/160 znaków</div>
+          </div>
         </div>
       </div>
     </div>
@@ -1116,6 +1203,14 @@ function onTwitterCardChange() {
     const lbl = inp.closest('label');
     if (lbl) lbl.style.borderColor = inp.value === val ? 'var(--a-acc)' : 'var(--a-bd-md)';
   });
+}
+
+function updateDescLen(val) {
+  const el = document.getElementById('seo-desc-len');
+  if (!el) return;
+  const len = val.length;
+  el.textContent = len + '/160 znaków';
+  el.style.color = len > 160 ? 'var(--a-err)' : 'var(--a-dim)';
 }
 
 function updateSeoPreview(type, url) {
