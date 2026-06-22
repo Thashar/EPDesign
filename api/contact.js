@@ -1,14 +1,103 @@
-﻿function esc(s) {
+function esc(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+// ─── Rate limiting ─────────────────────────────────────────────────────────────
+//
+// Zasady:
+//  - max 2 wiadomości na 15 min z jednego IP
+//  - jeśli kolejne naruszenie nastąpi w ciągu 1 h od poprzedniej blokady → czas blokady x2
+//  - eskalacja nie ma górnego limitu (15m → 30m → 1h → 2h → 4h → ...)
+//  - brak naruszeń przez 1 h od ostatniej blokady → reset do 15 min
+//
+const ipState = new Map();
+const BASE_DURATION  = 15 * 60 * 1000;  // 15 min
+const ESCALATION_WIN = 60 * 60 * 1000;  // 1 h — okno eskalacji
+const MAX_MSGS       = 2;
+
+function getState(ip) {
+  if (!ipState.has(ip)) {
+    ipState.set(ip, { msgs: [], blockUntil: 0, blockDuration: BASE_DURATION, lastBlock: 0 });
+  }
+  return ipState.get(ip);
+}
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const s   = getState(ip);
+
+  // IP jest aktualnie zablokowane
+  if (now < s.blockUntil) {
+    return { blocked: true, retryAfter: Math.ceil((s.blockUntil - now) / 1000) };
+  }
+
+  // Usuń wiadomości starsze niż 15 min (bazowe okno zliczania)
+  s.msgs = s.msgs.filter(t => now - t < BASE_DURATION);
+
+  if (s.msgs.length >= MAX_MSGS) {
+    // Eskalacja: jeśli ostatnia blokada była w ciągu 1 h → podwój czas blokady
+    if (s.lastBlock > 0 && now - s.lastBlock < ESCALATION_WIN) {
+      s.blockDuration *= 2;
+    } else {
+      s.blockDuration = BASE_DURATION;  // reset do bazowego po spokojnej godzinie
+    }
+    s.blockUntil = now + s.blockDuration;
+    s.lastBlock  = now;
+    s.msgs       = [];
+    return { blocked: true, retryAfter: Math.ceil(s.blockDuration / 1000) };
+  }
+
+  return { blocked: false };
+}
+
+function recordMsg(ip) {
+  getState(ip).msgs.push(Date.now());
+}
+
+function formatWait(seconds, isEn) {
+  if (seconds < 3600) {
+    const mins = Math.ceil(seconds / 60);
+    return isEn ? `${mins} min` : `${mins} min`;
+  }
+  const hours = Math.ceil(seconds / 3600);
+  return isEn ? `${hours} h` : `${hours} h`;
+}
+
+// Czyszczenie wpisów starszych niż 48 h (ochrona przed wyciekiem pamięci)
+setInterval(() => {
+  const cutoff = Date.now() - 48 * 60 * 60 * 1000;
+  for (const [ip, s] of ipState) {
+    if (s.blockUntil < cutoff && s.lastBlock < cutoff) ipState.delete(ip);
+  }
+}, 60 * 60 * 1000);
+
+function getIP(req) {
+  const xff = req.headers['x-forwarded-for'];
+  return (xff ? xff.split(',')[0] : req.socket?.remoteAddress || 'unknown').trim();
+}
+
+// ─── Handler ───────────────────────────────────────────────────────────────────
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', process.env.SITE_ORIGIN || 'https://ep-design.pl');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).end();
+  if (req.method !== 'POST')   return res.status(405).end();
+
+  const ip = getIP(req);
+  const rl = checkRateLimit(ip);
+
+  if (rl.blocked) {
+    const isEnRl = (req.body || {}).lang === 'en';
+    const wait   = formatWait(rl.retryAfter, isEnRl);
+    return res.status(429).json({
+      error: isEnRl
+        ? `Too many messages. Please try again in ${wait}.`
+        : `Zbyt wiele wiadomości. Spróbuj ponownie za ${wait}.`,
+      retryAfter: rl.retryAfter
+    });
+  }
 
   const { name, company, email, phone, subject, message, consent, lang } = req.body || {};
   const isEn = lang === 'en';
@@ -29,18 +118,21 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: isEn ? 'Server configuration error' : 'Błąd konfiguracji serwera' });
   }
 
-  const to    = process.env.CONTACT_EMAIL || 'kontakt@ep-design.pl';
-  const from  = process.env.CONTACT_FROM  || 'EPDesign Formularz <formularz@ep-design.pl>';
+  // Zalicz wiadomość do limitu dopiero po przejściu wszystkich walidacji
+  recordMsg(ip);
+
+  const to          = process.env.CONTACT_EMAIL || 'kontakt@ep-design.pl';
+  const from        = process.env.CONTACT_FROM  || 'EPDesign Formularz <formularz@ep-design.pl>';
   const subjectLine = `[EPDesign] ${subject || (isEn ? 'New inquiry' : 'Nowe zapytanie')} — ${name}`;
 
   const text = [
     isEn ? 'New inquiry via ep-design.pl' : 'Nowe zapytanie ze strony ep-design.pl',
     '',
-    `${isEn ? 'Name' : 'Imię i Nazwisko'}: ${name}`,
-    `${isEn ? 'Company' : 'Firma'}: ${company || '—'}`,
-    `E-mail: ${email}`,
-    `${isEn ? 'Phone' : 'Telefon'}: ${phone || '—'}`,
-    `${isEn ? 'Subject' : 'Przedmiot'}: ${subject || '—'}`,
+    `${isEn ? 'Name'    : 'Imię i Nazwisko'}: ${name}`,
+    `${isEn ? 'Company' : 'Firma'}:           ${company || '—'}`,
+    `E-mail:                                   ${email}`,
+    `${isEn ? 'Phone'   : 'Telefon'}:          ${phone || '—'}`,
+    `${isEn ? 'Subject' : 'Przedmiot'}:        ${subject || '—'}`,
     '',
     isEn ? 'Message:' : 'Wiadomość:',
     message,

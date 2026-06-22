@@ -163,5 +163,42 @@
     "krs": "0000914400",
     "regon": "389584790",
     "linkedin": "https://www.linkedin.com/company/energy-piping-design/"
+  },
+  "settings": {
+    "default_theme": "light"
+  },
+  "privacy_policy": {
+    "title": "Privacy Policy",
+    "tag": "GDPR",
+    "sections": [
+      {
+        "heading": "1. Data Controller",
+        "content": "The controller of your personal data is Energy Piping Design Sp. z o.o., ul. Jesionowa 15, 40-159 Katowice, Poland, VAT: PL9542829277. Contact: kontakt@ep-design.pl."
+      },
+      {
+        "heading": "2. Purpose and Legal Basis",
+        "content": "Personal data provided via the contact form (name, company, email, phone, message) are processed solely for the purpose of responding to your inquiry. The legal basis is your consent (Art. 6(1)(a) GDPR)."
+      },
+      {
+        "heading": "3. Recipients",
+        "content": "Your data are not sold or shared with third parties. They may be passed to technical service providers (hosting, email delivery) only to the extent necessary to handle your inquiry, under data processing agreements."
+      },
+      {
+        "heading": "4. Retention Period",
+        "content": "Data are retained until your inquiry is resolved and thereafter for the period required to defend potential legal claims — no longer than 3 years from the date of contact."
+      },
+      {
+        "heading": "5. Your Rights",
+        "content": "You have the right to access, rectify, erase, restrict, and port your data, and to object to processing. You may withdraw your consent at any time without affecting the lawfulness of processing carried out before withdrawal. You also have the right to lodge a complaint with a supervisory authority (in Poland: UODO, ul. Stawki 2, Warsaw)."
+      },
+      {
+        "heading": "6. Cookies and localStorage",
+        "content": "The site does not use analytical or marketing cookies. The browser stores only the selected colour theme (light/dark) via localStorage — this data is not sent to any server or shared with third parties."
+      },
+      {
+        "heading": "7. Contact",
+        "content": "For any data protection enquiries, please contact: kontakt@ep-design.pl."
+      }
+    ]
   }
 }

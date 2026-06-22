@@ -232,6 +232,10 @@ select option{background:var(--a-inp-sel)}
     <div class="nav-item" onclick="showSection('kadra')">Kadra</div>
     <div class="nav-item" onclick="showSection('certyfikaty')">Certyfikaty</div>
     <div class="nav-item" onclick="showSection('kontakt')">Kontakt</div>
+    <div class="nav-label">Prawne</div>
+    <div class="nav-item" onclick="showSection('privacy')">Polityka prywatności</div>
+    <div class="nav-label">Ustawienia</div>
+    <div class="nav-item" onclick="showSection('settings')">Layout</div>
   </nav>
 
   <!-- MAIN -->
@@ -398,7 +402,9 @@ function showSection(name) {
       (name === 'certyfikaty' && el.textContent.includes('Certyfi')) ||
       (name === 'kontakt' && el.textContent.includes('Kontakt')) ||
       (name === 'realizacje' && el.textContent.includes('Realizacje')) ||
-      (name === 'uslugi' && el.textContent.includes('sługi'))
+      (name === 'uslugi' && el.textContent.includes('sługi')) ||
+      (name === 'privacy' && el.textContent.includes('Polityk')) ||
+      (name === 'settings' && el.textContent.includes('Layout'))
     );
   });
   renderSection(name);
@@ -414,6 +420,8 @@ function renderSection(name) {
     case 'kadra':      main.innerHTML = renderKadra();      break;
     case 'certyfikaty':main.innerHTML = renderCertyfikaty();break;
     case 'kontakt':    main.innerHTML = renderKontakt();    break;
+    case 'privacy':    main.innerHTML = renderPrivacy();    break;
+    case 'settings':   main.innerHTML = renderSettings();  break;
   }
   bindSectionEvents(name);
 }
@@ -425,6 +433,8 @@ function collectFormData() {
     case 'uslugi':  collectUslugi();  break;
     case 'ofirmie': collectOfirmie(); break;
     case 'kontakt': collectKontakt(); break;
+    case 'privacy':   collectPrivacy();  break;
+    case 'settings':  collectSettings(); break;
   }
 }
 
@@ -998,6 +1008,186 @@ function saveCert(i) {
   const msg = document.getElementById(`c-msg-${i}`);
   msg.textContent = '✓';
   setTimeout(() => msg.textContent = '', 2000);
+}
+
+// ─── SETTINGS ────────────────────────────────────────────────────────────────
+function renderSettings() {
+  const s = DATA.settings || {};
+  const theme = s.default_theme || 'light';
+  return `
+    <div class="section-header">
+      <span class="section-title">Layout</span>
+      <span class="section-badge">Ustawienia globalne</span>
+    </div>
+    <div class="card">
+      <div class="card-body open">
+        <div style="margin-bottom:6px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--a-dim);">Domyślny motyw strony</div>
+        <div style="font-size:12px;color:var(--a-muted);margin-bottom:18px;">Motyw widziany przez nowych odwiedzających, którzy jeszcze nie zmienili preferencji ręcznie.</div>
+        <div style="display:flex;gap:16px;">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:14px 20px;border:2px solid ${theme==='light'?'var(--a-acc)':'var(--a-bd-md)'};border-radius:3px;background:${theme==='light'?'var(--a-acc-bg)':'transparent'};flex:1;transition:border-color .2s,background .2s;">
+            <input type="radio" name="default-theme" id="st-light" value="light" ${theme==='light'?'checked':''} onchange="updateThemePreview()" style="accent-color:var(--a-acc);width:16px;height:16px;flex:none;">
+            <div>
+              <div style="font-weight:600;font-size:13px;color:var(--a-heading);margin-bottom:3px;">Jasny</div>
+              <div style="font-size:11px;color:var(--a-muted);">Białe tło, ciemny tekst</div>
+            </div>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:14px 20px;border:2px solid ${theme==='dark'?'var(--a-acc)':'var(--a-bd-md)'};border-radius:3px;background:${theme==='dark'?'var(--a-acc-bg)':'transparent'};flex:1;transition:border-color .2s,background .2s;">
+            <input type="radio" name="default-theme" id="st-dark" value="dark" ${theme==='dark'?'checked':''} onchange="updateThemePreview()" style="accent-color:var(--a-acc);width:16px;height:16px;flex:none;">
+            <div>
+              <div style="font-weight:600;font-size:13px;color:var(--a-heading);margin-bottom:3px;">Ciemny</div>
+              <div style="font-size:11px;color:var(--a-muted);">Granatowe tło, jasny tekst</div>
+            </div>
+          </label>
+        </div>
+        <div style="margin-top:24px;padding:12px 16px;background:var(--a-acc-bg);border:1px solid var(--a-acc-bd);border-radius:3px;font-size:12px;color:var(--a-muted);">
+          Ustawienie jest globalne — dotyczy zarówno wersji PL jak i EN. Zostanie zapisane automatycznie w obu językach.
+        </div>
+        <div style="margin-top:20px;">
+          <button class="btn-save" onclick="saveSettings()">Zapisz ustawienia</button>
+          <span class="mono" id="settings-msg" style="margin-left:14px;font-size:12px;"></span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function updateThemePreview() {
+  const val = document.querySelector('input[name="default-theme"]:checked')?.value || 'light';
+  document.querySelectorAll('label[for]').forEach(l => {
+    const input = document.getElementById(l.getAttribute('for'));
+    if (!input || input.name !== 'default-theme') return;
+    const active = input.value === val;
+    l.style.borderColor = active ? 'var(--a-acc)' : 'var(--a-bd-md)';
+    l.style.background  = active ? 'var(--a-acc-bg)' : 'transparent';
+  });
+  document.querySelectorAll('input[name="default-theme"]').forEach(function(inp) {
+    const lbl = inp.closest('label');
+    if (!lbl) return;
+    const active = inp.value === val;
+    lbl.style.borderColor = active ? 'var(--a-acc)' : 'var(--a-bd-md)';
+    lbl.style.background  = active ? 'var(--a-acc-bg)' : 'transparent';
+  });
+}
+
+function collectSettings() {
+  const checked = document.querySelector('input[name="default-theme"]:checked');
+  if (!checked) return;
+  DATA.settings = DATA.settings || {};
+  DATA.settings.default_theme = checked.value;
+}
+
+async function saveSettings() {
+  collectSettings();
+  const msg = document.getElementById('settings-msg');
+  if (msg) msg.textContent = 'Zapisywanie...';
+  setStatus('Zapisywanie ustawień...', 'saving');
+
+  try {
+    const [rPL, rEN] = await Promise.all([
+      fetch('/api/content'),
+      fetch('/api/content?lang=en')
+    ]);
+    const [dataPL, dataEN] = await Promise.all([rPL.json(), rEN.json()]);
+
+    dataPL.settings = DATA.settings;
+    dataEN.settings = DATA.settings;
+
+    const [savePL, saveEN] = await Promise.all([
+      apiFetch('/api/content',          { method: 'POST', body: JSON.stringify(dataPL) }),
+      apiFetch('/api/content?lang=en',  { method: 'POST', body: JSON.stringify(dataEN) })
+    ]);
+
+    if (!savePL?.ok || !saveEN?.ok) throw new Error('Błąd zapisu');
+
+    setStatus('Zapisano ✓', 'ok');
+    if (msg) { msg.textContent = '✓ Zapisano'; setTimeout(() => msg.textContent = '', 2500); }
+    toast('Ustawienia zapisane w obu językach');
+  } catch(e) {
+    setStatus('Błąd zapisu', 'err');
+    if (msg) msg.textContent = '✗ Błąd';
+    toast('Błąd zapisu ustawień: ' + e.message, 'err');
+  }
+}
+
+// ─── POLITYKA PRYWATNOŚCI ─────────────────────────────────────────────────────
+function renderPrivacy() {
+  const pp = DATA.privacy_policy || { title: '', tag: '', sections: [] };
+  const sections = pp.sections || [];
+  return `
+    <div class="section-header">
+      <span class="section-title">Polityka prywatności</span>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span class="section-badge">${LANG === 'en' ? 'EN' : 'PL'} · ${sections.length} sekcji</span>
+        <button class="btn-add" onclick="addPrivacySection()">+ Dodaj sekcję</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body open">
+        <div class="form-row">
+          <div><label class="fl">Tytuł modala (np. Polityka Prywatności)</label><input type="text" id="pp-title" value="${esc(pp.title||'')}"></div>
+          <div><label class="fl">Tag (np. RODO / GDPR)</label><input type="text" id="pp-tag" value="${esc(pp.tag||'')}"></div>
+        </div>
+      </div>
+    </div>
+    <div id="pp-sections-list">
+      ${sections.map((s, i) => renderPrivacySection(s, i)).join('')}
+    </div>
+  `;
+}
+
+function renderPrivacySection(s, i) {
+  return `
+    <div class="card" id="pp-section-${i}">
+      <div class="card-head" onclick="toggleCard('pp-body-${i}')">
+        <span class="card-code">${esc(s.heading||('Sekcja ' + (i+1)))}</span>
+        <div class="card-actions">
+          <button class="btn-del" title="Usuń sekcję" onclick="event.stopPropagation();delPrivacySection(${i})">✕</button>
+        </div>
+      </div>
+      <div class="card-body open" id="pp-body-${i}">
+        <div class="form-group"><label class="fl">Nagłówek sekcji</label><input type="text" id="pp-h-${i}" value="${esc(s.heading||'')}" oninput="document.querySelector('#pp-section-${i} .card-code').textContent=this.value||'Sekcja ${i+1}'"></div>
+        <div class="form-group"><label class="fl">Treść</label><textarea id="pp-c-${i}" rows="4" style="width:100%;resize:vertical;">${esc(s.content||'')}</textarea></div>
+      </div>
+    </div>
+  `;
+}
+
+function addPrivacySection() {
+  collectPrivacy();
+  const pp = DATA.privacy_policy = DATA.privacy_policy || { title: '', tag: '', sections: [] };
+  pp.sections = pp.sections || [];
+  pp.sections.push({ heading: '', content: '' });
+  renderSection('privacy');
+}
+
+function delPrivacySection(i) {
+  if (!confirm('Usunąć tę sekcję?')) return;
+  collectPrivacy();
+  DATA.privacy_policy.sections.splice(i, 1);
+  renderSection('privacy');
+}
+
+function toggleCard(bodyId) {
+  const el = document.getElementById(bodyId);
+  if (el) el.classList.toggle('open');
+}
+
+function collectPrivacy() {
+  const pp = DATA.privacy_policy = DATA.privacy_policy || { title: '', tag: '', sections: [] };
+  const titleEl = document.getElementById('pp-title');
+  const tagEl   = document.getElementById('pp-tag');
+  if (titleEl) pp.title = titleEl.value.trim();
+  if (tagEl)   pp.tag   = tagEl.value.trim();
+  const sections = [];
+  let i = 0;
+  while (document.getElementById('pp-h-' + i)) {
+    sections.push({
+      heading: document.getElementById('pp-h-' + i).value.trim(),
+      content: document.getElementById('pp-c-' + i).value.trim()
+    });
+    i++;
+  }
+  if (i > 0) pp.sections = sections;
 }
 
 // ─── KONTAKT ──────────────────────────────────────────────────────────────────

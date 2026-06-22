@@ -54,7 +54,7 @@
   "areaServed": [{"@type": "Country", "name": "Poland"}, {"@type": "Place", "name": "European Union"}]
 }
 </script>
-<script>(function(){var t=localStorage.getItem('epd-theme');if(t!=='dark')document.documentElement.setAttribute('data-theme','light');}());</script>
+<script>(function(){var u=localStorage.getItem('epd-theme'),d=localStorage.getItem('epd-theme-default')||'light',t=u!==null?u:d;if(t!=='dark')document.documentElement.setAttribute('data-theme','light');}());</script>
 <style>
 :root{
   --bg-main:#06101c;--bg-surface:#05101c;--bg-footer:#040e19;
@@ -571,12 +571,12 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
   <div style="width:100%;max-width:860px;padding:clamp(40px,6vh,72px) clamp(22px,5vw,72px);">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;gap:20px;">
       <div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">GDPR</div>
-        <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(24px,3.5vw,42px);color:var(--text-heading);line-height:1.1;">Privacy Policy</h2>
+        <div id="privacy-tag" style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">GDPR</div>
+        <h2 id="privacy-title" style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(24px,3.5vw,42px);color:var(--text-heading);line-height:1.1;">Privacy Policy</h2>
       </div>
       <button onclick="closePrivacy()" aria-label="Close" style="background:var(--bg-input);border:1px solid var(--border-mid);border-radius:2px;color:var(--nl-color);font-size:20px;width:44px;height:44px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;transition:background .2s;" onmouseover="this.style.background='var(--close-hover)'" onmouseout="this.style.background='var(--bg-input)'">×</button>
     </div>
-    <div style="font-size:15px;line-height:1.78;color:var(--text-secondary);display:flex;flex-direction:column;gap:28px;">
+    <div id="privacy-content" style="font-size:15px;line-height:1.78;color:var(--text-secondary);display:flex;flex-direction:column;gap:28px;">
       <div>
         <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:var(--text-heading);margin-bottom:10px;">1. Data Controller</h3>
         <p>The controller of your personal data is <strong>Energy Piping Design Sp. z o.o.</strong>, ul. Jesionowa 15, 40-159 Katowice, Poland, VAT: PL9542829277. Contact: <a href="mailto:kontakt@ep-design.pl" style="color:var(--accent);">kontakt@ep-design.pl</a>.</p>
@@ -745,6 +745,32 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
         var emailLine = k.email ? '<a href="mailto:' + h(k.email) + '" style="color:var(--nl-color);text-decoration:none;">' + h(k.email) + '</a>' : '';
         var telLine   = k.telefon ? '<a href="tel:' + h(k.telefon) + '" style="color:var(--nl-color);text-decoration:none;">' + h(k.telefon) + '</a>' : '';
         wk.innerHTML = [emailLine, telLine].filter(Boolean).join('<br>');
+      }
+    }
+
+    if (d.settings && d.settings.default_theme) {
+      var def = d.settings.default_theme;
+      localStorage.setItem('epd-theme-default', def);
+      if (localStorage.getItem('epd-theme') === null) {
+        if (def === 'dark') document.documentElement.removeAttribute('data-theme');
+        else document.documentElement.setAttribute('data-theme', 'light');
+      }
+    }
+
+    if (d.privacy_policy) {
+      var pp = d.privacy_policy;
+      var privTag   = document.getElementById('privacy-tag');
+      var privTitle = document.getElementById('privacy-title');
+      var privContent = document.getElementById('privacy-content');
+      if (privTag && pp.tag)     privTag.textContent   = pp.tag;
+      if (privTitle && pp.title) privTitle.textContent = pp.title;
+      if (privContent && pp.sections) {
+        privContent.innerHTML = pp.sections.map(function(s) {
+          var body = h(s.content).replace(/[\w.+-]+@[\w.-]+\.[a-z]{2,}/gi, function(email) {
+            return '<a href="mailto:' + email + '" style="color:var(--accent);">' + email + '</a>';
+          });
+          return '<div><h3 style="font-family:\'Space Grotesk\',sans-serif;font-weight:600;font-size:17px;color:var(--text-heading);margin-bottom:10px;">' + h(s.heading) + '</h3><p>' + body + '</p></div>';
+        }).join('');
       }
     }
   }

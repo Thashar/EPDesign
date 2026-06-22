@@ -177,5 +177,42 @@
     "krs": "0000914400",
     "regon": "389584790",
     "linkedin": "https://www.linkedin.com/company/energy-piping-design/"
+  },
+  "settings": {
+    "default_theme": "light"
+  },
+  "privacy_policy": {
+    "title": "Polityka Prywatności",
+    "tag": "RODO",
+    "sections": [
+      {
+        "heading": "1. Administrator danych",
+        "content": "Administratorem Twoich danych osobowych jest Energy Piping Design Sp. z o.o. z siedzibą przy ul. Jesionowej 15, 40-159 Katowice, NIP: 9542829277, KRS: 0000914400. Kontakt: kontakt@ep-design.pl."
+      },
+      {
+        "heading": "2. Cel i podstawa prawna przetwarzania",
+        "content": "Dane osobowe podane w formularzu kontaktowym (imię i nazwisko, nazwa firmy, adres e-mail, numer telefonu, treść zapytania) są przetwarzane wyłącznie w celu udzielenia odpowiedzi na Twoje zapytanie. Podstawą prawną przetwarzania jest Twoja zgoda (art. 6 ust. 1 lit. a RODO)."
+      },
+      {
+        "heading": "3. Odbiorcy danych",
+        "content": "Twoje dane nie są sprzedawane ani udostępniane osobom trzecim. Mogą być przekazywane wyłącznie dostawcom usług technicznych (hosting, dostarczanie poczty e-mail) w zakresie niezbędnym do obsługi zapytania, na podstawie umów powierzenia przetwarzania."
+      },
+      {
+        "heading": "4. Okres przechowywania",
+        "content": "Dane przechowywane są do czasu rozpatrzenia zapytania, a następnie przez okres niezbędny do obrony ewentualnych roszczeń — nie dłużej niż 3 lata od daty kontaktu."
+      },
+      {
+        "heading": "5. Twoje prawa",
+        "content": "Przysługuje Ci prawo do: dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przenoszenia danych oraz wniesienia sprzeciwu wobec przetwarzania. Zgodę możesz wycofać w dowolnym momencie — bez wpływu na zgodność z prawem przetwarzania przed jej cofnięciem. Masz również prawo do wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych (ul. Stawki 2, Warszawa)."
+      },
+      {
+        "heading": "6. Pliki cookie i localStorage",
+        "content": "Strona nie używa analitycznych ani marketingowych plików cookie. Przeglądarka zapamiętuje wyłącznie wybrany motyw kolorystyczny (jasny/ciemny) za pomocą mechanizmu localStorage — dane te nie są wysyłane na serwer ani udostępniane podmiotom trzecim."
+      },
+      {
+        "heading": "7. Kontakt w sprawach danych",
+        "content": "W sprawach związanych z ochroną danych osobowych prosimy o kontakt pod adresem: kontakt@ep-design.pl."
+      }
+    ]
   }
 }
