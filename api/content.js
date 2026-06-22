@@ -57,8 +57,7 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const urlObj = new URL(req.url, 'http://localhost');
-  const lang    = urlObj.searchParams.get('lang');
-  const section = urlObj.searchParams.get('section') || '';
+  const lang     = urlObj.searchParams.get('lang');
   const filename = lang === 'en' ? 'content-en.json' : 'content.json';
 
   const SECTION_LABELS = {
@@ -73,6 +72,10 @@ module.exports = async function handler(req, res) {
     seo:         'SEO',
     settings:    'Ustawienia'
   };
+
+  const rawSections = urlObj.searchParams.get('sections') || urlObj.searchParams.get('section') || '';
+  const sectionList = rawSections.split(',').map(s => s.trim()).filter(Boolean);
+  const labels      = sectionList.map(s => SECTION_LABELS[s]).filter(Boolean);
 
   const hasGithub = !!(process.env.GITHUB_TOKEN && process.env.GITHUB_REPO);
   const localFile = path.join(__dirname, '..', filename);
@@ -114,10 +117,10 @@ module.exports = async function handler(req, res) {
         const file = await githubRequest(filename);
         const sha = file?.sha;
         const branch = process.env.GITHUB_BRANCH || 'main';
-        const label = SECTION_LABELS[section] || 'treść strony';
+        const labelStr  = labels.length > 0 ? labels.join(', ') : 'treść strony';
         const commitMsg = lang === 'en'
-          ? `Admin: update — ${label} (EN)`
-          : `Admin: aktualizacja — ${label}`;
+          ? `Admin: update — ${labelStr} (EN)`
+          : `Admin: aktualizacja — ${labelStr}`;
 
         const encoded = Buffer.from(newContent, 'utf-8').toString('base64');
         await githubRequest(filename, {
