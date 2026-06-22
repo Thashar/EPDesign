@@ -1,6 +1,9 @@
 {
   "outputDirectory": ".",
   "buildCommand": null,
+  "redirects": [
+    { "source": "/", "destination": "/pl/", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/admin.html",

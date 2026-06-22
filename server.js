@@ -208,7 +208,11 @@ const server = http.createServer(async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
   }
 
-  let filePath = (pathname === '/' || pathname === '') ? '/index.html' : pathname;
+  if (pathname === '/' || pathname === '') {
+    res.writeHead(302, { 'Location': '/pl/' });
+    return res.end();
+  }
+  let filePath = pathname;
   if (filePath.endsWith('/')) filePath += 'index.html';
   filePath = path.join(__dirname, decodeURIComponent(filePath));
 
