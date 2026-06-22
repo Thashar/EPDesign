@@ -57,8 +57,22 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const urlObj = new URL(req.url, 'http://localhost');
-  const lang = urlObj.searchParams.get('lang');
+  const lang    = urlObj.searchParams.get('lang');
+  const section = urlObj.searchParams.get('section') || '';
   const filename = lang === 'en' ? 'content-en.json' : 'content.json';
+
+  const SECTION_LABELS = {
+    hero:        'Strona główna',
+    realizacje:  'Realizacje',
+    uslugi:      'Usługi',
+    ofirmie:     'O firmie',
+    kadra:       'Kadra',
+    certyfikaty: 'Certyfikaty',
+    kontakt:     'Kontakt',
+    privacy:     'Polityka prywatności',
+    seo:         'SEO',
+    settings:    'Ustawienia'
+  };
 
   const hasGithub = !!(process.env.GITHUB_TOKEN && process.env.GITHUB_REPO);
   const localFile = path.join(__dirname, '..', filename);
@@ -100,9 +114,10 @@ module.exports = async function handler(req, res) {
         const file = await githubRequest(filename);
         const sha = file?.sha;
         const branch = process.env.GITHUB_BRANCH || 'main';
+        const label = SECTION_LABELS[section] || 'treść strony';
         const commitMsg = lang === 'en'
-          ? 'Admin: update EN content'
-          : 'Admin: aktualizacja treści strony';
+          ? `Admin: update — ${label} (EN)`
+          : `Admin: aktualizacja — ${label}`;
 
         const encoded = Buffer.from(newContent, 'utf-8').toString('base64');
         await githubRequest(filename, {

@@ -351,7 +351,9 @@ async function saveAll() {
   collectFormData();
 
   try {
-    const apiUrl = LANG === 'en' ? '/api/content?lang=en' : '/api/content';
+    const apiUrl = LANG === 'en'
+      ? `/api/content?lang=en&section=${currentSection}`
+      : `/api/content?section=${currentSection}`;
     const r = await apiFetch(apiUrl, {
       method: 'POST',
       body: JSON.stringify(DATA)
@@ -1330,8 +1332,8 @@ async function saveSettings() {
     dataEN.settings = DATA.settings;
 
     const [savePL, saveEN] = await Promise.all([
-      apiFetch('/api/content',          { method: 'POST', body: JSON.stringify(dataPL) }),
-      apiFetch('/api/content?lang=en',  { method: 'POST', body: JSON.stringify(dataEN) })
+      apiFetch('/api/content?section=settings',          { method: 'POST', body: JSON.stringify(dataPL) }),
+      apiFetch('/api/content?lang=en&section=settings',  { method: 'POST', body: JSON.stringify(dataEN) })
     ]);
 
     if (!savePL?.ok || !saveEN?.ok) throw new Error('Błąd zapisu');
