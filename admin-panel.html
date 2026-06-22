@@ -1106,7 +1106,7 @@ async function fetchGithubCommits() {
 }
 
 async function restoreCommit(sha, message) {
-  if (!confirm(`Przywrócić treść strony do stanu z commitu:\n\n„${message}"\n\nOperacja nadpisze aktualne treści PL i EN.`)) return;
+  if (!confirm(`Przywrócić treść strony do stanu z commitu:\n\n„${message}"\n\nOperacja nadpisze aktualne treści PL, EN oraz zdjęcia.`)) return;
   const btn = document.getElementById('gh-btn-' + sha);
   if (btn) { btn.disabled = true; btn.textContent = 'Przywracanie...'; }
   setStatus('Przywracanie...', 'saving');
@@ -1115,7 +1115,8 @@ async function restoreCommit(sha, message) {
     const d = r ? await r.json() : {};
     if (!r || !r.ok) throw new Error(d.error || 'Błąd przywracania');
     setStatus('Przywrócono ✓', 'ok');
-    toast('Treść przywrócona. Odświeżam dane...');
+    const photoNote = d.photos > 0 ? ` i ${d.photos} ${d.photos === 1 ? 'zdjęcie' : d.photos < 5 ? 'zdjęcia' : 'zdjęć'}` : '';
+    toast(`Przywrócono treść${photoNote}. Odświeżam dane...`);
     setTimeout(() => { loadData(); fetchGithubCommits(); }, 1200);
   } catch (e) {
     setStatus('Błąd', 'err');

@@ -72,58 +72,122 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Nieprawidłowy SHA commitu' });
     }
 
-    const files  = ['content.json', 'content-en.json'];
-    const errors = [];
-
-    for (const filename of files) {
-      try {
-        // Pobierz plik z docelowego commitu
-        const rTarget = await fetch(
-          `https://api.github.com/repos/${repo()}/contents/${filename}?ref=${sha}`,
+    try {
+      async function getFileAtRef(path, ref) {
+        const r = await fetch(
+          `https://api.github.com/repos/${repo()}/contents/${encodeURIComponent(path)}?ref=${ref}`,
           { headers: ghHeaders() }
         );
-        if (!rTarget.ok) {
-          errors.push(`${filename}: brak w commicie ${sha.slice(0, 7)}`);
-          continue;
-        }
-        const targetFile = await rTarget.json();
-
-        // Pobierz aktualny SHA pliku (wymagany przez GitHub API do PUT)
-        const rCurrent = await fetch(
-          `https://api.github.com/repos/${repo()}/contents/${filename}?ref=${branch()}`,
-          { headers: ghHeaders() }
-        );
-        if (!rCurrent.ok) {
-          errors.push(`${filename}: nie można pobrać aktualnej wersji`);
-          continue;
-        }
-        const currentFile = await rCurrent.json();
-
-        // Zapisz plik z treścią z docelowego commitu
-        const rPut = await fetch(
-          `https://api.github.com/repos/${repo()}/contents/${filename}`,
-          {
-            method: 'PUT',
-            headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              message: `Przywrócono ${filename} z commitu ${sha.slice(0, 7)}`,
-              content: targetFile.content.replace(/\n/g, ''),
-              sha:     currentFile.sha,
-              branch:  branch()
-            })
-          }
-        );
-        if (!rPut.ok) {
-          const errTxt = await rPut.text();
-          errors.push(`${filename}: błąd zapisu (${errTxt.slice(0, 120)})`);
-        }
-      } catch (e) {
-        errors.push(`${filename}: ${e.message}`);
+        if (r.status === 404) return null;
+        if (!r.ok) throw new Error(`GitHub ${r.status} dla ${path}`);
+        return r.json();
       }
-    }
 
-    if (errors.length) return res.status(502).json({ error: errors.join(' | ') });
-    return res.json({ success: true });
+      function extractUploadPaths(obj, found = new Set()) {
+        if (!obj || typeof obj !== 'object') return found;
+        if (Array.isArray(obj)) { obj.forEach(item => extractUploadPaths(item, found)); return found; }
+        for (const [key, val] of Object.entries(obj)) {
+          if ((key === 'photo' || key === 'image') && typeof val === 'string' && val.startsWith('uploads/')) {
+            found.add(val);
+          } else {
+            extractUploadPaths(val, found);
+          }
+        }
+        return found;
+      }
+
+      // 1. Pobierz content.json i content-en.json z docelowego SHA
+      const [plFile, enFile] = await Promise.all([
+        getFileAtRef('content.json',    sha),
+        getFileAtRef('content-en.json', sha)
+      ]);
+      if (!plFile || !enFile) {
+        return res.status(404).json({ error: 'content.json lub content-en.json nie istnieje w tym commicie' });
+      }
+
+      // 2. Wyodrębnij ścieżki zdjęć z obu plików
+      const decode = f => JSON.parse(Buffer.from(f.content, 'base64').toString('utf-8').replace(/^﻿/, ''));
+      const photoPaths = new Set([
+        ...extractUploadPaths(decode(plFile)),
+        ...extractUploadPaths(decode(enFile))
+      ]);
+
+      // 3. Pobierz zdjęcia z docelowego SHA (równolegle)
+      const photoEntries = await Promise.all(
+        [...photoPaths].map(async p => {
+          const f = await getFileAtRef(p, sha);
+          return f ? { path: p, blobSha: f.sha } : null;
+        })
+      );
+      const photos = photoEntries.filter(Boolean);
+
+      // 4. Pobierz aktualny HEAD commita i SHA drzewa
+      const refR = await fetch(
+        `https://api.github.com/repos/${repo()}/git/refs/heads/${branch()}`,
+        { headers: ghHeaders() }
+      );
+      if (!refR.ok) throw new Error('Nie można pobrać HEAD ref');
+      const currentCommitSha = (await refR.json()).object.sha;
+
+      const commitR = await fetch(
+        `https://api.github.com/repos/${repo()}/git/commits/${currentCommitSha}`,
+        { headers: ghHeaders() }
+      );
+      if (!commitR.ok) throw new Error('Nie można pobrać aktualnego commitu');
+      const currentTreeSha = (await commitR.json()).tree.sha;
+
+      // 5. Zbuduj nowe drzewo na bazie aktualnego — tylko zmienione pliki
+      const treeItems = [
+        { path: 'content.json',    mode: '100644', type: 'blob', sha: plFile.sha },
+        { path: 'content-en.json', mode: '100644', type: 'blob', sha: enFile.sha },
+        ...photos.map(f => ({ path: f.path, mode: '100644', type: 'blob', sha: f.blobSha }))
+      ];
+
+      const treeR = await fetch(
+        `https://api.github.com/repos/${repo()}/git/trees`,
+        {
+          method: 'POST',
+          headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+          body: JSON.stringify({ base_tree: currentTreeSha, tree: treeItems })
+        }
+      );
+      if (!treeR.ok) throw new Error(`Błąd tworzenia tree: ${(await treeR.text()).slice(0, 120)}`);
+      const newTreeSha = (await treeR.json()).sha;
+
+      // 6. Utwórz commit
+      const n = photos.length;
+      const photoNote = n > 0 ? ` + ${n} ${n === 1 ? 'zdjęcie' : n < 5 ? 'zdjęcia' : 'zdjęć'}` : '';
+      const newCommitR = await fetch(
+        `https://api.github.com/repos/${repo()}/git/commits`,
+        {
+          method: 'POST',
+          headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: `Przywrócono treść${photoNote} z commitu ${sha.slice(0, 7)}`,
+            tree:    newTreeSha,
+            parents: [currentCommitSha]
+          })
+        }
+      );
+      if (!newCommitR.ok) throw new Error(`Błąd tworzenia commitu: ${(await newCommitR.text()).slice(0, 120)}`);
+      const newCommitSha = (await newCommitR.json()).sha;
+
+      // 7. Przesuń wskaźnik gałęzi
+      const updateR = await fetch(
+        `https://api.github.com/repos/${repo()}/git/refs/heads/${branch()}`,
+        {
+          method: 'PATCH',
+          headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sha: newCommitSha })
+        }
+      );
+      if (!updateR.ok) throw new Error(`Błąd aktualizacji ref: ${(await updateR.text()).slice(0, 120)}`);
+
+      return res.json({ success: true, photos: n });
+    } catch (e) {
+      console.error('[github] restore error:', e.message);
+      return res.status(502).json({ error: e.message });
+    }
   }
 
   return res.status(405).json({ error: 'Method not allowed' });
