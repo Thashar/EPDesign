@@ -1150,7 +1150,7 @@ function renderSEO() {
           <label class="fl">Opis strony <span style="color:var(--a-dim);font-weight:400">(meta description — widoczny pod linkiem w Google)</span></label>
           <textarea id="seo-desc" rows="3" style="width:100%;resize:vertical;" oninput="updateDescLen(this.value)">${esc(s.description||'')}</textarea>
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-top:6px;gap:12px;flex-wrap:wrap;">
-            <div style="font-size:11px;color:var(--a-muted);line-height:1.5;max-width:480px;">Google może samodzielnie zdecydować, czy wyświetli ten opis czy zastąpi go fragmentem treści ze strony — nawet jeśli mieści się w limicie.</div>
+            <div style="font-size:11px;color:var(--a-muted);line-height:1.5;max-width:480px;">Google może samodzielnie zdecydować, czy wyświetli ten opis czy zastąpi go fragmentem treści ze strony — nawet jeśli mieści się w limicie. Jeśli z niego skorzysta, wyświetli maksymalnie pierwszych 160 znaków.</div>
             <div id="seo-desc-len" style="font-family:'IBM Plex Mono',monospace;font-size:10px;text-align:right;white-space:nowrap;color:${(s.description||'').length>160?'var(--a-err)':'var(--a-dim)'};">${(s.description||'').length}/160 znaków</div>
           </div>
         </div>
