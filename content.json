@@ -3,19 +3,19 @@
     "lastUpdated": "2026-06-22"
   },
   "hero_home": {
-    "tagline": "Inżynieria orurowania · Energetyka i przemysł.",
+    "tagline": "Inżynieria orurowania · Energetyka i przemysł...",
     "heading": "Rurociągi projektowane z inżynierską precyzją.",
     "description": "Od analiz przedprojektowych i podatności rurociągów, przez projekty wykonawcze i powykonawcze, po skanowanie oraz modelowanie 3D — z eksperckim wsparciem automatyki na każdym etapie prac."
   },
   "hero_uslugi": {
-    "tag": "OFERTA",
+    "tag": "OFERTA...",
     "heading": "Kompleksowe usługi inżynierskie\ndla sektora energetycznego",
     "subheading": "Specjalistyczne usługi inżynierskie w zakresie orurowania — od analiz i projektów, przez skanowanie i modelowanie 3D, po eksperckie wsparcie w automatyzacji i weryfikację zgodności z IRiESP i NC-RfG."
   },
   "realizacje": [
     {
       "id": "epd-2023-004",
-      "code": "EPD-2023-004",
+      "code": "EPD-2023-004...",
       "category": "Energetyka",
       "title": "EC Katowice — Modernizacja rurociągów pary technologicznej",
       "description": "Projekt wykonawczy modernizacji sieci rurociągów pary i kondensatu w elektrociepłowni. Analiza podatności, izometrie i dobór kompensatorów...",
