@@ -617,6 +617,12 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
   function h(str) {
     return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
+  function imgUrl(path) {
+    if (!path) return '';
+    var p = String(path).replace(/\\/g, '/');
+    if (p && !p.startsWith('/') && !p.startsWith('http')) p = '/' + p;
+    return h(p);
+  }
 
   function renderRealizacjeGrid(items) {
     if (!items || !items.length) return '';
@@ -645,7 +651,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
     if (!members || !members.length) return '';
     return members.map(p => {
       const img = p.photo
-        ? `<div style="width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid var(--border-card);"><img src="${h(p.photo)}" alt="${h(p.name)}" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"></div>`
+        ? `<div style="width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid var(--border-card);"><img src="${imgUrl(p.photo)}" alt="${h(p.name)}" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"></div>`
         : `<div style="width:100%;aspect-ratio:1;border-radius:2px;border:1px solid var(--border-lt);background:var(--bg-input);display:flex;align-items:center;justify-content:center;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-ph);">zdjęcie</span></div>`;
       return `
         <div style="display:flex;flex-direction:column;gap:18px;">
@@ -675,7 +681,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
     if (!certs || !certs.length) return '';
     return certs.map(c => {
       const imgBlock = c.image
-        ? `<img src="${h(c.image)}" alt="${h(c.code)}" style="width:100%;height:100%;object-fit:contain;">`
+        ? `<img src="${imgUrl(c.image)}" alt="${h(c.code)}" style="width:100%;height:100%;object-fit:contain;">`
         : `<div style="width:44px;height:44px;border:1.5px solid var(--border-str);border-radius:2px;display:flex;align-items:center;justify-content:center;"><span style="color:var(--text-dim);font-size:22px;line-height:1;">+</span></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-ph);text-align:center;">Zdjęcie certyfikatu<br>${h(c.label)} ${h(c.code)}</div>`;
       return `
         <div style="border:1px solid var(--border-card);border-radius:2px;overflow:hidden;display:flex;flex-direction:column;">
