@@ -48,7 +48,7 @@ html,body{height:100%;background:var(--a-bg);font-family:'Space Grotesk',sans-se
 /* Layout */
 .layout{display:grid;grid-template-rows:80px 1fr;grid-template-columns:220px 1fr;height:100vh;overflow:hidden}
 .topbar{grid-column:1/-1;background:var(--a-bg);border-bottom:1px solid var(--a-bd-sm);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px}
-.sidebar{background:var(--a-bg);border-right:1px solid var(--a-bd-sm);overflow-y:auto;padding:16px 0}
+.sidebar{display:flex;flex-direction:column;background:var(--a-bg);border-right:1px solid var(--a-bd-sm);overflow-y:auto;padding:16px 0}
 .main{overflow-y:auto;overflow-x:hidden;padding:32px;background:var(--a-surface)}
 
 /* Topbar */
@@ -176,7 +176,8 @@ select option{background:var(--a-inp-sel)}
   .btn-save{padding:8px 14px;font-size:12px}
   .btn-logout{padding:7px 10px;font-size:11px}
 
-  .sidebar{grid-row:2;grid-column:1;border-right:none;border-bottom:1px solid var(--a-bd-sm);padding:0;display:flex;overflow-x:auto;overflow-y:visible;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .sidebar{grid-row:2;grid-column:1;border-right:none;border-bottom:1px solid var(--a-bd-sm);padding:0;display:flex;flex-direction:row;overflow-x:auto;overflow-y:visible;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .sidebar-footer{display:none}
   .sidebar::-webkit-scrollbar{display:none}
   .nav-label{display:none}
   .nav-item{display:inline-flex;flex-shrink:0;padding:14px 18px;border-left:none;border-bottom:2px solid transparent;font-size:13px}
@@ -238,6 +239,13 @@ select option{background:var(--a-inp-sel)}
     <div class="nav-item" onclick="showSection('settings')">Layout</div>
     <div class="nav-item" onclick="showSection('seo')">SEO</div>
     <div class="nav-item" onclick="showSection('github')">GitHub</div>
+    <div style="flex:1"></div>
+    <div class="sidebar-footer" style="padding:12px 16px;border-top:1px solid var(--a-bd-sm);">
+      <a href="/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;color:var(--a-dim);text-decoration:none;padding:8px 4px;transition:color .15s;" onmouseover="this.style.color='var(--a-text)'" onmouseout="this.style.color='var(--a-dim)'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Powrót do strony
+      </a>
+    </div>
   </nav>
 
   <!-- MAIN -->
