@@ -72,6 +72,8 @@ setInterval(() => {
 }, 60 * 60 * 1000);
 
 function getIP(req) {
+  // x-epd-real-ip jest ustawiany przez lokalny serwer dev ze socket.remoteAddress (nie do sfałszowania)
+  if (req.headers['x-epd-real-ip']) return req.headers['x-epd-real-ip'];
   const xff = req.headers['x-forwarded-for'];
   return (xff ? xff.split(',')[0] : req.socket?.remoteAddress || 'unknown').trim();
 }

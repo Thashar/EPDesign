@@ -1,22 +1,4 @@
-const crypto = require('crypto');
-
-function verifySession(req) {
-  const cookie = req.headers.cookie || '';
-  const m = cookie.match(/(?:^|;\s*)epd_session=([^;]+)/);
-  const token = m ? decodeURIComponent(m[1]) : '';
-  if (!token) return false;
-  try {
-    const parts = token.split('.');
-    if (parts.length !== 3) return false;
-    const [id, expires, sig] = parts;
-    if (Date.now() > parseInt(expires, 10)) return false;
-    const secret = process.env.JWT_SECRET;
-    if (!secret) return false;
-    const expected = crypto.createHmac('sha256', secret).update(`${id}.${expires}`).digest('hex');
-    if (sig.length !== expected.length) return false;
-    return crypto.timingSafeEqual(Buffer.from(sig, 'hex'), Buffer.from(expected, 'hex'));
-  } catch { return false; }
-}
+const { verifySession } = require('./_auth');
 
 function ghHeaders() {
   return {

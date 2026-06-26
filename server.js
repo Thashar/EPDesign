@@ -3,31 +3,9 @@
  * Uruchom: node server.js
  * Wymaga: Node 18+ (wbudowany fetch)
  */
-const http   = require('http');
-const fs     = require('fs');
-const path   = require('path');
-const crypto = require('crypto');
-
-function verifySessionCookie(req) {
-  const cookie = req.headers.cookie || '';
-  const m = cookie.match(/(?:^|;\s*)epd_session=([^;]+)/);
-  const token = m ? decodeURIComponent(m[1]) : '';
-  if (!token) return false;
-  try {
-    const parts = token.split('.');
-    if (parts.length !== 3) return false;
-    const [id, expires, sig] = parts;
-    if (Date.now() > parseInt(expires, 10)) return false;
-    const secret = process.env.JWT_SECRET;
-    if (!secret) return false;
-    const payload = `${id}.${expires}`;
-    const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex');
-    if (sig.length !== expected.length) return false;
-    return crypto.timingSafeEqual(Buffer.from(sig, 'hex'), Buffer.from(expected, 'hex'));
-  } catch {
-    return false;
-  }
-}
+const http = require('http');
+const fs   = require('fs');
+const path = require('path');
 
 // ─── Wczytaj .env (bez npm) ─────────────────────────────────────────────────
 function loadEnv() {
@@ -45,6 +23,9 @@ function loadEnv() {
   });
 }
 loadEnv();
+
+// Załaduj po loadEnv, żeby JWT_SECRET było dostępne
+const { verifySession } = require('./api/_auth');
 
 // ─── MIME types ──────────────────────────────────────────────────────────────
 const MIME = {
@@ -64,13 +45,24 @@ const MIME = {
   '.pdf':  'application/pdf',
 };
 
-// ─── Odczyt body ─────────────────────────────────────────────────────────────
+// SEC-02: limit 2 MB na ciało żądania
+const BODY_LIMIT = 2 * 1024 * 1024;
+
 function readBody(req) {
   if (!['POST', 'PUT', 'PATCH'].includes(req.method)) return Promise.resolve('');
   return new Promise((resolve, reject) => {
     let buf = '';
-    req.on('data', chunk => buf += chunk);
-    req.on('end',  () => resolve(buf));
+    let size = 0;
+    req.on('data', chunk => {
+      size += chunk.length;
+      if (size > BODY_LIMIT) {
+        req.destroy();
+        reject(new Error('Request body too large'));
+        return;
+      }
+      buf += chunk;
+    });
+    req.on('end',   () => resolve(buf));
     req.on('error', reject);
   });
 }
@@ -99,7 +91,11 @@ function localContentPost(req, body, res) {
 function localUpload(body, res) {
   const { filename, data } = body || {};
   if (!filename || !data) return res.status(400).json({ error: 'Brak pliku' });
-  const safe = filename.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9._-]/g, '').slice(0, 64);
+  const ALLOWED_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.pdf']);
+  const safe = filename.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9._-]/g, '').replace(/\.{2,}/g, '.').slice(0, 64);
+  const dotIdx = safe.lastIndexOf('.');
+  const ext = dotIdx >= 0 ? safe.slice(dotIdx) : '';
+  if (!ALLOWED_EXT.has(ext)) return res.status(400).json({ error: 'Niedozwolony typ pliku' });
   const dest = path.join(__dirname, 'uploads', safe);
   fs.writeFileSync(dest, Buffer.from(data, 'base64'));
   console.log(`  [upload] Zapisano lokalnie: uploads/${safe}`);
@@ -126,6 +122,17 @@ function patchForLocal(handlerPath, rawReq, body, mockRes) {
   return null; // nie patchowane — użyj oryginalnego handlera
 }
 
+// ─── Nagłówki bezpieczeństwa dla stron publicznych ──────────────────────────
+const PUBLIC_SECURITY_HEADERS = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'SAMEORIGIN',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Content-Security-Policy':
+    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; " +
+    "img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://api.resend.com; " +
+    "frame-ancestors 'none'"
+};
+
 // ─── Serwer ──────────────────────────────────────────────────────────────────
 const server = http.createServer(async (req, res) => {
   const urlObj   = new URL(req.url, 'http://localhost');
@@ -136,15 +143,31 @@ const server = http.createServer(async (req, res) => {
     const name        = pathname.slice(5).replace(/\/$/, '');
     const handlerPath = path.join(__dirname, 'api', `${name}.js`);
 
+    // Blokuj próby wyjścia poza katalog api/
+    if (!handlerPath.startsWith(path.join(__dirname, 'api') + path.sep)) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Nieprawidłowa ścieżka API' }));
+    }
+
     if (!fs.existsSync(handlerPath)) {
       res.writeHead(404, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ error: `Nie znaleziono API: /api/${name}` }));
     }
 
-    const rawBody = await readBody(req);
+    let rawBody;
+    try {
+      rawBody = await readBody(req);
+    } catch {
+      res.writeHead(413, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Request body too large' }));
+    }
+
     let parsed = {};
     if (rawBody) { try { parsed = JSON.parse(rawBody); } catch {} }
     req.body = parsed;
+
+    // SEC-03: wstrzyknij prawdziwy adres IP z gniazda (nie można sfałszować przez nagłówki)
+    req.headers['x-epd-real-ip'] = req.socket?.remoteAddress || 'unknown';
 
     // Mock res (pasuje do interfejsu Vercel)
     let sent = false;
@@ -193,36 +216,49 @@ const server = http.createServer(async (req, res) => {
 
   // Panel admina — dostęp tylko z ważną sesją
   if (pathname === '/admin-panel.html') {
-    if (!verifySessionCookie(req)) {
+    if (!verifySession(req)) {
       res.writeHead(302, { 'Location': '/admin.html' });
       return res.end();
     }
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Content-Security-Policy',
+      "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; " +
+      "img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    );
   }
 
   if (pathname === '/admin.html') {
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Content-Security-Policy',
+      "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; " +
+      "img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    );
   }
 
   if (pathname === '/' || pathname === '') {
     res.writeHead(302, { 'Location': '/pl/' });
     return res.end();
   }
+
   let filePath = pathname;
   if (filePath.endsWith('/')) filePath += 'index.html';
   filePath = path.join(__dirname, decodeURIComponent(filePath));
 
-  // Zabezpieczenie przed traversal
-  if (!filePath.startsWith(__dirname)) {
+  // SEC-06: zabezpieczenie przed traversal z separatorem ścieżki
+  if (!filePath.startsWith(__dirname + path.sep) && filePath !== __dirname) {
     res.writeHead(403); return res.end('Forbidden');
   }
 
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
     const ext = path.extname(filePath).toLowerCase();
+    // SEC-07: nagłówki bezpieczeństwa dla stron publicznych
+    if (ext === '.html') {
+      Object.entries(PUBLIC_SECURITY_HEADERS).forEach(([k, v]) => res.setHeader(k, v));
+    }
     res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
     fs.createReadStream(filePath).pipe(res);
   } else {
@@ -241,16 +277,17 @@ server.listen(PORT, () => {
   console.log('  ║  EPD Dev Server                            ║');
   console.log('  ╚════════════════════════════════════════════╝');
   console.log('');
-  console.log(`  Strona główna:  http://localhost:${PORT}/`);
+  console.log(`  Strona główna:   http://localhost:${PORT}/`);
   console.log(`  Panel logowania: http://localhost:${PORT}/admin.html`);
-  console.log(`  Panel admina:   http://localhost:${PORT}/admin-panel.html`);
+  console.log(`  Panel admina:    http://localhost:${PORT}/admin-panel.html`);
   console.log('');
   if (noGithub) {
     console.log('  ⚠  GITHUB_TOKEN pusty → zapis/odczyt lokalnie z content.json');
     console.log('     Zdjęcia zapisywane do uploads/ na dysku');
     console.log('');
   }
-  console.log(`  Hasło: ${process.env.ADMIN_PASSWORD || '(ADMIN_PASSWORD nie ustawione)'}`);
+  // SEC-01: nie loguj hasła — tylko informacja czy jest ustawione
+  console.log(`  ADMIN_PASSWORD: ${process.env.ADMIN_PASSWORD ? '(ustawione)' : '⚠ NIE USTAWIONE'}`);
   console.log('');
   console.log('  Ctrl+C — zatrzymaj');
   console.log('');

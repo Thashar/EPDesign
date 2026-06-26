@@ -1,22 +1,6 @@
-const crypto = require('crypto');
+const { verifyToken, getToken } = require('./_auth');
 
-function verifyToken(token) {
-  if (!token) return false;
-  try {
-    const parts = token.split('.');
-    if (parts.length !== 3) return false;
-    const [id, expires, sig] = parts;
-    if (Date.now() > parseInt(expires, 10)) return false;
-    const secret = process.env.JWT_SECRET;
-    if (!secret) return false;
-    const payload = `${id}.${expires}`;
-    const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex');
-    if (sig.length !== expected.length) return false;
-    return crypto.timingSafeEqual(Buffer.from(sig, 'hex'), Buffer.from(expected, 'hex'));
-  } catch {
-    return false;
-  }
-}
+const ALLOWED_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.pdf']);
 
 function sanitizeFilename(name) {
   return name
@@ -25,13 +9,6 @@ function sanitizeFilename(name) {
     .replace(/[^a-z0-9._-]/g, '')
     .replace(/\.{2,}/g, '.')
     .slice(0, 64);
-}
-
-function getToken(req) {
-  const cookie = req.headers.cookie || '';
-  const m = cookie.match(/(?:^|;\s*)epd_session=([^;]+)/);
-  if (m) return decodeURIComponent(m[1]);
-  return (req.headers.authorization || '').replace('Bearer ', '').trim();
 }
 
 module.exports = async function handler(req, res) {
@@ -44,11 +21,17 @@ module.exports = async function handler(req, res) {
   const { filename, data } = req.body || {};
   if (!filename || !data) return res.status(400).json({ error: 'Brak pliku' });
 
+  const safe = sanitizeFilename(filename);
+  const dotIdx = safe.lastIndexOf('.');
+  const ext = dotIdx >= 0 ? safe.slice(dotIdx) : '';
+  if (!ALLOWED_EXT.has(ext)) {
+    return res.status(400).json({ error: `Niedozwolony typ pliku. Dozwolone: ${[...ALLOWED_EXT].join(', ')}` });
+  }
+
   const repo = process.env.GITHUB_REPO;
   const ghToken = process.env.GITHUB_TOKEN;
   if (!repo || !ghToken) return res.status(500).json({ error: 'GitHub nie skonfigurowany' });
 
-  const safe = sanitizeFilename(filename);
   const path = `uploads/${safe}`;
   const branch = process.env.GITHUB_BRANCH || 'main';
 

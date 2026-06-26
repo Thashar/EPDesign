@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const { verifyToken, getSessionToken, getClientIp } = require('./_auth');
 
 // { ip -> { attempts: number[], lockedUntil: number, windowMs: number } }
 const state = new Map();
@@ -36,44 +37,12 @@ function checkRateLimit(ip) {
   return { limited: false };
 }
 
-function getIp(req) {
-  return (
-    (req.headers['x-forwarded-for'] || '').split(',')[0].trim() ||
-    req.socket?.remoteAddress ||
-    'unknown'
-  );
-}
-
 function generateToken(secret) {
   const id = crypto.randomBytes(16).toString('hex');
   const expires = Date.now() + 86400000; // 24h
   const payload = `${id}.${expires}`;
   const sig = crypto.createHmac('sha256', secret).update(payload).digest('hex');
   return `${payload}.${sig}`;
-}
-
-function verifyToken(token) {
-  if (!token) return false;
-  try {
-    const parts = token.split('.');
-    if (parts.length !== 3) return false;
-    const [id, expires, sig] = parts;
-    if (Date.now() > parseInt(expires, 10)) return false;
-    const secret = process.env.JWT_SECRET;
-    if (!secret) return false;
-    const payload = `${id}.${expires}`;
-    const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex');
-    if (sig.length !== expected.length) return false;
-    return crypto.timingSafeEqual(Buffer.from(sig, 'hex'), Buffer.from(expected, 'hex'));
-  } catch {
-    return false;
-  }
-}
-
-function getSessionToken(req) {
-  const cookie = req.headers.cookie || '';
-  const m = cookie.match(/(?:^|;\s*)epd_session=([^;]+)/);
-  return m ? decodeURIComponent(m[1]) : '';
 }
 
 module.exports = function handler(req, res) {
@@ -88,7 +57,7 @@ module.exports = function handler(req, res) {
 
   if (req.method !== 'POST') return res.status(405).end();
 
-  const ip = getIp(req);
+  const ip = getClientIp(req);
   const { limited, retryAfter } = checkRateLimit(ip);
   if (limited) {
     res.setHeader('Retry-After', retryAfter);
