@@ -1,24 +1,6 @@
-const crypto = require('crypto');
-const fs     = require('fs');
-const path   = require('path');
-
-function verifyToken(token) {
-  if (!token) return false;
-  try {
-    const parts = token.split('.');
-    if (parts.length !== 3) return false;
-    const [id, expires, sig] = parts;
-    if (Date.now() > parseInt(expires, 10)) return false;
-    const secret = process.env.JWT_SECRET;
-    if (!secret) return false;
-    const payload = `${id}.${expires}`;
-    const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex');
-    if (sig.length !== expected.length) return false;
-    return crypto.timingSafeEqual(Buffer.from(sig, 'hex'), Buffer.from(expected, 'hex'));
-  } catch {
-    return false;
-  }
-}
+const fs   = require('fs');
+const path = require('path');
+const { verifyToken, getToken } = require('./_auth');
 
 async function githubRequest(path, options = {}) {
   const repo = process.env.GITHUB_REPO;
@@ -41,13 +23,6 @@ async function githubRequest(path, options = {}) {
     throw new Error(`GitHub ${res.status}: ${body}`);
   }
   return res.status === 404 ? null : res.json();
-}
-
-function getToken(req) {
-  const cookie = req.headers.cookie || '';
-  const m = cookie.match(/(?:^|;\s*)epd_session=([^;]+)/);
-  if (m) return decodeURIComponent(m[1]);
-  return (req.headers.authorization || '').replace('Bearer ', '').trim();
 }
 
 module.exports = async function handler(req, res) {
