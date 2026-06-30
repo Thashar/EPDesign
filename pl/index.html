@@ -159,7 +159,7 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
   .nav-links.open{display:flex !important;}
   .hero-bullets{flex-direction:column !important;gap:10px !important;}
   #root{min-height:100svh !important;height:auto !important;}
-  .hero-copyright{position:static !important;padding:0 clamp(22px,5vw,72px) 24px !important;}
+  .hero-copyright{position:relative !important;left:0 !important;z-index:2 !important;text-align:left !important;padding:0 clamp(22px,5vw,72px) 24px !important;}
 }
 @media (max-width: 900px){
   #root > nav,
