@@ -174,17 +174,35 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
   .nav-burger{display:flex !important;}
   .nav-links{display:none !important;position:absolute;top:100%;left:0;right:0;flex-direction:column !important;flex-wrap:nowrap !important;background:var(--bg-nav);padding:14px 18px 18px;border-bottom:1px solid var(--border);gap:14px !important;z-index:100;}
   .nav-links.open{display:flex !important;}
+  /* Hero burger dropdown (dark mode): continuation of the dark hero gradient,
+     with 0.97 transparency like --bg-nav; layers shifted up by the nav height */
+  #root .nav-links{
+    background:linear-gradient(180deg,rgba(5,16,28,0.55) 0%,transparent 22%,transparent 80%,rgba(4,12,22,0.7) 100%),
+               linear-gradient(102deg,rgba(5,16,28,0.97) 0%,rgba(5,16,28,0.92) 28%,rgba(6,18,32,0.55) 48%,rgba(6,18,32,0.12) 64%,transparent 78%),
+               radial-gradient(125% 95% at 70% 38%,rgba(19,52,81,0.97) 0%,rgba(10,28,48,0.97) 46%,rgba(5,16,28,0.97) 100%) !important;
+    background-size:100vw 100vh !important;
+    background-repeat:no-repeat !important;
+    background-position:0 -76px !important;
+  }
   /* Burger dropdown in light mode: continuation of the header gradient — the same
-     layers shifted up by the nav bar height (hero 76px, subpages 72px) */
+     layers shifted up by the nav bar height (hero 76px, subpages 72px);
+     base with 0.97 alpha, matching the --bg-nav transparency in dark mode */
   [data-theme="light"] .nav-links{
     background:linear-gradient(180deg,rgba(175,210,238,0.18) 0%,transparent 22%,transparent 80%,rgba(160,202,232,0.12) 100%),
                linear-gradient(102deg,rgba(175,210,238,0.42) 0%,rgba(190,222,244,0.18) 30%,rgba(208,230,246,0.05) 52%,transparent 70%),
-               radial-gradient(125% 95% at 70% 38%,#f2f6fb 0%,#e7edf6 46%,#dae3f0 100%) !important;
+               radial-gradient(125% 95% at 70% 38%,rgba(242,246,251,0.97) 0%,rgba(231,237,246,0.97) 46%,rgba(218,227,240,0.97) 100%) !important;
     background-size:100vw 100vh !important;
     background-repeat:no-repeat !important;
     background-position:0 -72px !important;
   }
-  [data-theme="light"] #root .nav-links{background-position:0 -76px !important;}
+  [data-theme="light"] #root .nav-links{
+    background:linear-gradient(180deg,rgba(175,210,238,0.18) 0%,transparent 22%,transparent 80%,rgba(160,202,232,0.12) 100%),
+               linear-gradient(102deg,rgba(175,210,238,0.42) 0%,rgba(190,222,244,0.18) 30%,rgba(208,230,246,0.05) 52%,transparent 70%),
+               radial-gradient(125% 95% at 70% 38%,rgba(242,246,251,0.97) 0%,rgba(231,237,246,0.97) 46%,rgba(218,227,240,0.97) 100%) !important;
+    background-size:100vw 100vh !important;
+    background-repeat:no-repeat !important;
+    background-position:0 -76px !important;
+  }
   .hero-bullets{flex-direction:column !important;gap:10px !important;}
   #root{min-height:100svh !important;height:auto !important;}
   .hero-copyright{position:relative !important;left:0 !important;bottom:auto !important;z-index:2 !important;text-align:left !important;padding:0 clamp(22px,5vw,72px) 24px !important;}
