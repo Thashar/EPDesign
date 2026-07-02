@@ -144,6 +144,10 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
   background-size:100vw 100vh !important;
   background-repeat:no-repeat !important;
 }
+/* Subpage footers pinned to the bottom when content is shorter than the screen */
+#pg-uslugi,#pg-realizacje,#pg-ofirmie,#pg-certyfikaty{display:flex;flex-direction:column;}
+#pg-uslugi > *,#pg-realizacje > *,#pg-ofirmie > *,#pg-certyfikaty > *{flex-shrink:0;}
+#pg-uslugi > footer,#pg-realizacje > footer,#pg-ofirmie > footer,#pg-certyfikaty > footer{margin-top:auto;}
 [data-theme="light"] #home-heading{color:#06101c !important;}
 [data-theme="light"] #home-description{color:#2a5070 !important;}
 [data-theme="light"] .hero-tagline{color:#1a6090 !important;}
