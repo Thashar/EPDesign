@@ -856,41 +856,81 @@ function navigate(pg) {
   setTimeout(function() { setPage(pg); }, pg === 'home' ? 0 : 260);
 }
 
+var EPD_SLIDE_CSS  = 'transform 0.65s cubic-bezier(0.4,0,0.2,1)';
+var EPD_PAGE_ORDER = ['home', 'uslugi', 'realizacje', 'ofirmie', 'certyfikaty'];
+
 function setPage(pg) {
   if (pg === 'home') { if (window._epdCanvasResume) window._epdCanvasResume(); }
   else { if (window._epdCanvasPause) window._epdCanvasPause(); }
-  var pages = ['uslugi', 'realizacje', 'ofirmie', 'certyfikaty'];
-  pages.forEach(function(p) {
-    var el = document.getElementById('pg-' + p);
-    if (!el) return;
-    if (p === pg) {
-      el.style.transform = 'translateX(0)';
-      el.style.pointerEvents = 'all';
-      el.style.zIndex = '50';
-      el.scrollTop = 0;
-    } else {
-      el.style.transform = 'translateX(100%)';
-      el.style.pointerEvents = 'none';
-      el.style.zIndex = '49';
-    }
-  });
-  // Rule: two logos must never be visible on screen at once — the destination
-  // page's logo stays hidden during the slide and fades in after it completes
   var prev = window._epdActivePg || 'home';
-  if (pg !== prev) {
-    window._epdActivePg = pg;
-    var dest = pg === 'home' ? document.getElementById('root') : document.getElementById('pg-' + pg);
-    var logo = dest && dest.querySelector('nav .logo-img');
-    if (logo) {
-      logo.style.transition = 'none';
-      logo.style.opacity = '0';
-      clearTimeout(window._epdLogoTimer);
-      window._epdLogoTimer = setTimeout(function() {
-        logo.style.transition = 'opacity 0.9s ease';
-        void logo.offsetWidth;
-        logo.style.opacity = pg === 'home' ? '1' : '0.9';
-      }, 650);
+  if (pg === prev) {
+    var cur = pg === 'home' ? null : document.getElementById('pg-' + pg);
+    if (cur) cur.scrollTop = 0;
+    return;
+  }
+  window._epdActivePg = pg;
+
+  function place(el, x) { // position a sheet without animation
+    el.style.transition = 'none';
+    el.style.transform = 'translateX(' + x + ')';
+    void el.offsetWidth;
+    el.style.transition = EPD_SLIDE_CSS;
+  }
+
+  // Book-page model: going forward the new sheet slides over the static
+  // current one; going back the current sheet slides out right, revealing
+  // the one lying underneath
+  var fwd  = EPD_PAGE_ORDER.indexOf(pg) > EPD_PAGE_ORDER.indexOf(prev);
+  var dest = pg === 'home' ? null : document.getElementById('pg-' + pg);
+  var out  = prev === 'home' ? null : document.getElementById('pg-' + prev);
+
+  if (fwd) {
+    if (out) { out.style.zIndex = '49'; out.style.pointerEvents = 'none'; }
+    place(dest, '100%');
+    dest.style.zIndex = '50';
+    dest.scrollTop = 0;
+    dest.style.pointerEvents = 'all';
+    dest.style.transform = 'translateX(0)';
+  } else {
+    if (dest) {
+      place(dest, '0');
+      dest.style.zIndex = '49';
+      dest.scrollTop = 0;
+      dest.style.pointerEvents = 'all';
     }
+    if (out) {
+      out.style.zIndex = '50';
+      out.style.pointerEvents = 'none';
+      out.style.transform = 'translateX(100%)';
+    }
+  }
+
+  // After the transition park the remaining sheets past the right edge
+  clearTimeout(window._epdPageTimer);
+  window._epdPageTimer = setTimeout(function() {
+    EPD_PAGE_ORDER.forEach(function(p) {
+      if (p === 'home' || p === pg) return;
+      var el = document.getElementById('pg-' + p);
+      if (!el) return;
+      place(el, '100%');
+      el.style.zIndex = '49';
+      el.style.pointerEvents = 'none';
+    });
+  }, 700);
+
+  // Rule: two logos must never be visible on screen at once — the destination
+  // page's logo stays hidden during the transition and fades in after it
+  var destRoot = pg === 'home' ? document.getElementById('root') : dest;
+  var logo = destRoot && destRoot.querySelector('nav .logo-img');
+  if (logo) {
+    logo.style.transition = 'none';
+    logo.style.opacity = '0';
+    clearTimeout(window._epdLogoTimer);
+    window._epdLogoTimer = setTimeout(function() {
+      logo.style.transition = 'opacity 0.9s ease';
+      void logo.offsetWidth;
+      logo.style.opacity = pg === 'home' ? '1' : '0.9';
+    }, 650);
   }
 }
 
