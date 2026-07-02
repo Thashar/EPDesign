@@ -874,6 +874,24 @@ function setPage(pg) {
       el.style.zIndex = '49';
     }
   });
+  // Rule: two logos must never be visible on screen at once — the destination
+  // page's logo stays hidden during the slide and fades in after it completes
+  var prev = window._epdActivePg || 'home';
+  if (pg !== prev) {
+    window._epdActivePg = pg;
+    var dest = pg === 'home' ? document.getElementById('root') : document.getElementById('pg-' + pg);
+    var logo = dest && dest.querySelector('nav .logo-img');
+    if (logo) {
+      logo.style.transition = 'none';
+      logo.style.opacity = '0';
+      clearTimeout(window._epdLogoTimer);
+      window._epdLogoTimer = setTimeout(function() {
+        logo.style.transition = 'opacity 0.9s ease';
+        void logo.offsetWidth;
+        logo.style.opacity = pg === 'home' ? '1' : '0.9';
+      }, 650);
+    }
+  }
 }
 
 function openWycena() {
