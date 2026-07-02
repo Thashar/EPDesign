@@ -131,6 +131,19 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
 [data-theme="light"] #root{background:radial-gradient(125% 95% at 70% 38%,#f2f6fb 0%,#e7edf6 46%,#dae3f0 100%) !important;color:#0d2135 !important;}
 [data-theme="light"] #hero-ol-side{background:linear-gradient(102deg,rgba(175,210,238,0.42) 0%,rgba(190,222,244,0.18) 30%,rgba(208,230,246,0.05) 52%,transparent 70%) !important;}
 [data-theme="light"] #hero-ol-tb{background:linear-gradient(180deg,rgba(175,210,238,0.18) 0%,transparent 22%,transparent 80%,rgba(160,202,232,0.12) 100%) !important;}
+/* Subpage navs in light mode: the same layers as the hero background, spanned
+   over 100vw×100vh — the nav is sticky at the viewport top, so it shows the
+   exact same slice as the hero top (fixed attachment breaks in a transformed parent) */
+[data-theme="light"] #pg-uslugi > nav,
+[data-theme="light"] #pg-realizacje > nav,
+[data-theme="light"] #pg-ofirmie > nav,
+[data-theme="light"] #pg-certyfikaty > nav{
+  background:linear-gradient(180deg,rgba(175,210,238,0.18) 0%,transparent 22%,transparent 80%,rgba(160,202,232,0.12) 100%),
+             linear-gradient(102deg,rgba(175,210,238,0.42) 0%,rgba(190,222,244,0.18) 30%,rgba(208,230,246,0.05) 52%,transparent 70%),
+             radial-gradient(125% 95% at 70% 38%,#f2f6fb 0%,#e7edf6 46%,#dae3f0 100%) !important;
+  background-size:100vw 100vh !important;
+  background-repeat:no-repeat !important;
+}
 [data-theme="light"] #home-heading{color:#06101c !important;}
 [data-theme="light"] #home-description{color:#2a5070 !important;}
 [data-theme="light"] .hero-tagline{color:#1a6090 !important;}
