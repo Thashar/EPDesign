@@ -172,8 +172,8 @@ input::placeholder,textarea::placeholder{color:var(--text-dim)}
   #root .nav-links .nc{color:var(--text-primary);border-color:var(--nc-bdr)}
   #root .nav-links .nc:hover{border-color:var(--accent);background:var(--accent-bg)}
   .nav-burger{display:flex !important;}
-  .nav-links{display:none !important;position:absolute;top:100%;left:0;right:0;flex-direction:column !important;flex-wrap:nowrap !important;background:var(--bg-nav);padding:14px 18px 18px;border-bottom:1px solid var(--border);gap:14px !important;z-index:100;}
-  .nav-links.open{display:flex !important;}
+  .nav-links{display:flex !important;position:absolute;top:100%;left:0;right:0;flex-direction:column !important;flex-wrap:nowrap !important;background:var(--bg-nav);padding:14px 18px 18px;border-bottom:1px solid var(--border);gap:14px !important;z-index:100;clip-path:inset(0 0 100% 0);visibility:hidden;transition:clip-path .38s cubic-bezier(0.4,0,0.2,1),visibility 0s linear .38s;}
+  .nav-links.open{clip-path:inset(0 0 0 0);visibility:visible;transition:clip-path .38s cubic-bezier(0.4,0,0.2,1);}
   /* Hero burger dropdown (dark mode): continuation of the dark hero gradient,
      with 0.97 transparency like --bg-nav; layers shifted up by the nav height */
   #root .nav-links{
